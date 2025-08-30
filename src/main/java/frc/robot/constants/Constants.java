@@ -5,6 +5,11 @@
 
 package frc.robot.constants;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,4 +20,16 @@ package frc.robot.constants;
  */
 public final class Constants {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
+
+    public static final Transform3d camTrans1 = new Transform3d(
+            new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(0), Units.inchesToMeters(7)),
+            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0)));
+
+    public static final Transform3d camTrans2 = new Transform3d(
+            new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(-12), Units.inchesToMeters(40)),
+            new Rotation3d(0, Math.toRadians(30), Math.toRadians(200)));
+
+    public static final Transform3d camTrans3 = new Transform3d(
+            new Translation3d(Units.inchesToMeters(5), Units.inchesToMeters(17), Units.inchesToMeters(40)),
+            new Rotation3d(0, Math.toRadians(5), Math.toRadians(90)));
 }

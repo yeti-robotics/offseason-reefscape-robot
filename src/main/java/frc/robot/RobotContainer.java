@@ -17,7 +17,6 @@ import frc.robot.constants.Constants;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
     CommandXboxController primary;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */

@@ -14,8 +14,10 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Download PhotonVision
-        run: curl -L https://api.github.com/repos/PhotonVision/photonvision/actions/artifacts/3601960507/zip | tar -zx -C ~/wpilib/2027_alpha1/
+      - name: Look at file structure
+        run: ls -ltr -a
+#      - name: Download PhotonVision
+#        run: curl -L https://api.github.com/repos/PhotonVision/photonvision/actions/artifacts/3601960507/zip | tar -zx -C ~/wpilib/2027_alpha1/
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2

@@ -15,7 +15,7 @@ jobs:
           java-version: 17
 
       - name: Look at file structure
-        run: cd ../../ && ls -ltr -a
+        run: cd ../../../../ && ls -ltr -a
 #      - name: Download PhotonVision
 #        run: curl -L https://api.github.com/repos/PhotonVision/photonvision/actions/artifacts/3601960507/zip | tar -zx -C ~/wpilib/2027_alpha1/
 

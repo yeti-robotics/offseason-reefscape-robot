@@ -81,9 +81,8 @@ public class DriveCommands {
                             omega * drive.getMaxAngularSpeedRadPerSec());
                     boolean isFlipped = DriverStation.getAlliance().isPresent()
                             && DriverStation.getAlliance().get() == Alliance.Red;
-                    drive.runVelocity(drive.getChassisSpeeds()
-                            .toFieldRelative(
-                                    isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation()));
+                    drive.runVelocity(speeds.toFieldRelative(
+                            isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation()));
                 },
                 drive);
     }
@@ -120,11 +119,8 @@ public class DriveCommands {
                                     omega);
                             boolean isFlipped = DriverStation.getAlliance().isPresent()
                                     && DriverStation.getAlliance().get() == Alliance.Red;
-                            drive.runVelocity(drive.getChassisSpeeds()
-                                    .toFieldRelative(
-                                            isFlipped
-                                                    ? drive.getRotation().plus(Rotation2d.kPi)
-                                                    : drive.getRotation()));
+                            drive.runVelocity(speeds.toFieldRelative(
+                                    isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation()));
                         },
                         drive)
 

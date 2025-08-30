@@ -105,7 +105,7 @@ public class RobotContainer {
         controller
                 .a()
                 .whileTrue(DriveCommands.joystickDriveAtAngle(
-                        drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), () -> new Rotation2d()));
+                        drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), Rotation2d::new));
 
         // Switch to X pattern when X button is pressed
         controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

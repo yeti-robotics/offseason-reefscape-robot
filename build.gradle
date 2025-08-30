@@ -113,6 +113,14 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir.absolutePath}/generated/sources/annotationProcessor/java/main"
+        }
+    }
+}
+
 idea {
     project {
         // The project.sourceCompatibility setting is not always picked up, so we set explicitly

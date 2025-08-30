@@ -101,7 +101,6 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
         modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
 
-
         // Start odometry thread
         PhoenixOdometryThread.getInstance().start();
 
@@ -193,7 +192,7 @@ public class Drive extends SubsystemBase {
      */
     public void runVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
-        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(0.02);
+        ChassisSpeeds discreteSpeeds = getChassisSpeeds().discretize(0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
@@ -266,7 +265,7 @@ public class Drive extends SubsystemBase {
 
     /** Returns the measured chassis speeds of the robot. */
     @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-    private ChassisSpeeds getChassisSpeeds() {
+    public ChassisSpeeds getChassisSpeeds() {
         return kinematics.toChassisSpeeds(getModuleStates());
     }
 

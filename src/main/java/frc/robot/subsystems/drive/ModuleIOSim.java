@@ -88,7 +88,6 @@ public class ModuleIOSim implements ModuleIO {
         inputs.driveAppliedVolts = driveAppliedVolts;
         inputs.driveCurrentAmps = Math.abs(driveSim.getCurrentDraw());
 
-
         // Update turn inputs
         inputs.turnConnected = true;
         inputs.turnEncoderConnected = true;

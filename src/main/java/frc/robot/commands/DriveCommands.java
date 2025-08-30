@@ -217,7 +217,7 @@ public class DriveCommands {
                 // Measurement sequence
                 Commands.sequence(
                         // Wait for modules to fully orient before starting measurement
-                        Commands.waitSeconds(1.0),
+                        Commands.wait(1.0),
 
                         // Record starting measurement
                         Commands.runOnce(() -> {

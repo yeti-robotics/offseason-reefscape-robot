@@ -7,7 +7,9 @@
 
 package frc.robot.constants;
 
+import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.generated.TunerConstants;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -28,4 +30,6 @@ public final class Constants {
         /** Replaying from a log file. */
         REPLAY
     }
+
+    public static final CANBus drivetrainCANBus = new CANBus(TunerConstants.kCANBus.getName(), "./logs/example.hoot");
 }

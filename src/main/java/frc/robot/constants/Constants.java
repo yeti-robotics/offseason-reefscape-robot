@@ -12,15 +12,15 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
+import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.generated.TunerConstants;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
  * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and "replay"
  * (log replay from a file).
  */
-
-//still a semi work in progress
 public final class Constants {
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
@@ -35,6 +35,8 @@ public final class Constants {
         /** Replaying from a log file. */
         REPLAY
     }
+
+    public static final CANBus drivetrainCANBus = new CANBus(TunerConstants.kCANBus.getName(), "./logs/example.hoot");
     public static final int PRIMARY_CONTROLLER_PORT = 0;
 
     //reef & scoring cam

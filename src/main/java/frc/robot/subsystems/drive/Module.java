@@ -70,7 +70,7 @@ public class Module {
         state.cosineScale(inputs.turnPosition);
 
         // Apply setpoints
-        io.setDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
+        io.setDriveVelocity(state.speed / constants.WheelRadius);
         io.setTurnPosition(state.angle);
     }
 

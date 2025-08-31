@@ -65,12 +65,12 @@ public class ModuleIOSim implements ModuleIO {
     public void updateInputs(ModuleIOInputs inputs) {
         // Run closed-loop control
         if (driveClosedLoop) {
-            driveAppliedVolts = driveFFVolts + driveController.calculate(driveSim.getAngularVelocityRadPerSec());
+            driveAppliedVolts = driveFFVolts + driveController.calculate(driveSim.getAngularVelocity());
         } else {
             driveController.reset();
         }
         if (turnClosedLoop) {
-            turnAppliedVolts = turnController.calculate(turnSim.getAngularPositionRad());
+            turnAppliedVolts = turnController.calculate(turnSim.getAngularPosition());
         } else {
             turnController.reset();
         }
@@ -83,19 +83,19 @@ public class ModuleIOSim implements ModuleIO {
 
         // Update drive inputs
         inputs.driveConnected = true;
-        inputs.drivePositionRad = driveSim.getAngularPositionRad();
-        inputs.driveVelocityRadPerSec = driveSim.getAngularVelocityRadPerSec();
+        inputs.drivePositionRad = driveSim.getAngularPosition();
+        inputs.driveVelocityRadPerSec = driveSim.getAngularVelocity();
         inputs.driveAppliedVolts = driveAppliedVolts;
-        inputs.driveCurrentAmps = Math.abs(driveSim.getCurrentDrawAmps());
+        inputs.driveCurrentAmps = Math.abs(driveSim.getCurrentDraw());
 
         // Update turn inputs
         inputs.turnConnected = true;
         inputs.turnEncoderConnected = true;
-        inputs.turnAbsolutePosition = new Rotation2d(turnSim.getAngularPositionRad());
-        inputs.turnPosition = new Rotation2d(turnSim.getAngularPositionRad());
-        inputs.turnVelocityRadPerSec = turnSim.getAngularVelocityRadPerSec();
+        inputs.turnAbsolutePosition = new Rotation2d(turnSim.getAngularPosition());
+        inputs.turnPosition = new Rotation2d(turnSim.getAngularPosition());
+        inputs.turnVelocityRadPerSec = turnSim.getAngularVelocity();
         inputs.turnAppliedVolts = turnAppliedVolts;
-        inputs.turnCurrentAmps = Math.abs(turnSim.getCurrentDrawAmps());
+        inputs.turnCurrentAmps = Math.abs(turnSim.getCurrentDraw());
 
         // Update odometry inputs (50Hz because high-frequency odometry in sim doesn't matter)
         inputs.odometryTimestamps = new double[] {Timer.getFPGATimestamp()};

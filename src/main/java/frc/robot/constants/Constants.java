@@ -18,6 +18,8 @@ import edu.wpi.first.math.util.Units;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+
+//still a semi work in progress
 public final class Constants {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
 

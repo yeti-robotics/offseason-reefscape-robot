@@ -14,12 +14,6 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Look at file structure
-        run: cd ~/wpilib/2027_alpha1 && ls -ltr -a
-
-#      - name: Download PhotonVision
-#        run: mv photonlib-offline.zip ~/wpilib/2027_alpha1/
-
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 

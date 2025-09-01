@@ -22,6 +22,4 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem(){
 }
-    public Command elevatorToPosition(){
-    }
 }

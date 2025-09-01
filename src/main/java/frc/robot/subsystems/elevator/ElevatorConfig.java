@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.CANrangeConfiguration;
 class ElevatorConfig {
     static final int primaryElevatorMotorID = 0;
     static final int secondaryElevatorMotorID = 0;
+    static final int canRangeID = 0;
 
     static final double gearRatio = 0;
 

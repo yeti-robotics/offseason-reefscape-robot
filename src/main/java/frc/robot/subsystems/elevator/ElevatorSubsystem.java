@@ -1,10 +1,27 @@
 package frc.robot.subsystems.elevator;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 import static frc.robot.constants.Constants.RIO_BUS;
 import static frc.robot.subsystems.elevator.ElevatorConfig.*;
 
 public class ElevatorSubsystem extends SubsystemBase {
+    private final TalonFX primaryElevatorMotor =
+            new TalonFX(ElevatorConfig.primaryElevatorMotorID, RIO_BUS);
+    private final TalonFX secondaryElevatorMotor =
+            new TalonFX(ElevatorConfig.secondaryElevatorMotorID, RIO_BUS);
+    private final MotionMagicTorqueCurrentFOC magicRequest =
+            new MotionMagicTorqueCurrentFOC(0).withSlot(0);
+    private final StatusSignal<Angle> elevatorPosition = primaryElevatorMotor.getPosition();
 
+    public ElevatorSubsystem(){
+}
+    public Command elevatorToPosition(){
+    }
 }

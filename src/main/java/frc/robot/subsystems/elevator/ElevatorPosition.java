@@ -1,4 +1,4 @@
 package frc.robot.subsystems.elevator;
 
-public class ElevatorPosition {
+public enum ElevatorPosition {
 }

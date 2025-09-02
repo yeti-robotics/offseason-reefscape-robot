@@ -6,11 +6,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 
 class ElevatorConfig {
+    //Placeholder IDs for now
     static final int primaryElevatorMotorID = 0;
     static final int secondaryElevatorMotorID = 0;
     static final int canRangeID = 0;
 
-    static final double gearRatio = 0;
+    static final double gearRatio = 18/1;
 
     private static final Slot0Configs SLOT_0_CONFIGS =
             new Slot0Configs();

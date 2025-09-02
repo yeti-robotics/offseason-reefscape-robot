@@ -77,22 +77,16 @@ public class RobotContainer {
 
     public void updateVisionSim() {
         aprilTagCamSim.update(drive.getPose());
-        Pose3d radioCamPose = new Pose3d(
+        Pose3d frontCameraPose = new Pose3d(
                 drive.getPose())
                 .transformBy(new Transform3d(Constants.camTrans1.getX(), Constants.camTrans1.getY(), Constants.camTrans1.getZ(), Constants.camTrans1.getRotation()));
 
-        Pose3d scoreCamPose = new Pose3d(
+        Pose3d rearCameraPose = new Pose3d(
                 drive.getPose())
                 .transformBy(new Transform3d(Constants.camTrans2.getX(), Constants.camTrans2.getY(), Constants.camTrans2.getZ(), Constants.camTrans2.getRotation()));
 
-        Pose3d newCamPose = new Pose3d(
-                drive.getPose())
-                .transformBy(new Transform3d(Constants.camTrans3.getX(), Constants.camTrans3.getY(), Constants.camTrans3.getZ(), Constants.camTrans3.getRotation()));
-
-
-        Logger.recordOutput("RadioCam Transform", radioCamPose);
-        Logger.recordOutput("ScoreCam Transform", scoreCamPose);
-        Logger.recordOutput("newCam Transform", newCamPose);
+        Logger.recordOutput("Front Cam Transform", frontCameraPose);
+        Logger.recordOutput("Rear Cam Transform", rearCameraPose);
     }
 
 //    private final SwerveRequest.FieldCentric driveForward = new SwerveRequest.FieldCentric()
@@ -149,20 +143,20 @@ public class RobotContainer {
         autoChooser.addOption("Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         autoChooser.addOption("Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        frontCam = new PhotonAprilTagSystem("RadioCam", Constants.camTrans1, drive);
-        rearCam = new PhotonAprilTagSystem("ScoreCam", Constants.camTrans2, drive);
+        frontCam = new PhotonAprilTagSystem("FrontCam", Constants.camTrans1, drive);
+        rearCam = new PhotonAprilTagSystem("RearCam", Constants.camTrans2, drive);
 
         mechanisms = new Mechanisms();
 
         AprilTagCamSim simCam1 = AprilTagCamSimBuilder.newCamera()
-                .withCameraName("RadioCam")
+                .withCameraName("FrontCam")
                 .withTransform(Constants.camTrans1)
                 .build();
         aprilTagCamSim.addCamera(simCam1);
         frontCam.setCamera(simCam1.getCam());
 
         AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
-                .withCameraName("ScoreCam")
+                .withCameraName("RearCam")
                 .withTransform(Constants.camTrans2)
                 .build();
         aprilTagCamSim.addCamera(simCam2);

@@ -26,31 +26,32 @@ public final class Constants {
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
     public static enum Mode {
-        /** Running on a real robot. */
+        /**
+         * Running on a real robot.
+         */
         REAL,
 
-        /** Running a physics simulator. */
+        /**
+         * Running a physics simulator.
+         */
         SIM,
 
-        /** Replaying from a log file. */
+        /**
+         * Replaying from a log file.
+         */
         REPLAY
     }
 
     public static final CANBus drivetrainCANBus = new CANBus(TunerConstants.kCANBus.getName(), "./logs/example.hoot");
     public static final int PRIMARY_CONTROLLER_PORT = 0;
 
-    //reef & scoring cam
+    // Front Camera
     public static final Transform3d camTrans1 = new Transform3d(
             new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(0), Units.inchesToMeters(7)),
             new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0)));
 
-    //left elevator cam
+    // Rear Camera
     public static final Transform3d camTrans2 = new Transform3d(
             new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(-12), Units.inchesToMeters(40)),
             new Rotation3d(0, Math.toRadians(10), Math.toRadians(200)));
-
-    //right elevator cam
-    public static final Transform3d camTrans3 = new Transform3d(
-            new Translation3d(Units.inchesToMeters(5), Units.inchesToMeters(17), Units.inchesToMeters(40)),
-            new Rotation3d(0, Math.toRadians(5), Math.toRadians(90)));
 }

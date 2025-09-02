@@ -7,9 +7,13 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveModule;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,7 +29,18 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.apriltag.AprilTagPose;
+import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
+import frc.robot.subsystems.vision.apriltag.impl.photon.PhotonAprilTagSystem;
+import frc.robot.util.sim.Mechanisms;
+import frc.robot.util.sim.vision.AprilTagCamSim;
+import frc.robot.util.sim.vision.AprilTagCamSimBuilder;
+import frc.robot.util.sim.vision.AprilTagSimulator;
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import java.util.List;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,6 +51,54 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
     // Subsystems
     private final Drive drive;
+
+    // Vision
+    public final PhotonAprilTagSystem frontCam;
+    public final PhotonAprilTagSystem rearCam;
+    private final AprilTagSubsystem[] aprilTagSubsystems;
+    final Mechanisms mechanisms;
+
+    AprilTagSimulator aprilTagCamSim = new AprilTagSimulator();
+
+    public void updateVision() {
+        for (AprilTagSubsystem aprilTagSubsystem : aprilTagSubsystems) {
+            List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
+
+            if (!aprilTagPoseOpt.isEmpty() && !drive.isMotionBlur()) {
+                for (AprilTagPose pose : aprilTagPoseOpt) {
+                    if (pose.numTags() > 0) {
+                        drive.addVisionMeasurement(
+                                pose.estimatedRobotPose(), pose.timestamp(), pose.standardDeviations());
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateVisionSim() {
+        aprilTagCamSim.update(drive.getPose());
+        Pose3d radioCamPose = new Pose3d(
+                drive.getPose())
+                .transformBy(new Transform3d(Constants.camTrans1.getX(), Constants.camTrans1.getY(), Constants.camTrans1.getZ(), Constants.camTrans1.getRotation()));
+
+        Pose3d scoreCamPose = new Pose3d(
+                drive.getPose())
+                .transformBy(new Transform3d(Constants.camTrans2.getX(), Constants.camTrans2.getY(), Constants.camTrans2.getZ(), Constants.camTrans2.getRotation()));
+
+        Pose3d newCamPose = new Pose3d(
+                drive.getPose())
+                .transformBy(new Transform3d(Constants.camTrans3.getX(), Constants.camTrans3.getY(), Constants.camTrans3.getZ(), Constants.camTrans3.getRotation()));
+
+
+        Logger.recordOutput("RadioCam Transform", radioCamPose);
+        Logger.recordOutput("ScoreCam Transform", scoreCamPose);
+        Logger.recordOutput("newCam Transform", newCamPose);
+    }
+
+//    private final SwerveRequest.FieldCentric driveForward = new SwerveRequest.FieldCentric()
+//            .withDeadband(TunerConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
+//            .withRotationalDeadband(TunerConstants.MaFxAngularRate * 0.1)
+//            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     // Controller
     private final CommandXboxController controller = new CommandXboxController(0);
@@ -86,6 +149,27 @@ public class RobotContainer {
         autoChooser.addOption("Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
         autoChooser.addOption("Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+        frontCam = new PhotonAprilTagSystem("RadioCam", Constants.camTrans1, drive);
+        rearCam = new PhotonAprilTagSystem("ScoreCam", Constants.camTrans2, drive);
+
+        mechanisms = new Mechanisms();
+
+        AprilTagCamSim simCam1 = AprilTagCamSimBuilder.newCamera()
+                .withCameraName("RadioCam")
+                .withTransform(Constants.camTrans1)
+                .build();
+        aprilTagCamSim.addCamera(simCam1);
+        frontCam.setCamera(simCam1.getCam());
+
+        AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
+                .withCameraName("ScoreCam")
+                .withTransform(Constants.camTrans2)
+                .build();
+        aprilTagCamSim.addCamera(simCam2);
+        rearCam.setCamera(simCam2.getCam());
+
+        aprilTagSubsystems = new AprilTagSubsystem[] {frontCam, rearCam};
+
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -118,6 +202,14 @@ public class RobotContainer {
                                 drive)
                         .ignoringDisable(true));
     }
+
+//    public void updateMechanisms() {
+//        mechanisms.publishComponentPoses(
+//                elevator.getCurrentPosition(), arm.getCurrentPosition(), wrist.getCurrentPosition(), true);
+//        mechanisms.publishComponentPoses(
+//                elevator.getTargetPosition(), arm.getTargetPosition(), wrist.getTargetPosition(), false);
+//        mechanisms.updateElevatorArmMech(elevator.getCurrentPosition(), arm.getCurrentPosition());
+//    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

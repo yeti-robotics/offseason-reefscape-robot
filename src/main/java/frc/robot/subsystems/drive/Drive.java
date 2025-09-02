@@ -43,6 +43,8 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -291,6 +293,11 @@ public class Drive extends SubsystemBase {
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
+    }
+
+    @AutoLogOutput(key = "Spin")
+    public boolean isMotionBlur() {
+        return false; // TODO: IMPLEMENT
     }
 
     /** Returns the current odometry rotation. */

@@ -31,4 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         secondaryElevatorMotor.setControl(
                 new Follower(ElevatorConfig.primaryElevatorMotorID, true));
 }
+    public Command zeroPosition() {
+        return runOnce(() -> primaryElevatorMotor.setPosition(0));
+    }
 }

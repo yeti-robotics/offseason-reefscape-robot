@@ -18,12 +18,12 @@ class ElevatorConfig {
     private static final Slot1Configs SLOT_1_CONFIGS =
             new Slot1Configs();
 
-    private static final TalonFXConfiguration primaryTalonFXConfigs =
+    static final TalonFXConfiguration primaryTalonFXConfigs =
             new TalonFXConfiguration();
-    private static final TalonFXConfiguration secondaryTalonFXConfigs =
+    static final TalonFXConfiguration secondaryTalonFXConfigs =
             new TalonFXConfiguration();
 
-    private static final CANrangeConfiguration canRangeElevatorConfigs =
+    static final CANrangeConfiguration canRangeElevatorConfigs =
             new CANrangeConfiguration();
 
     static final double HEIGHT_TOLERANCE = 0;

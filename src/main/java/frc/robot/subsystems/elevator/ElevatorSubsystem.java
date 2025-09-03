@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -25,5 +26,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final StatusSignal<Angle> elevatorPosition = primaryElevatorMotor.getPosition();
 
     public ElevatorSubsystem(){
+        primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);
+        secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
+        secondaryElevatorMotor.setControl(
+                new Follower(ElevatorConfig.primaryElevatorMotorID, true));
 }
 }

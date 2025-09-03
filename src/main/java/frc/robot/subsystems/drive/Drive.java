@@ -30,6 +30,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.AngularVelocityUnit;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -295,9 +298,15 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    @AutoLogOutput(key = "Spin")
     public boolean isMotionBlur() {
         return false; // TODO: IMPLEMENT
+        // return getSpin().gte(TunerConstants.MAX_BLUR_SPEED)
+    }
+
+    @AutoLogOutput(key = "Spin")
+    public AngularVelocity getSpin() {
+        return AngularVelocity.ofBaseUnits(3, RadiansPerSecond); // TODO: IMPLEMENT
+        // return this.getPigeon2().getAngularVelocityZWorld().getValue();
     }
 
     /** Returns the current odometry rotation. */

@@ -45,12 +45,12 @@ public final class Constants {
     public static final CANBus drivetrainCANBus = new CANBus(TunerConstants.kCANBus.getName(), "./logs/example.hoot");
     public static final int PRIMARY_CONTROLLER_PORT = 0;
 
-    // Front Camera
+    // Front Camera Red
     public static final Transform3d camTrans1 = new Transform3d(
             new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(0), Units.inchesToMeters(7)),
             new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0)));
 
-    // Rear Camera
+    // Rear Camera Blue
     public static final Transform3d camTrans2 = new Transform3d(
             new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(-12), Units.inchesToMeters(40)),
             new Rotation3d(0, Math.toRadians(10), Math.toRadians(200)));

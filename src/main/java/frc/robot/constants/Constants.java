@@ -47,11 +47,11 @@ public final class Constants {
 
     // Front Camera Red
     public static final Transform3d camTrans1 = new Transform3d(
-            new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(0), Units.inchesToMeters(7)),
-            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0)));
+            new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(0), Units.inchesToMeters(9)),
+            new Rotation3d(0, Math.toRadians(-20), Math.toRadians(0)));
 
     // Rear Camera Blue
     public static final Transform3d camTrans2 = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(-12), Units.inchesToMeters(40)),
-            new Rotation3d(0, Math.toRadians(10), Math.toRadians(200)));
+            new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(-11), Units.inchesToMeters(40)),
+            new Rotation3d(0, Math.toRadians(10), Math.toRadians(180)));
 }

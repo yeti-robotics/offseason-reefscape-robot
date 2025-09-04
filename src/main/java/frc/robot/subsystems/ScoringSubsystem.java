@@ -13,5 +13,12 @@ public class ScoringSubsystem extends SubsystemBase {
         insideCANRange = new CANrange(ScoreConfigs.canRangeStartID);
         outsideCANRange = new CANrange(ScoreConfigs.canRangeEndID);
     }
-}
 
+    public boolean coralInMechanism() {
+        return (insideCANRange.getIsDetected().getValue() && outsideCANRange.getIsDetected().getValue());
+    }
+
+    public boolean coralIsSafe() {
+        return (outsideCANRange.getIsDetected().getValue() && !insideCANRange.getIsDetected().getValue());
+    }
+}

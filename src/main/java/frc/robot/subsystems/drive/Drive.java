@@ -30,6 +30,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.AngularVelocityUnit;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -96,6 +99,9 @@ public class Drive extends SubsystemBase {
     private SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
+    public PPHolonomicDriveController driveController = new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0));
+
+
     public Drive(GyroIO gyroIO, ModuleIO flModuleIO, ModuleIO frModuleIO, ModuleIO blModuleIO, ModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
@@ -112,7 +118,7 @@ public class Drive extends SubsystemBase {
                 this::setPose,
                 this::getChassisSpeeds,
                 this::runVelocity,
-                new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+                driveController,
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -295,9 +301,13 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    @AutoLogOutput(key = "Spin")
     public boolean isMotionBlur() {
-        return false; // TODO: IMPLEMENT
+        return getSpin().gte(TunerConstants.MAX_BLUR_SPEED);
+    }
+
+    @AutoLogOutput(key = "Spin")
+    public AngularVelocity getSpin() {
+        return AngularVelocity.ofBaseUnits(gyroInputs.yawVelocityRadPerSec, RadiansPerSecond);
     }
 
     /** Returns the current odometry rotation. */

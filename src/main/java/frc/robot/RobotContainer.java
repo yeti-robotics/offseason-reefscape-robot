@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ReefAlignPPOTF;
 import frc.robot.constants.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -64,7 +65,7 @@ public class RobotContainer {
         for (AprilTagSubsystem aprilTagSubsystem : aprilTagSubsystems) {
             List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
 
-            if (!aprilTagPoseOpt.isEmpty() && !drive.isMotionBlur()) {
+            if (!aprilTagPoseOpt.isEmpty() && !drive.isMotionBlur()) { // TODO: Implement isMotionBlur() with new TunerConstants
                 for (AprilTagPose pose : aprilTagPoseOpt) {
                     if (pose.numTags() > 0) {
                         drive.addVisionMeasurement(
@@ -95,7 +96,7 @@ public class RobotContainer {
 //            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     // Controller
-    private final CommandXboxController controller = new CommandXboxController(0);
+    private final CommandXboxController controller = new CommandXboxController(Constants.PRIMARY_CONTROLLER_PORT);
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;

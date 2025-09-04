@@ -50,8 +50,7 @@ public class AprilTagCamSimBuilder {
             cameraName = "camera";
         }
 
-        Transform3d transform =
-                this.transform == null ? new Transform3d(translation, rotation) : this.transform;
+        Transform3d transform = this.transform == null ? new Transform3d(translation, rotation) : this.transform;
 
         SimCameraProperties cameraProp = new SimCameraProperties();
         // A 640 x 480 camera with a 100 degree diagonal FOV.
@@ -71,10 +70,9 @@ public class AprilTagCamSimBuilder {
         cameraSim.enableProcessedStream(true);
         cameraSim.enableDrawWireframe(true);
 
-        StructArrayPublisher<Pose3d> pub =
-                NetworkTableInstance.getDefault()
-                        .getStructArrayTopic(cameraName + "SeenTags", Pose3d.struct)
-                        .publish();
+        StructArrayPublisher<Pose3d> pub = NetworkTableInstance.getDefault()
+                .getStructArrayTopic(cameraName + "SeenTags", Pose3d.struct)
+                .publish();
 
         return new AprilTagCamSim(cam, cameraSim, pub, transform);
     }

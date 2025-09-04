@@ -10,12 +10,9 @@ public class AprilTagConstants {
 
     static {
         try {
-            APRIL_TAG_FIELD_LAYOUT =
-                    AprilTagFieldLayout.loadFromResource(
-                            AprilTagFields.kDefaultField.m_resourceFile);
+            APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadFromResource(AprilTagFields.kDefaultField.m_resourceFile);
         } catch (IOException e) {
-            APRIL_TAG_FIELD_LAYOUT =
-                    AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+            APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
         }
     }
 }

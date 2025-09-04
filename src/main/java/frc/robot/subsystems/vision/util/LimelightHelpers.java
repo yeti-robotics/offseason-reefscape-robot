@@ -27,8 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public class LimelightHelpers {
 
-    private static final Map<String, DoubleArrayEntry> doubleArrayEntries =
-            new ConcurrentHashMap<>();
+    private static final Map<String, DoubleArrayEntry> doubleArrayEntries = new ConcurrentHashMap<>();
 
     /** Represents a Color/Retroreflective Target Result extracted from JSON Output */
     public static class LimelightTarget_Retro {
@@ -642,10 +641,8 @@ public class LimelightHelpers {
         return inData[position];
     }
 
-    private static PoseEstimate getBotPoseEstimate(
-            String limelightName, String entryName, boolean isMegaTag2) {
-        DoubleArrayEntry poseEntry =
-                LimelightHelpers.getLimelightDoubleArrayEntry(limelightName, entryName);
+    private static PoseEstimate getBotPoseEstimate(String limelightName, String entryName, boolean isMegaTag2) {
+        DoubleArrayEntry poseEntry = LimelightHelpers.getLimelightDoubleArrayEntry(limelightName, entryName);
 
         TimestampedDoubleArray tsValue = poseEntry.getAtomic();
         double[] poseArray = tsValue.value;
@@ -682,21 +679,12 @@ public class LimelightHelpers {
                 double distToCamera = poseArray[baseIndex + 4];
                 double distToRobot = poseArray[baseIndex + 5];
                 double ambiguity = poseArray[baseIndex + 6];
-                rawFiducials[i] =
-                        new RawFiducial(id, txnc, tync, ta, distToCamera, distToRobot, ambiguity);
+                rawFiducials[i] = new RawFiducial(id, txnc, tync, ta, distToCamera, distToRobot, ambiguity);
             }
         }
 
         return new PoseEstimate(
-                pose,
-                adjustedTimestamp,
-                latency,
-                tagCount,
-                tagSpan,
-                tagDist,
-                tagArea,
-                rawFiducials,
-                isMegaTag2);
+                pose, adjustedTimestamp, latency, tagCount, tagSpan, tagDist, tagArea, rawFiducials, isMegaTag2);
     }
 
     /**
@@ -726,8 +714,7 @@ public class LimelightHelpers {
             double distToRobot = extractArrayEntry(rawFiducialArray, baseIndex + 5);
             double ambiguity = extractArrayEntry(rawFiducialArray, baseIndex + 6);
 
-            rawFiducials[i] =
-                    new RawFiducial(id, txnc, tync, ta, distToCamera, distToRobot, ambiguity);
+            rawFiducials[i] = new RawFiducial(id, txnc, tync, ta, distToCamera, distToRobot, ambiguity);
         }
 
         return rawFiducials;
@@ -765,10 +752,9 @@ public class LimelightHelpers {
             double corner3_X = extractArrayEntry(rawDetectionArray, baseIndex + 10);
             double corner3_Y = extractArrayEntry(rawDetectionArray, baseIndex + 11);
 
-            rawDetections[i] =
-                    new RawDetection(
-                            classId, txnc, tync, ta, corner0_X, corner0_Y, corner1_X, corner1_Y,
-                            corner2_X, corner2_Y, corner3_X, corner3_Y);
+            rawDetections[i] = new RawDetection(
+                    classId, txnc, tync, ta, corner0_X, corner0_Y, corner1_X, corner1_Y, corner2_X, corner2_Y,
+                    corner3_X, corner3_Y);
         }
 
         return rawDetections;
@@ -833,15 +819,12 @@ public class LimelightHelpers {
         return getLimelightNTTable(tableName).getEntry(entryName);
     }
 
-    public static DoubleArrayEntry getLimelightDoubleArrayEntry(
-            String tableName, String entryName) {
+    public static DoubleArrayEntry getLimelightDoubleArrayEntry(String tableName, String entryName) {
         String key = tableName + "/" + entryName;
-        return doubleArrayEntries.computeIfAbsent(
-                key,
-                k -> {
-                    NetworkTable table = getLimelightNTTable(tableName);
-                    return table.getDoubleArrayTopic(entryName).getEntry(new double[0]);
-                });
+        return doubleArrayEntries.computeIfAbsent(key, k -> {
+            NetworkTable table = getLimelightNTTable(tableName);
+            return table.getDoubleArrayTopic(entryName).getEntry(new double[0]);
+        });
     }
 
     public static double getLimelightNTDouble(String tableName, String entryName) {
@@ -1392,11 +1375,7 @@ public class LimelightHelpers {
      * @param cropYMax Maximum Y value (-1 to 1)
      */
     public static void setCropWindow(
-            String limelightName,
-            double cropXMin,
-            double cropXMax,
-            double cropYMin,
-            double cropYMax) {
+            String limelightName, double cropXMin, double cropXMax, double cropYMin, double cropYMax) {
         double[] entries = new double[4];
         entries[0] = cropXMin;
         entries[1] = cropXMax;
@@ -1406,8 +1385,7 @@ public class LimelightHelpers {
     }
 
     /** Sets 3D offset point for easy 3D targeting. */
-    public static void setFiducial3DOffset(
-            String limelightName, double offsetX, double offsetY, double offsetZ) {
+    public static void setFiducial3DOffset(String limelightName, double offsetX, double offsetY, double offsetZ) {
         double[] entries = new double[3];
         entries[0] = offsetX;
         entries[1] = offsetY;
@@ -1434,8 +1412,7 @@ public class LimelightHelpers {
             double pitchRate,
             double roll,
             double rollRate) {
-        SetRobotOrientation_INTERNAL(
-                limelightName, yaw, yawRate, pitch, pitchRate, roll, rollRate, true);
+        SetRobotOrientation_INTERNAL(limelightName, yaw, yawRate, pitch, pitchRate, roll, rollRate, true);
     }
 
     public static void SetRobotOrientation_NoFlush(
@@ -1446,8 +1423,7 @@ public class LimelightHelpers {
             double pitchRate,
             double roll,
             double rollRate) {
-        SetRobotOrientation_INTERNAL(
-                limelightName, yaw, yawRate, pitch, pitchRate, roll, rollRate, false);
+        SetRobotOrientation_INTERNAL(limelightName, yaw, yawRate, pitch, pitchRate, roll, rollRate, false);
     }
 
     private static void SetRobotOrientation_INTERNAL(
@@ -1546,13 +1522,7 @@ public class LimelightHelpers {
      * @param yaw Yaw angle in degrees
      */
     public static void setCameraPose_RobotSpace(
-            String limelightName,
-            double forward,
-            double side,
-            double up,
-            double roll,
-            double pitch,
-            double yaw) {
+            String limelightName, double forward, double side, double up, double roll, double pitch, double yaw) {
         double[] entries = new double[6];
         entries[0] = forward;
         entries[1] = side;
@@ -1579,10 +1549,9 @@ public class LimelightHelpers {
 
     /** Asynchronously take snapshot. */
     public static CompletableFuture<Boolean> takeSnapshot(String tableName, String snapshotName) {
-        return CompletableFuture.supplyAsync(
-                () -> {
-                    return SYNCH_TAKESNAPSHOT(tableName, snapshotName);
-                });
+        return CompletableFuture.supplyAsync(() -> {
+            return SYNCH_TAKESNAPSHOT(tableName, snapshotName);
+        });
     }
 
     private static boolean SYNCH_TAKESNAPSHOT(String tableName, String snapshotName) {
@@ -1617,9 +1586,7 @@ public class LimelightHelpers {
         long start = System.nanoTime();
         LimelightResults results = new LimelightResults();
         if (mapper == null) {
-            mapper =
-                    new ObjectMapper()
-                            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         }
 
         try {

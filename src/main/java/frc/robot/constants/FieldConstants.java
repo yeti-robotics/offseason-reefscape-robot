@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class FieldConstants {
-    public static final double FIELD_LENGTH = 16.5354;
+    public static final double FIELD_LENGTH_METERS = 16.5354;
 
     // Copyright (c) 2025 FRC 6328
     // http://github.com/Mechanical-Advantage
@@ -23,11 +23,9 @@ public class FieldConstants {
     static {
         try {
             if (Robot.isReal()) {
-                APRIL_TAG_FIELD_LAYOUT =
-                        new AprilTagFieldLayout("/home/systemcore/deploy/practice_field.json");
+                APRIL_TAG_FIELD_LAYOUT = new AprilTagFieldLayout("/home/systemcore/deploy/practice_field.json");
             } else {
-                APRIL_TAG_FIELD_LAYOUT =
-                        AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+                APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -60,8 +58,7 @@ public class FieldConstants {
 
     public static class Reef {
         public static final double faceLength = Units.inchesToMeters(36.792600);
-        public static final Translation2d center =
-                new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
+        public static final Translation2d center = new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
         public static final double faceToZoneLine =
                 Units.inchesToMeters(12); // Side of the reef to the inside of the reef zone line
 

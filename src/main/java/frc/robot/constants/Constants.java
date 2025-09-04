@@ -7,12 +7,11 @@
 
 package frc.robot.constants;
 
+import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-
-import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.generated.TunerConstants;
 
@@ -46,12 +45,12 @@ public final class Constants {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
 
     // Front Camera Red
-    public static final Transform3d camTrans1 = new Transform3d(
+    public static final Transform3d frontCamTrans = new Transform3d(
             new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(0), Units.inchesToMeters(9)),
             new Rotation3d(0, Math.toRadians(-20), Math.toRadians(0)));
 
     // Rear Camera Blue
-    public static final Transform3d camTrans2 = new Transform3d(
+    public static final Transform3d rearCamTrans = new Transform3d(
             new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(8), Units.inchesToMeters(38)),
             new Rotation3d(0, Math.toRadians(0), Math.toRadians(160)));
 }

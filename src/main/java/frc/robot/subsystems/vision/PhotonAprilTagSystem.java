@@ -1,4 +1,4 @@
-package frc.robot.subsystems.vision.apriltag.impl.photon;
+package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -38,21 +38,16 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
     private double bestDetectionTimestamp;
     private final List<AprilTagPose> poseEstimates = new ArrayList<>();
 
-    public PhotonAprilTagSystem(
-            String cameraName,
-            Transform3d cameraTransform,
-            Drive commandSwerveDrivetrain) {
+    public PhotonAprilTagSystem(String cameraName, Transform3d cameraTransform, Drive commandSwerveDrivetrain) {
         this.camera = new PhotonCamera(cameraName);
         this.cameraTransform = cameraTransform;
-        this.photonPoseEstimator =
-                new PhotonPoseEstimator(
-                        FieldConstants.APRIL_TAG_FIELD_LAYOUT,
-                        PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        cameraTransform);
+        this.photonPoseEstimator = new PhotonPoseEstimator(
+                FieldConstants.APRIL_TAG_FIELD_LAYOUT,
+                PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                cameraTransform);
         this.drivetrain = commandSwerveDrivetrain;
 
-        photonPoseEstimator.setMultiTagFallbackStrategy(
-                PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+        photonPoseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
     }
 
     @Override
@@ -77,9 +72,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
             if (pipelineResult.hasTargets()) {
                 for (var target : pipelineResult.targets) {
                     boolean lessThan5M =
-                            AprilTagDetectionHelpers.getDetectionDistance(
-                                            target.getBestCameraToTarget())
-                                    > 5;
+                            AprilTagDetectionHelpers.getDetectionDistance(target.getBestCameraToTarget()) > 5;
 
                     boolean tagAmb = target.getPoseAmbiguity() > maxAmbiguity;
 
@@ -89,8 +82,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                 }
             }
 
-            Optional<EstimatedRobotPose> estimatedRobotPoseOpt =
-                    photonPoseEstimator.update(pipelineResult);
+            Optional<EstimatedRobotPose> estimatedRobotPoseOpt = photonPoseEstimator.update(pipelineResult);
             double timestamp = pipelineResult.getTimestampSeconds();
 
             if (timestamp > latestTimestamp) {
@@ -100,8 +92,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
 
             if (estimatedRobotPoseOpt.isPresent()) {
                 EstimatedRobotPose estimatedRobotPose = estimatedRobotPoseOpt.get();
-                Optional<MultiTargetPNPResult> multiTargetPNPResultOptional =
-                        pipelineResult.getMultiTagResult();
+                Optional<MultiTargetPNPResult> multiTargetPNPResultOptional = pipelineResult.getMultiTagResult();
 
                 double ambiguity = 0, distance = 0;
                 int numTags;
@@ -121,12 +112,9 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                     boolean isMultiTag = multiTargetPNPResultOptional.isPresent();
 
                     for (PhotonTrackedTarget target : estimatedRobotPose.targetsUsed) {
-                        double targetDist =
-                                AprilTagDetectionHelpers.getDetectionDistance(
-                                        target.bestCameraToTarget);
+                        double targetDist = AprilTagDetectionHelpers.getDetectionDistance(target.bestCameraToTarget);
 
-                        if (pipelineResult == latestResult
-                                && (closestTarget == null || targetDist < closestDistance)) {
+                        if (pipelineResult == latestResult && (closestTarget == null || targetDist < closestDistance)) {
                             closestTarget = target;
                             closestDistance = targetDist;
                         }
@@ -144,8 +132,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                         ambiguity /= numTags;
                     }
 
-                    double scaleFactor =
-                            (1 / (1 + Math.pow(distance, 1.5))) * (1 + Math.pow(ambiguity, 1.2));
+                    double scaleFactor = (1 / (1 + Math.pow(distance, 1.5))) * (1 + Math.pow(ambiguity, 1.2));
                     double linearStdDevs = translationBaseStdev * scaleFactor;
                     double angularStdDevs = rotationBaseStdev * scaleFactor;
 
@@ -156,12 +143,11 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                      */
                     Matrix<N3, N1> stdDevs = AprilTagPose.DEFAULT_STD_DEVS;
 
-                    poseEstimates.add(
-                            new AprilTagPose(
-                                    estimatedRobotPose.estimatedPose.toPose2d(),
-                                    numTags,
-                                    pipelineResult.getTimestampSeconds(),
-                                    stdDevs));
+                    poseEstimates.add(new AprilTagPose(
+                            estimatedRobotPose.estimatedPose.toPose2d(),
+                            numTags,
+                            pipelineResult.getTimestampSeconds(),
+                            stdDevs));
                 }
             }
         }
@@ -191,19 +177,13 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
 
         Pose3d aprilTagPose = optAprilTagPose.get();
 
-        Pose3d robotPose =
-                PhotonUtils.estimateFieldToRobotAprilTag(
-                        target.bestCameraToTarget, aprilTagPose, cameraTransform.inverse());
+        Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(
+                target.bestCameraToTarget, aprilTagPose, cameraTransform.inverse());
 
-        Pose3d targetPose =
-                Pose3d.kZero.transformBy(cameraTransform).transformBy(target.bestCameraToTarget);
+        Pose3d targetPose = Pose3d.kZero.transformBy(cameraTransform).transformBy(target.bestCameraToTarget);
 
-        return Optional.of(
-                new AprilTagDetection(
-                        target.getFiducialId(),
-                        robotPose.toPose2d(),
-                        targetPose.toPose2d(),
-                        target.getPoseAmbiguity()));
+        return Optional.of(new AprilTagDetection(
+                target.getFiducialId(), robotPose.toPose2d(), targetPose.toPose2d(), target.getPoseAmbiguity()));
     }
 
     @Override

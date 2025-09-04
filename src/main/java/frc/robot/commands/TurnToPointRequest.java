@@ -20,15 +20,13 @@ public class TurnToPointRequest extends SwerveRequest.FieldCentricFacingAngle {
     private Pose2d targetPoseRelativeToRobot;
 
     @Override
-    public StatusCode apply(
-            SwerveDrivetrain.SwerveControlParameters parameters, SwerveModule... modulesToApply) {
-        this.TargetDirection =
-                parameters
-                        .currentPose
-                        .plus(new Transform2d())
-                        .getTranslation()
-                        .minus(parameters.currentPose.getTranslation())
-                        .getAngle();
+    public StatusCode apply(SwerveDrivetrain.SwerveControlParameters parameters, SwerveModule... modulesToApply) {
+        this.TargetDirection = parameters
+                .currentPose
+                .plus(new Transform2d())
+                .getTranslation()
+                .minus(parameters.currentPose.getTranslation())
+                .getAngle();
         if (ForwardPerspective == ForwardPerspectiveValue.OperatorPerspective) {
             // This is an angle from the frame of the reference of the field. Subtract
             // the operator persepctive to counteract CTRE adding it later

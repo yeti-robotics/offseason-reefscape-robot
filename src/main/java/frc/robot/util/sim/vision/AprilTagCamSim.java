@@ -21,10 +21,7 @@ public class AprilTagCamSim {
     private final Transform3d transform;
 
     public AprilTagCamSim(
-            PhotonCamera cam,
-            PhotonCameraSim cameraSim,
-            StructArrayPublisher<Pose3d> pub,
-            Transform3d transform) {
+            PhotonCamera cam, PhotonCameraSim cameraSim, StructArrayPublisher<Pose3d> pub, Transform3d transform) {
         this.cam = cam;
         this.cameraSim = cameraSim;
         this.tagCache = new ArrayList<>();
@@ -36,10 +33,9 @@ public class AprilTagCamSim {
         var results = cam.getAllUnreadResults();
         if (!results.isEmpty()) {
             tagCache.clear();
-            var t =
-                    results.get(0).getTargets().stream()
-                            .map(PhotonTrackedTarget::getFiducialId)
-                            .toList();
+            var t = results.get(0).getTargets().stream()
+                    .map(PhotonTrackedTarget::getFiducialId)
+                    .toList();
             tagCache.addAll(t);
         }
 
@@ -57,10 +53,9 @@ public class AprilTagCamSim {
         List<Pose3d> seenTags = new ArrayList<>();
         var tags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getTags();
         for (int i = 0; i < results.results().size(); i++) {
-            var seenTagIdsArr =
-                    results.results().stream()
-                            .map(AprilTagDetection::getFiducialID)
-                            .toArray(Integer[]::new);
+            var seenTagIdsArr = results.results().stream()
+                    .map(AprilTagDetection::getFiducialID)
+                    .toArray(Integer[]::new);
             seenTags.add(tags.get(seenTagIdsArr[i] - 1).pose);
         }
 

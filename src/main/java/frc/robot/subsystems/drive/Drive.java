@@ -302,14 +302,12 @@ public class Drive extends SubsystemBase {
     }
 
     public boolean isMotionBlur() {
-        return false; // TODO: IMPLEMENT
-        // return getSpin().gte(TunerConstants.MAX_BLUR_SPEED)
+        return getSpin().gte(TunerConstants.MAX_BLUR_SPEED);
     }
 
     @AutoLogOutput(key = "Spin")
     public AngularVelocity getSpin() {
-        return AngularVelocity.ofBaseUnits(3, RadiansPerSecond); // TODO: IMPLEMENT
-        // return this.getPigeon2().getAngularVelocityZWorld().getValue();
+        return AngularVelocity.ofBaseUnits(gyroInputs.yawVelocityRadPerSec, RadiansPerSecond);
     }
 
     /** Returns the current odometry rotation. */

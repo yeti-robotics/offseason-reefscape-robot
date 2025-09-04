@@ -52,6 +52,6 @@ public final class Constants {
 
     // Rear Camera Blue
     public static final Transform3d camTrans2 = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(-11), Units.inchesToMeters(40)),
-            new Rotation3d(0, Math.toRadians(10), Math.toRadians(180)));
+            new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(8), Units.inchesToMeters(38)),
+            new Rotation3d(0, Math.toRadians(0), Math.toRadians(160)));
 }

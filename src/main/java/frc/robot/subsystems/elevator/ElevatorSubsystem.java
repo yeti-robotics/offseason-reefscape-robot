@@ -34,4 +34,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     public Command zeroPosition() {
         return runOnce(() -> primaryElevatorMotor.setPosition(0));
     }
+
+    public boolean atSetPoint(double desiredPosition, double positionTolerance) {
+        return Math.abs(primaryElevatorMotor.getPosition().getValueAsDouble() - desiredPosition) < positionTolerance;
+    }
+
+    public Command moveTo(ElevatorPosition position){
+        return run(() -> primaryElevatorMotor.setControl(magicRequest.withPosition(position.ordinal()))).until(() -> atSetPoint(position.ordinal(), 0));
+    }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ScoringSubsystem extends SubsystemBase {
@@ -21,4 +22,10 @@ public class ScoringSubsystem extends SubsystemBase {
     public boolean coralIsSafe() {
         return (outsideCANRange.getIsDetected().getValue() && !insideCANRange.getIsDetected().getValue());
     }
+
+    private void setScoringSpeed(double speed) { scoringMotor.set(speed); }
+
+    private void stopMotor() {scoringMotor.stopMotor();}
+
+    public Command spinRollers(double speed) {return startEnd(() -> setScoringSpeed(coralInMechanism() ? speed : 0), this::stopMotor); }
 }

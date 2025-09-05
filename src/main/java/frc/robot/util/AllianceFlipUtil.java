@@ -22,7 +22,7 @@ public class AllianceFlipUtil {
      */
     public static double apply(double xCoordinate) {
         if (shouldFlip()) {
-            return FieldConstants.FIELD_LENGTH - xCoordinate;
+            return FieldConstants.FIELD_LENGTH_METERS - xCoordinate;
         } else {
             return xCoordinate;
         }
@@ -57,8 +57,7 @@ public class AllianceFlipUtil {
 
     public static Translation3d apply(Translation3d translation3d) {
         if (shouldFlip()) {
-            return new Translation3d(
-                    apply(translation3d.getX()), translation3d.getY(), translation3d.getZ());
+            return new Translation3d(apply(translation3d.getX()), translation3d.getY(), translation3d.getZ());
         } else {
             return translation3d;
         }

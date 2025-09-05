@@ -4,6 +4,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import static frc.robot.subsystems.ScoreConfigs.scoringMotorSpeed;
+
 public class ScoringSubsystem extends SubsystemBase {
     private final TalonFX scoringMotor;
     private final CANrange insideCANRange;
@@ -23,9 +25,9 @@ public class ScoringSubsystem extends SubsystemBase {
         return (outsideCANRange.getIsDetected().getValue() && !insideCANRange.getIsDetected().getValue());
     }
 
-    private void setScoringSpeed(double speed) { scoringMotor.set(speed); }
+    private void setScoringSpeed(double scoringMotorSpeed) { scoringMotor.set(scoringMotorSpeed); }
 
     private void stopMotor() {scoringMotor.stopMotor();}
 
-    public Command spinRollers(double speed) {return startEnd(() -> setScoringSpeed(coralInMechanism() ? speed : 0), this::stopMotor); }
+    public Command spinRollers(double scoringMotorSpeed) {return startEnd(() -> setScoringSpeed(coralInMechanism() ? scoringMotorSpeed : 0), this::stopMotor); }
 }

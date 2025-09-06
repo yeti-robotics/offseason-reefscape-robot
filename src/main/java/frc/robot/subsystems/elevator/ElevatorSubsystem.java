@@ -23,7 +23,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private final MotionMagicTorqueCurrentFOC magicRequest =
             new MotionMagicTorqueCurrentFOC(0).withSlot(0);
-    private final StatusSignal<Angle> elevatorPosition = primaryElevatorMotor.getPosition();
 
     public ElevatorSubsystem(){
         primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);

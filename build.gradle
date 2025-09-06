@@ -1,8 +1,6 @@
-import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO
-
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.3.2"
+    id "edu.wpi.first.GradleRIO2027" version "2027.0.0-alpha-2"
     id "idea"
     id 'com.diffplug.spotless' version '6.25.0'
     id "com.peterabeles.gversion" version "1.10"
@@ -37,8 +35,8 @@ deploy {
                 // Static files artifact
                 frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
                     files = project.fileTree('src/main/deploy')
-                    directory = '/home/lvuser/deploy'
-                    deleteOldFiles = false // Change to true to delete files on roboRIO that no
+                    directory = '/home/systemcore/deploy'
+                    deleteOldFiles = false // Change to true to delete files on systemcore that no
                     // longer exist in deploy directory of this project
                 }
             }

@@ -155,7 +155,7 @@ fabric.properties
 .idea/*
 
 !.idea/codeStyles
-!.idea/runConfigurations
+!runConfigurations
 
 ### Java ###
 # Compiled class file

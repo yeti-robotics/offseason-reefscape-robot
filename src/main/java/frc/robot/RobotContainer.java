@@ -61,7 +61,7 @@ public class RobotContainer {
             List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
 
             if (!aprilTagPoseOpt.isEmpty()
-                    && !drive.isMotionBlur()) { // TODO: Implement isMotionBlur() with new TunerConstants
+                    && !drive.isMotionBlur()) {
                 for (AprilTagPose pose : aprilTagPoseOpt) {
                     if (pose.numTags() > 0) {
                         drive.addVisionMeasurement(

@@ -60,8 +60,7 @@ public class RobotContainer {
         for (AprilTagSubsystem aprilTagSubsystem : aprilTagSubsystems) {
             List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
 
-            if (!aprilTagPoseOpt.isEmpty()
-                    && !drive.isMotionBlur()) {
+            if (!aprilTagPoseOpt.isEmpty() && !drive.isMotionBlur()) {
                 for (AprilTagPose pose : aprilTagPoseOpt) {
                     if (pose.numTags() > 0) {
                         drive.addVisionMeasurement(

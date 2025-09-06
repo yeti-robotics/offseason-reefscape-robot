@@ -14,8 +14,10 @@ class ElevatorConfig {
 
     static final double gearRatio = 18/1;
 
+    //Real Configs
     private static final Slot0Configs SLOT_0_CONFIGS =
             new Slot0Configs();
+    //Sim Configs
     private static final Slot1Configs SLOT_1_CONFIGS = new Slot1Configs()
             .withKP(4)
             .withKI(0)

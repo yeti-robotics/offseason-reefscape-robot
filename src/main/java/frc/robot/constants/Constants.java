@@ -16,8 +16,8 @@ import frc.robot.generated.TunerConstants;
  */
 public final class Constants {
     public static final int PRIMARY_CONTROLLER_PORT = 0;
-    public static final String CANIVORE_BUS = "canivoreBus";
-    public static final String RIO_BUS = "rio";
+    public static final CANBus motorCANBus = new CANBus("can_s1");
+
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 

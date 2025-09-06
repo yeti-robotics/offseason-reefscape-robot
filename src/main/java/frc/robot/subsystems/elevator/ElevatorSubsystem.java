@@ -10,15 +10,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
-import static frc.robot.constants.Constants.RIO_BUS;
+import static frc.robot.constants.Constants.motorCANBus;
 import static frc.robot.subsystems.elevator.ElevatorConfig.*;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private final TalonFX primaryElevatorMotor =
-            new TalonFX(ElevatorConfig.primaryElevatorMotorID, RIO_BUS);
+            new TalonFX(ElevatorConfig.primaryElevatorMotorID, motorCANBus);
     private final TalonFX secondaryElevatorMotor =
-            new TalonFX(ElevatorConfig.secondaryElevatorMotorID, RIO_BUS);
-    private final CANrange canRangeElevator = new CANrange(ElevatorConfig.canRangeID, RIO_BUS);
+            new TalonFX(ElevatorConfig.secondaryElevatorMotorID, motorCANBus);
+    private final CANrange canRangeElevator = new CANrange(ElevatorConfig.canRangeID, motorCANBus);
 
 
     private final MotionMagicTorqueCurrentFOC magicRequest =

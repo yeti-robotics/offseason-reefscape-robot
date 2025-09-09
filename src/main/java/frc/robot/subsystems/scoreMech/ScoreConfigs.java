@@ -1,6 +1,4 @@
-package frc.robot.subsystems;
-
-import com.ctre.phoenix6.hardware.CANrange;
+package frc.robot.subsystems.scoreMech;
 
 class ScoreConfigs {
     static final int scoringMotorID = 5;

@@ -1,11 +1,11 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.scoreMech;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ScoreConfigs;
 
 import static frc.robot.constants.Constants.motorCANBus;
-import static frc.robot.subsystems.ScoreConfigs.scoringMotorSpeed;
 
 public class ScoringSubsystem extends SubsystemBase {
     private final TalonFX scoringMotor;

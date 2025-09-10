@@ -6,8 +6,8 @@ public interface ScoreMechIO {
     @AutoLog
     public class ScoreMechIOInputs {
         public double scoreVelocity = 0.0;
-        public boolean coralIsSafe = false;
-        public boolean coralInMechanism = false;
+        public boolean innerSensorDetected = false;
+        public boolean outerSensorDetected = false;
     }
 
     public default void updateInputs(ScoreMechIOInputs inputs) {

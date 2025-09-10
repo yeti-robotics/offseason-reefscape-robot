@@ -19,8 +19,8 @@ public class RampIOTalonFX implements RampIO {
     public void updateInputs(RampIOInputs inputs) {
         inputs.rollerVelocityRPM = roller.getVelocity().getValueAsDouble();
         inputs.rollerVoltage = roller.getMotorVoltage().getValueAsDouble();
-        inputs.outerCANRangeDetected = outerRampSensor.getIsDetected().getValue();
-        inputs.innerCANRangeDetected = innerRampSensor.getIsDetected().getValue();
+        inputs.outerSensorDetected = outerRampSensor.getIsDetected().getValue();
+        inputs.innerSensorDetected = innerRampSensor.getIsDetected().getValue();
     }
 
     @Override

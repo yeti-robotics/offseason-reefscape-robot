@@ -22,10 +22,10 @@ public class RampSubsystem extends SubsystemBase {
     }
 
     public boolean outerRollerDetection() {
-        return inputs.outerCANRangeDetected;
+        return inputs.outerSensorDetected;
     }
 
     public boolean innerRollerDetection() {
-        return inputs.innerCANRangeDetected;
+        return inputs.innerSensorDetected;
     }
 }

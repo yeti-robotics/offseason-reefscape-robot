@@ -7,8 +7,8 @@ public interface RampIO {
     public static class RampIOInputs {
         public double rollerVelocityRPM = 0;
         public double rollerVoltage = 0;
-        public boolean outerCANRangeDetected = false;
-        public boolean innerCANRangeDetected = false;
+        public boolean outerSensorDetected = false;
+        public boolean innerSensorDetected = false;
     }
 
     public default void updateInputs(RampIOInputs inputs) {}

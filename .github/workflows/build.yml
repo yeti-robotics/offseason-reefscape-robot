@@ -1,7 +1,8 @@
 name: Build robot code
 permissions:
   contents: read
-on: pull_request
+on:
+  workflow_dispatch:
 jobs:
   gradle:
     runs-on: ubuntu-latest

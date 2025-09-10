@@ -5,20 +5,26 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.constants.Constants;
 
 public class RampIOTalonFX implements RampIO {
-    private final TalonFX Roller = new TalonFX(0, Constants.motorCANBus);
-    private final CANrange RampSensor = new CANrange(1, Constants.motorCANBus);
-    private final CANrange RampSensorTwo = new CANrange(2, Constants.motorCANBus);
+    private final TalonFX roller;
+    private final CANrange innerRampSensor;
+    private final CANrange outerRampSensor;
 
-    public RampIOTalonFX() {}
+    public RampIOTalonFX() {
+        roller = new TalonFX(RampConfigTalonFXReal.rollerID, Constants.motorCANBus);
+        innerRampSensor = new CANrange(RampConfigTalonFXReal.innerRampSensorID, Constants.motorCANBus);
+        outerRampSensor = new CANrange(RampConfigTalonFXReal.outerRampSensorID, Constants.motorCANBus);
+    }
 
     @Override
     public void updateInputs(RampIOInputs inputs) {
-        inputs.rollerVelocityRPM = Roller.getVelocity().getValueAsDouble();
-        inputs.rollerVoltage = Roller.getMotorVoltage().getValueAsDouble();
+        inputs.rollerVelocityRPM = roller.getVelocity().getValueAsDouble();
+        inputs.rollerVoltage = roller.getMotorVoltage().getValueAsDouble();
+        inputs.outerCANRangeDetected = outerRampSensor.getIsDetected().getValue();
+        inputs.innerCANRangeDetected = innerRampSensor.getIsDetected().getValue();
     }
 
     @Override
     public void setRollerVoltage(double volts) {
-        Roller.setVoltage(0.1);
+        roller.setVoltage(0.1);
     }
 }

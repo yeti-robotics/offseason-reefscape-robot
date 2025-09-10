@@ -7,17 +7,25 @@ public class RampSubsystem extends SubsystemBase {
     private RampIO io;
     private RampIOInputsAutoLogged inputs;
 
-    public RampSubsystem(RampIO io) {
-        this.io = io;
-        inputs = new RampIOInputsAutoLogged();
-    }
-
     @Override
     public void periodic() {
         io.updateInputs(inputs);
     }
 
-    public void RunRamp(double voltage) {
+    public RampSubsystem(RampIO io) {
+        this.io = io;
+        inputs = new RampIOInputsAutoLogged();
+    }
+
+    public void runRamp(double voltage) {
         io.setRollerVoltage(voltage);
+    }
+
+    public boolean outerRollerDetection() {
+        return inputs.outerCANRangeDetected;
+    }
+
+    public boolean innerRollerDetection() {
+        return inputs.innerCANRangeDetected;
     }
 }

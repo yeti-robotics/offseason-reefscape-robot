@@ -32,5 +32,5 @@ public final class Constants {
     }
 
     public static final CANBus drivetrainCANBus = new CANBus(TunerConstants.kCANBus.getName(), "./logs/example.hoot");
-    public static final CANBus motorCANBus = new CANBus("can_s1");
+    public static final CANBus motorCANBus = CANBus.systemCore(1);
 }

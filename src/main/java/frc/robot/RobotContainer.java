@@ -117,7 +117,7 @@ public class RobotContainer {
                         new ModuleIOTalonFX(TunerConstants.FrontRight),
                         new ModuleIOTalonFX(TunerConstants.BackLeft),
                         new ModuleIOTalonFX(TunerConstants.BackRight));
-                score = new ScoreMechSubsystem(new ScoreMechIO() {});
+                score = new ScoreMechSubsystem(new ScoreMechIOTalonFXCANrange());
 
                 break;
 

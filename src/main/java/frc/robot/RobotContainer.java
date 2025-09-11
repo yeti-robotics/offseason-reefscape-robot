@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.Constants;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.ramp.*;
 import frc.robot.subsystems.vision.PhotonAprilTagSystem;
 import frc.robot.subsystems.vision.apriltag.AprilTagPose;
 import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
@@ -36,7 +38,6 @@ import frc.robot.util.sim.vision.AprilTagCamSimBuilder;
 import frc.robot.util.sim.vision.AprilTagSimulator;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
-import frc.robot.subsystems.ramp.*;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -209,6 +210,11 @@ public class RobotContainer {
                         .ignoringDisable(true));
 
         controller.x().onTrue(Commands.runOnce(() -> ramp.runRamp(1)));
+
+        // ramp commands
+        // when outer can range is triggered, start spinning motor, when inner can range is triggered, stop motor.
+
+        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
     }
 
     //    public void updateMechanisms() {

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.scoreMech;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ScoreMechSubsystem extends SubsystemBase {
@@ -25,5 +26,17 @@ public class ScoreMechSubsystem extends SubsystemBase {
 
     public double getScoreVelocity() {
         return inputs.scoreVelocity;
+    }
+
+    public boolean coralIsSafe() {
+        return !innerSensorDetected() && outerSensorDetected();
+    }
+
+    private void stopMotor() {
+        io.setScoreVelocity(0);
+    }
+
+    public Command scoreCoral() {
+        return runEnd(() -> io.setScoreVelocity(coralIsSafe() ? .5 : 0), this::stopMotor);
     }
 }

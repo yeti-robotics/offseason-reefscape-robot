@@ -209,6 +209,7 @@ public class RobotContainer {
                         .ignoringDisable(true));
 
         controller.rightTrigger().onTrue(score.scoreCoral());
+        controller.leftTrigger().onTrue(score.spinUntilCoralSafe());
     }
 
     //    public void updateMechanisms() {

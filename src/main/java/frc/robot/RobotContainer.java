@@ -27,6 +27,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.scoreMech.ScoreMechIO;
+import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
+import frc.robot.subsystems.scoreMech.ScoreMechSubsystem;
 import frc.robot.subsystems.vision.PhotonAprilTagSystem;
 import frc.robot.subsystems.vision.apriltag.AprilTagPose;
 import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
@@ -47,6 +50,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
     // Subsystems
     private final Drive drive;
+    private final ScoreMechSubsystem score;
 
     // Vision
     public final PhotonAprilTagSystem frontCam;
@@ -113,6 +117,8 @@ public class RobotContainer {
                         new ModuleIOTalonFX(TunerConstants.FrontRight),
                         new ModuleIOTalonFX(TunerConstants.BackLeft),
                         new ModuleIOTalonFX(TunerConstants.BackRight));
+                score = new ScoreMechSubsystem(new ScoreMechIO() {});
+
                 break;
 
             case SIM:
@@ -123,12 +129,16 @@ public class RobotContainer {
                         new ModuleIOSim(TunerConstants.FrontRight),
                         new ModuleIOSim(TunerConstants.BackLeft),
                         new ModuleIOSim(TunerConstants.BackRight));
+
+                score = new ScoreMechSubsystem(new ScoreMechIOSim() {});
                 break;
 
             default:
                 // Replayed robot, disable IO implementations
                 drive = new Drive(
                         new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
+                score = new ScoreMechSubsystem(new ScoreMechIO() {});
+
                 break;
         }
 
@@ -197,6 +207,8 @@ public class RobotContainer {
                                 () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                                 drive)
                         .ignoringDisable(true));
+
+        controller.rightTrigger().onTrue(score.scoreCoral());
     }
 
     //    public void updateMechanisms() {

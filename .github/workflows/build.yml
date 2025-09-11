@@ -1,4 +1,6 @@
 name: Build robot code
+permissions:
+  contents: read
 on:
   workflow_dispatch:
 jobs:

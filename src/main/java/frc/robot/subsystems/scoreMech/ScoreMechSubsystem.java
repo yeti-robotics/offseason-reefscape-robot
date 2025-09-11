@@ -37,6 +37,6 @@ public class ScoreMechSubsystem extends SubsystemBase {
     }
 
     public Command scoreCoral() {
-        return runEnd(() -> io.setScoreVelocity(coralIsSafe() ? .5 : 0), this::stopMotor);
+        return runEnd(() -> io.setScoreVelocity(coralIsSafe() ? getScoreVelocity() : 0), this::stopMotor);
     }
 }

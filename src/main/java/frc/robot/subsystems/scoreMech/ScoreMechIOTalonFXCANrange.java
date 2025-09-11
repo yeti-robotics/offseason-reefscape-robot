@@ -1,21 +1,20 @@
 package frc.robot.subsystems.scoreMech;
 
+import static frc.robot.constants.Constants.motorCANBus;
+
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
-
-import static frc.robot.constants.Constants.motorCANBus;
 
 public class ScoreMechIOTalonFXCANrange implements ScoreMechIO {
     private TalonFX scoreMotor;
     private CANrange innerCANrange;
     private CANrange outerCANrange;
 
-    public void ScoreMechIOTalonFxCANrange(){
+    public void ScoreMechIOTalonFxCANrange() {
         scoreMotor = new TalonFX(ScoreConfigs.scoreMotorID, motorCANBus);
         innerCANrange = new CANrange(ScoreConfigs.innerCANrangeID, motorCANBus);
         outerCANrange = new CANrange(ScoreConfigs.outerCANrangeID, motorCANBus);
     }
-
 
     public void updateInputs(ScoreMechIOInputs inputs) {
         inputs.scoreVelocity = scoreMotor.getVelocity().getValueAsDouble();

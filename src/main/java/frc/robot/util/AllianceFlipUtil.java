@@ -22,7 +22,7 @@ public class AllianceFlipUtil {
      */
     public static double apply(double xCoordinate) {
         if (shouldFlip()) {
-            return FieldConstants.FIELD_LENGTH - xCoordinate;
+            return FieldConstants.FIELD_LENGTH_METERS - xCoordinate;
         } else {
             return xCoordinate;
         }

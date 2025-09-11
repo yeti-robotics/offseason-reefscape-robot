@@ -22,9 +22,4 @@ public class RampIOTalonFX implements RampIO {
         inputs.outerSensorDetected = outerRampSensor.getIsDetected().getValue();
         inputs.innerSensorDetected = innerRampSensor.getIsDetected().getValue();
     }
-
-    @Override
-    public void setRollerVoltage(double volts) {
-        roller.setVoltage(0.1);
-    }
 }

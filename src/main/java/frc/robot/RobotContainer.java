@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.Constants;
@@ -209,6 +210,11 @@ public class RobotContainer {
                         .ignoringDisable(true));
 
         controller.x().onTrue(Commands.runOnce(() -> ramp.runRamp(1)));
+
+        // ramp commands
+        // when outer can range is triggered, start spinning motor, when inner can range is triggered, stop motor.
+
+        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
     }
 
     //    public void updateMechanisms() {

@@ -20,14 +20,6 @@ public class RampSubsystem extends SubsystemBase {
         inputs = new RampIOInputsAutoLogged();
     }
 
-    public void runRamp(double voltage) {
-        io.setRollerVoltage(voltage);
-    }
-
-    public void stopRamp() {
-        io.setRollerVoltage(0);
-    }
-
     public boolean outerRollerDetection() {
         return inputs.outerSensorDetected;
     }
@@ -39,10 +31,10 @@ public class RampSubsystem extends SubsystemBase {
     public Command setRoller(double voltage) {
         return runEnd(
                         () -> {
-                            runRamp(voltage);
+                            io.setRollerVoltage(voltage);
                         },
                         () -> {
-                            stopRamp();
+                            io.setRollerVoltage(0);
                         })
                 .until(this::innerRollerDetection);
     }

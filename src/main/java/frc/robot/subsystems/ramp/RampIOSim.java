@@ -1,9 +1,13 @@
 package frc.robot.subsystems.ramp;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.util.sim.PhysicsSim;
+
+import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
 
 public class RampIOSim implements RampIO {
     private final TalonFX roller;
@@ -27,6 +31,6 @@ public class RampIOSim implements RampIO {
 
     @Override
     public void setRollerVoltage(double volts) {
-        roller.setVoltage(0.1);
+        roller.setControl(new DutyCycleOut(volts));
     }
 }

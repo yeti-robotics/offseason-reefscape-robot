@@ -24,6 +24,7 @@ public class ScoreMechIOSim implements ScoreMechIO {
         inputs.outerSensorDetected = outerCANrange.getIsDetected().getValue();
     }
 
+    @Override
     public void setScoreVelocity(double scoreVelocity) {
         scoreMotor.set(scoreVelocity);
     }

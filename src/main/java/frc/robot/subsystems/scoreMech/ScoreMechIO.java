@@ -13,6 +13,4 @@ public interface ScoreMechIO {
     public default void updateInputs(ScoreMechIOInputs inputs) {}
 
     public default void setScoreVelocity(double scoreVelocity) {}
-
-    public default void spinMotor(double scoreVelocity) {}
 }

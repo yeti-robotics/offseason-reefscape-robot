@@ -21,4 +21,8 @@ public class ScoreMechIOTalonFXCANrange implements ScoreMechIO {
         inputs.innerSensorDetected = innerCANrange.getIsDetected().getValue();
         inputs.outerSensorDetected = outerCANrange.getIsDetected().getValue();
     }
+
+    public void setScoreVelocity(double scoreVelocity) {
+        scoreMotor.set(scoreVelocity);
+    }
 }

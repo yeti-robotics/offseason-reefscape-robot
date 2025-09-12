@@ -4,5 +4,4 @@ class ScoreConfigs {
     static final int scoreMotorID = 5;
     static final int innerCANrangeID = 20;
     static final int outerCANrangeID = 29;
-    static final double scoreVelocity = 0.5;
 }

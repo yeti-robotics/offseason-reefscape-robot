@@ -1,6 +1,5 @@
 package frc.robot.subsystems.ramp;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface RampIO {

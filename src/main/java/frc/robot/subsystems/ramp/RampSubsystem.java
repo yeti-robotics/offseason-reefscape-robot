@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class RampSubsystem extends SubsystemBase {
 
     private RampIO io;
-    private RampIOInputsAutoLogged inputs;
+    private RampIOInputsAutoLogged inputs = new RampIOInputsAutoLogged();
 
     @Override
     public void periodic() {
@@ -17,7 +17,6 @@ public class RampSubsystem extends SubsystemBase {
 
     public RampSubsystem(RampIO io) {
         this.io = io;
-        inputs = new RampIOInputsAutoLogged();
     }
 
     public boolean outerRollerDetection() {

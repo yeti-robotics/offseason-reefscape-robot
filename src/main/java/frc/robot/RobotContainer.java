@@ -208,12 +208,6 @@ public class RobotContainer {
                                 () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                                 drive)
                         .ignoringDisable(true));
-
-        controller.x().onTrue(Commands.runOnce(() -> ramp.runRamp(1)));
-
-        // ramp commands
-        // when outer can range is triggered, start spinning motor, when inner can range is triggered, stop motor.
-
         new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
     }
 

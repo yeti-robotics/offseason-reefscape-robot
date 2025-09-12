@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ScoreMechSubsystem extends SubsystemBase {
     private ScoreMechIO io;
-    private ScoreMechIOInputsAutoLogged inputs;
+    private ScoreMechIOInputsAutoLogged inputs = new ScoreMechIOInputsAutoLogged();
 
     public ScoreMechSubsystem(ScoreMechIO io) {
         this.io = io;

@@ -130,7 +130,7 @@ public class RobotContainer {
                         new ModuleIOSim(TunerConstants.BackLeft),
                         new ModuleIOSim(TunerConstants.BackRight));
 
-                score = new ScoreMechSubsystem(new ScoreMechIOSim() {});
+                score = new ScoreMechSubsystem(new ScoreMechIOSim());
                 break;
 
             default:

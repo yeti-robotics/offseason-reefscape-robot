@@ -25,7 +25,7 @@ public class ScoreMechIOSim implements ScoreMechIO {
     }
 
     @Override
-    public void setScoreVelocity(double scoreVelocity) {
-        scoreMotor.set(scoreVelocity);
+    public void setPower(double scorePower) {
+        scoreMotor.set(scorePower);
     }
 }

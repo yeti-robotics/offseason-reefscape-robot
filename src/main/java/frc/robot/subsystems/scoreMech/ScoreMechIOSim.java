@@ -11,7 +11,7 @@ public class ScoreMechIOSim implements ScoreMechIO {
     private CANrange innerCANrange;
     private CANrange outerCANrange;
 
-    public void ScoreMechIOSim() {
+    public ScoreMechIOSim() {
         scoreMotor = new TalonFX(ScoreConfigs.scoreMotorID, motorCANBus);
         innerCANrange = new CANrange(ScoreConfigs.innerCANrangeID, motorCANBus);
         outerCANrange = new CANrange(ScoreConfigs.outerCANrangeID, motorCANBus);

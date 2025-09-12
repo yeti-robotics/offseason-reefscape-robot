@@ -29,6 +29,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.scoreMech.ScoreMechIO;
 import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
+import frc.robot.subsystems.scoreMech.ScoreMechIOTalonFXCANrange;
 import frc.robot.subsystems.scoreMech.ScoreMechSubsystem;
 import frc.robot.subsystems.vision.PhotonAprilTagSystem;
 import frc.robot.subsystems.vision.apriltag.AprilTagPose;

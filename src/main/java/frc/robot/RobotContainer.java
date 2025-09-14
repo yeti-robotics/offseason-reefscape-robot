@@ -208,6 +208,8 @@ public class RobotContainer {
                                 () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                                 drive)
                         .ignoringDisable(true));
+
+        //trigger for coral detection in ramp - will automatically set coral position for handoff
         new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
     }
 

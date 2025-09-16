@@ -6,7 +6,7 @@ import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
-class ElevatorConfig {
+class ElevatorConfigTalonFXReal {
     static final int primaryElevatorMotorID = 0;
     static final int secondaryElevatorMotorID = 0;
     static final int canRangeID = 0;
@@ -15,16 +15,6 @@ class ElevatorConfig {
 
     // Real Configs
     private static final Slot0Configs SLOT_0_CONFIGS = new Slot0Configs();
-    // Sim Configs
-    private static final Slot1Configs SLOT_1_CONFIGS = new Slot1Configs()
-            .withKP(4)
-            .withKI(0)
-            .withKD(48)
-            .withKG(0)
-            .withKV(0)
-            .withKA(1)
-            .withKS(0.5)
-            .withGravityType(GravityTypeValue.Elevator_Static);
 
     static final TalonFXConfiguration primaryTalonFXConfigs = new TalonFXConfiguration();
     static final TalonFXConfiguration secondaryTalonFXConfigs = new TalonFXConfiguration();

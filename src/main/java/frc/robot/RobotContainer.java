@@ -100,7 +100,7 @@ public class RobotContainer {
     //            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     // Controller
-    private final CommandXboxController controller = new CommandXboxController(0);
+    private final CommandXboxController controller = new CommandXboxController(Constants.PRIMARY_CONTROLLER_PORT);
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -180,7 +180,7 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        //Configure the trigger bindings
+        // Configure the trigger bindings
         configureTriggerBindings();
     }
 

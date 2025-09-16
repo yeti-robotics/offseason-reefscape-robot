@@ -1,6 +1,5 @@
 package frc.robot.subsystems.ramp;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -13,9 +12,9 @@ public class RampIOSim implements RampIO {
     private final CANrange outerRampSensor;
 
     public RampIOSim() {
-        roller = new TalonFX(RampConfigTalonFXReal.rollerID, Constants.motorCANBus);
-        innerRampSensor = new CANrange(RampConfigTalonFXReal.innerRampSensorID, Constants.motorCANBus);
-        outerRampSensor = new CANrange(RampConfigTalonFXReal.outerRampSensorID, Constants.motorCANBus);
+        roller = new TalonFX(RampConfigTalonFXSim.rollerID, Constants.motorCANBus);
+        innerRampSensor = new CANrange(RampConfigTalonFXSim.innerRampSensorID, Constants.motorCANBus);
+        outerRampSensor = new CANrange(RampConfigTalonFXSim.outerRampSensorID, Constants.motorCANBus);
         PhysicsSim.getInstance().addTalonFX(roller);
     }
 

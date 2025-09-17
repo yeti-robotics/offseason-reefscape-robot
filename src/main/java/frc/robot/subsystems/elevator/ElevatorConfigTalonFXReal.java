@@ -7,9 +7,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 class ElevatorConfigTalonFXReal {
-    static final int primaryElevatorMotorID = 0;
-    static final int secondaryElevatorMotorID = 0;
-    static final int canRangeID = 0;
+    static final int primaryElevatorMotorID = 14;
+    static final int secondaryElevatorMotorID = 15;
+    static final int canRangeID = 16;
 
     static final double gearRatio = 0;
 

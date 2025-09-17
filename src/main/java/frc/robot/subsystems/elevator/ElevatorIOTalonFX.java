@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.util.sim.PhysicsSim;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
     public final TalonFX primaryElevatorMotor;
@@ -20,6 +21,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         primaryElevatorMotor = new TalonFX(ElevatorConfigTalonFXReal.primaryElevatorMotorID, motorCANBus);
         secondaryElevatorMotor = new TalonFX(ElevatorConfigTalonFXReal.secondaryElevatorMotorID, motorCANBus);
         canRangeElevator = new CANrange(ElevatorConfigTalonFXReal.canRangeID, motorCANBus);
+        PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
     }
 
     @Override

@@ -33,7 +33,6 @@ import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.ramp.*;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.scoreMech.ScoreMechIO;
 import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
 import frc.robot.subsystems.scoreMech.ScoreMechIOTalonFXCANrange;
@@ -156,7 +155,6 @@ public class RobotContainer {
                         new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 score = new ScoreMechSubsystem(new ScoreMechIO() {});
                 elevator = new ElevatorSubsystem(new ElevatorIO() {});
-
 
                 ramp = new RampSubsystem(new RampIO() {});
 

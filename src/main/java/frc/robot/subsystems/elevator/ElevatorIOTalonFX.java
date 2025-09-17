@@ -14,8 +14,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     public final TalonFX secondaryElevatorMotor;
     public final CANrange canRangeElevator;
 
-    private final MotionMagicTorqueCurrentFOC magicRequest =
-            new MotionMagicTorqueCurrentFOC(0).withSlot(0);
+    private final MotionMagicTorqueCurrentFOC magicRequest = new MotionMagicTorqueCurrentFOC(0).withSlot(0);
 
     public ElevatorIOTalonFX() {
         primaryElevatorMotor = new TalonFX(ElevatorConfigTalonFXReal.primaryElevatorMotorID, motorCANBus);
@@ -43,7 +42,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         return Math.abs(primaryElevatorMotor.getPosition().getValueAsDouble() - desiredPosition) < positionTolerance;
     }
 
-    public Command moveTo(ElevatorPosition position){
-        return run(() -> primaryElevatorMotor.setControl(magicRequest.withPosition(position.ordinal()))).until(() -> atSetPoint(position.ordinal(), 0));
+    public Command moveTo(ElevatorPosition position) {
+        return run(() -> primaryElevatorMotor.setControl(magicRequest.withPosition(position.ordinal())))
+                .until(() -> atSetPoint(position.ordinal(), 0));
     }
 }

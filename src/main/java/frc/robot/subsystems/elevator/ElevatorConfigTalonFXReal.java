@@ -2,9 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 
 class ElevatorConfigTalonFXReal {
     static final int primaryElevatorMotorID = 14;

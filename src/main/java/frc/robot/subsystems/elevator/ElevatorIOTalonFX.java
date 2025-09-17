@@ -1,10 +1,13 @@
 package frc.robot.subsystems.elevator;
 
+import static edu.wpi.first.wpilibj2.command.Commands.run;
+import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static frc.robot.constants.Constants.motorCANBus;
 
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
     public final TalonFX primaryElevatorMotor;
@@ -29,6 +32,18 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     @Override
     public void moveToPosition(double position) {
-        primaryElevatorMotor.setControl(new MotionMagicTorqueCurrentFOC(position));
+        primaryElevatorMotor.setControl(magicRequest);
+    }
+
+    public Command zeroPosition() {
+        return runOnce(() -> primaryElevatorMotor.setPosition(0));
+    }
+
+    public boolean atSetPoint(double desiredPosition, double positionTolerance) {
+        return Math.abs(primaryElevatorMotor.getPosition().getValueAsDouble() - desiredPosition) < positionTolerance;
+    }
+
+    public Command moveTo(ElevatorPosition position){
+        return run(() -> primaryElevatorMotor.setControl(magicRequest.withPosition(position.ordinal()))).until(() -> atSetPoint(position.ordinal(), 0));
     }
 }

@@ -12,18 +12,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     private ElevatorIO io;
     private ElevatorIOInputsAutoLogged inputs;
 
-    public final TalonFX primaryElevatorMotor;
-    public final TalonFX secondaryElevatorMotor;
-    public final CANrange canRangeElevator;
-
     private final MotionMagicTorqueCurrentFOC magicRequest =
             new MotionMagicTorqueCurrentFOC(0).withSlot(0);
 
     public ElevatorSubsystem(ElevatorIO io) {
         this.io = io;
-        primaryElevatorMotor = new TalonFX(ElevatorConfigTalonFXReal.primaryElevatorMotorID, motorCANBus);
-        secondaryElevatorMotor = new TalonFX(ElevatorConfigTalonFXReal.secondaryElevatorMotorID, motorCANBus);
-        canRangeElevator = new CANrange(ElevatorConfigTalonFXReal.canRangeID, motorCANBus);
     }
 
     @Override
@@ -37,17 +30,5 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public boolean isAtBottom() {
         return inputs.isAtBottom;
-    }
-
-    public Command zeroPosition() {
-        return runOnce(() -> primaryElevatorMotor.setPosition(0));
-    }
-
-    public boolean atSetPoint(double desiredPosition, double positionTolerance) {
-        return Math.abs(primaryElevatorMotor.getPosition().getValueAsDouble() - desiredPosition) < positionTolerance;
-    }
-
-    public Command moveTo(ElevatorPosition position){
-        return run(() -> primaryElevatorMotor.setControl(magicRequest.withPosition(position.ordinal()))).until(() -> atSetPoint(position.ordinal(), 0));
     }
 }

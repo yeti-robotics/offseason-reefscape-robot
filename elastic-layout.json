@@ -42,11 +42,12 @@
             "y": 384.0,
             "width": 384.0,
             "height": 256.0,
-            "type": "Large Text Display",
+            "type": "Text Display",
             "properties": {
               "topic": "/AdvantageKit/NetworkInputs/SmartDashboard/Auto Choices",
               "period": 0.06,
-              "data_type": "string"
+              "data_type": "string",
+              "show_submit_button": false
             }
           },
           {

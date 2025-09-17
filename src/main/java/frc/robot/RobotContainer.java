@@ -27,6 +27,10 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.scoreMech.ScoreMechIO;
 import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
 import frc.robot.subsystems.scoreMech.ScoreMechIOTalonFXCANrange;
@@ -52,6 +56,7 @@ public class RobotContainer {
     // Subsystems
     private final Drive drive;
     private final ScoreMechSubsystem score;
+    private final ElevatorSubsystem elevator;
 
     // Vision
     public final PhotonAprilTagSystem frontCam;
@@ -119,6 +124,7 @@ public class RobotContainer {
                         new ModuleIOTalonFX(TunerConstants.BackLeft),
                         new ModuleIOTalonFX(TunerConstants.BackRight));
                 score = new ScoreMechSubsystem(new ScoreMechIOTalonFXCANrange());
+                elevator = new ElevatorSubsystem(new ElevatorIOTalonFX());
 
                 break;
 
@@ -132,6 +138,7 @@ public class RobotContainer {
                         new ModuleIOSim(TunerConstants.BackRight));
 
                 score = new ScoreMechSubsystem(new ScoreMechIOSim());
+                elevator = new ElevatorSubsystem(new ElevatorIOSim());
                 break;
 
             default:
@@ -139,6 +146,7 @@ public class RobotContainer {
                 drive = new Drive(
                         new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 score = new ScoreMechSubsystem(new ScoreMechIO() {});
+                elevator = new ElevatorSubsystem(new ElevatorIO() {});
 
                 break;
         }

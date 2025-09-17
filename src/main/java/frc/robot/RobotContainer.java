@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.Constants;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.ramp.*;
 import frc.robot.subsystems.scoreMech.ScoreMechIO;
 import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
 import frc.robot.subsystems.scoreMech.ScoreMechIOTalonFXCANrange;
@@ -52,6 +54,7 @@ public class RobotContainer {
     // Subsystems
     private final Drive drive;
     private final ScoreMechSubsystem score;
+    private final RampSubsystem ramp;
 
     // Vision
     public final PhotonAprilTagSystem frontCam;
@@ -120,6 +123,9 @@ public class RobotContainer {
                         new ModuleIOTalonFX(TunerConstants.BackRight));
                 score = new ScoreMechSubsystem(new ScoreMechIOTalonFXCANrange());
 
+
+                ramp = new RampSubsystem(new RampIOTalonFX());
+
                 break;
 
             case SIM:
@@ -132,6 +138,8 @@ public class RobotContainer {
                         new ModuleIOSim(TunerConstants.BackRight));
 
                 score = new ScoreMechSubsystem(new ScoreMechIOSim());
+
+                ramp = new RampSubsystem(new RampIOSim());
                 break;
 
             default:
@@ -139,6 +147,9 @@ public class RobotContainer {
                 drive = new Drive(
                         new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 score = new ScoreMechSubsystem(new ScoreMechIO() {});
+
+
+                ramp = new RampSubsystem(new RampIO() {});
 
                 break;
         }
@@ -179,6 +190,9 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        // Configure the trigger bindings
+        configureTriggerBindings();
     }
 
     /**
@@ -211,6 +225,11 @@ public class RobotContainer {
 
         controller.rightTrigger().onTrue(score.scoreCoral());
         controller.leftTrigger().onTrue(score.spinUntilCoralSafe());
+    }
+
+    private void configureTriggerBindings() {
+        // Trigger for coral detection in ramp - will automatically set coral position for handoff
+        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
     }
 
     //    public void updateMechanisms() {

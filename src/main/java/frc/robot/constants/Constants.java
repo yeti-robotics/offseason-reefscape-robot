@@ -54,4 +54,5 @@ public final class Constants {
     public static final Transform3d rearCamTrans = new Transform3d(
             new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(8), Units.inchesToMeters(38)),
             new Rotation3d(0, Math.toRadians(0), Math.toRadians(160)));
+    public static final CANBus motorCANBus = CANBus.systemCore(1);
 }

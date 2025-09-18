@@ -9,11 +9,7 @@ public enum ElevatorPosition {
     private final Angle height;
 
     ElevatorPosition(double height) {
-        this(Units.Rotations.of(height));
-    }
-
-    ElevatorPosition(Angle height) {
-        this.height = height;
+        this.height = Units.Rotations.of(height);
     }
 
     public Angle getHeight() {

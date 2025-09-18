@@ -29,6 +29,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
         secondaryElevatorMotor.setControl(
                 new Follower(ElevatorConfigTalonFXReal.primaryElevatorMotorID, true));
+
+        zeroPosition();
     }
 
     @Override
@@ -43,16 +45,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         primaryElevatorMotor.setControl(magicRequest);
     }
 
-    public Command zeroPosition() {
-        return runOnce(() -> primaryElevatorMotor.setPosition(0));
-    }
-
-    public boolean atSetPoint(double desiredPosition, double positionTolerance) {
-        return Math.abs(primaryElevatorMotor.getPosition().getValueAsDouble() - desiredPosition) < positionTolerance;
-    }
-
-    public Command moveTo(ElevatorPosition position) {
-        return run(() -> primaryElevatorMotor.setControl(magicRequest.withPosition(position.ordinal())))
-                .until(() -> atSetPoint(position.ordinal(), 0));
+    @Override
+    public void zeroPosition() {
+        primaryElevatorMotor.setPosition(0);
     }
 }

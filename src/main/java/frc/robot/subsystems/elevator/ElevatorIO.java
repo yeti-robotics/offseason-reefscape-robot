@@ -8,9 +8,12 @@ public interface ElevatorIO {
         public double positionRotation = 0.0;
         public double velocityRPM = 0.0;
         public boolean isAtBottom = false;
+        public boolean isAtSetpoint = false;
     }
 
     public default void updateInputs(ElevatorIOInputs inputs) {}
 
     public default void moveToPosition(double position) {}
+
+    public default void zeroPosition() {}
 }

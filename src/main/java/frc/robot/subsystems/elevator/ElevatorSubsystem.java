@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -18,8 +19,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         io.updateInputs(inputs);
     }
 
-    public void moveToPosition(double position) {
-        io.moveToPosition(position);
+    public Command moveToPosition(double position) {
+        return runOnce(() -> io.moveToPosition(position));
     }
 
     public boolean isAtBottom() {

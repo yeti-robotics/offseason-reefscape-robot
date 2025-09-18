@@ -3,7 +3,10 @@ package frc.robot.subsystems.elevator;
 import static edu.wpi.first.wpilibj2.command.Commands.run;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static frc.robot.constants.Constants.motorCANBus;
+import static frc.robot.subsystems.elevator.ElevatorConfigTalonFXReal.primaryTalonFXConfigs;
+import static frc.robot.subsystems.elevator.ElevatorConfigTalonFXReal.secondaryTalonFXConfigs;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -22,6 +25,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         secondaryElevatorMotor = new TalonFX(ElevatorConfigTalonFXReal.secondaryElevatorMotorID, motorCANBus);
         canRangeElevator = new CANrange(ElevatorConfigTalonFXReal.canRangeID, motorCANBus);
         PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
+        primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);
+        secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
+        secondaryElevatorMotor.setControl(
+                new Follower(ElevatorConfigTalonFXReal.primaryElevatorMotorID, true));
     }
 
     @Override

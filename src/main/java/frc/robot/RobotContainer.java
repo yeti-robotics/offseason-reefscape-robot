@@ -123,7 +123,6 @@ public class RobotContainer {
                         new ModuleIOTalonFX(TunerConstants.BackRight));
                 score = new ScoreMechSubsystem(new ScoreMechIOTalonFXCANrange());
 
-
                 ramp = new RampSubsystem(new RampIOTalonFX());
 
                 break;
@@ -147,7 +146,6 @@ public class RobotContainer {
                 drive = new Drive(
                         new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 score = new ScoreMechSubsystem(new ScoreMechIO() {});
-
 
                 ramp = new RampSubsystem(new RampIO() {});
 

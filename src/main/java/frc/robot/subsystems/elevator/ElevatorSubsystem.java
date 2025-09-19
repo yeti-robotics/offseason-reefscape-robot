@@ -26,4 +26,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     public boolean isAtBottom() {
         return inputs.isAtBottom;
     }
+
+    public double getCurrentPosition(){return inputs.positionRotation;}
+
+    public double getTargetPosition(){return inputs.targetPositionRotation;}
 }
+
+

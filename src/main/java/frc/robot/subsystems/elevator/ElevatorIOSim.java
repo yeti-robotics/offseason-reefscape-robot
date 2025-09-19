@@ -26,6 +26,7 @@ public class ElevatorIOSim implements ElevatorIO {
         inputs.positionRotation = primaryElevatorMotor.getPosition().getValueAsDouble();
         inputs.velocityRPM = secondaryElevatorMotor.getVelocity().getValueAsDouble();
         inputs.isAtBottom = canRangeElevator.getIsDetected().getValue();
+        inputs.targetPositionRotation = primaryElevatorMotor.getClosedLoopReference().getValueAsDouble();
     }
 
     @Override

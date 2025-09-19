@@ -35,6 +35,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         inputs.positionRotation = primaryElevatorMotor.getPosition().getValueAsDouble();
         inputs.velocityRPM = primaryElevatorMotor.getVelocity().getValueAsDouble();
         inputs.isAtBottom = canRangeElevator.getIsDetected().getValue();
+        inputs.targetPositionRotation = primaryElevatorMotor.getClosedLoopReference().getValueAsDouble();
     }
 
     @Override

@@ -28,6 +28,10 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.ramp.*;
 import frc.robot.subsystems.scoreMech.ScoreMechIO;
 import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
@@ -54,6 +58,8 @@ public class RobotContainer {
     // Subsystems
     private final Drive drive;
     private final ScoreMechSubsystem score;
+    private final ElevatorSubsystem elevator;
+
     private final RampSubsystem ramp;
 
     // Vision
@@ -123,6 +129,7 @@ public class RobotContainer {
                         new ModuleIOTalonFX(TunerConstants.BackRight));
                 score = new ScoreMechSubsystem(new ScoreMechIOTalonFXCANrange());
 
+                elevator = new ElevatorSubsystem(new ElevatorIOTalonFX());
                 ramp = new RampSubsystem(new RampIOTalonFX());
 
                 break;
@@ -137,6 +144,7 @@ public class RobotContainer {
                         new ModuleIOSim(TunerConstants.BackRight));
 
                 score = new ScoreMechSubsystem(new ScoreMechIOSim());
+                elevator = new ElevatorSubsystem(new ElevatorIOSim());
 
                 ramp = new RampSubsystem(new RampIOSim());
                 break;
@@ -146,6 +154,8 @@ public class RobotContainer {
                 drive = new Drive(
                         new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 score = new ScoreMechSubsystem(new ScoreMechIO() {});
+                elevator = new ElevatorSubsystem(new ElevatorIO() {});
+
 
                 ramp = new RampSubsystem(new RampIO() {});
 
@@ -230,13 +240,13 @@ public class RobotContainer {
         new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
     }
 
-    //    public void updateMechanisms() {
-    //        mechanisms.publishComponentPoses(
-    //                elevator.getCurrentPosition(), arm.getCurrentPosition(), wrist.getCurrentPosition(), true);
-    //        mechanisms.publishComponentPoses(
-    //                elevator.getTargetPosition(), arm.getTargetPosition(), wrist.getTargetPosition(), false);
-    //        mechanisms.updateElevatorArmMech(elevator.getCurrentPosition(), arm.getCurrentPosition());
-    //    }
+    public void updateMechanisms() {
+        mechanisms.publishComponentPoses(
+                elevator.getCurrentPosition(), true);
+        mechanisms.publishComponentPoses(
+                elevator.getTargetPosition(), false);
+        mechanisms.updateElevatorMech(elevator.getCurrentPosition());
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

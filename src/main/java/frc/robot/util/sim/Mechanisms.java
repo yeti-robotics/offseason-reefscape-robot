@@ -41,14 +41,14 @@ public class Mechanisms {
         return elevatorMech;
     }
 
-    public void updateElevatorMech(Angle elevatorPos) {
-        liftLigament.setLength(Units.inchesToMeters((elevatorPos.magnitude() * 6) + 1));
+    public void updateElevatorMech(double elevatorPos) {
+        liftLigament.setLength(Units.inchesToMeters((elevatorPos * 6) + 1));
         SmartDashboard.putData("Mechanisms/CoralManipulator", elevatorMech);
     }
 
-    public void publishComponentPoses(Angle elevatorPos, boolean useRealPoses) {
-        double elevatorStageHeight = Units.inchesToMeters(elevatorPos.times(8.6).magnitude());
-        double carriageHeight = Units.inchesToMeters(elevatorPos.times(15).magnitude());
+    public void publishComponentPoses(double elevatorPos, boolean useRealPoses) {
+        double elevatorStageHeight = Units.inchesToMeters(elevatorPos * 8.6);
+        double carriageHeight = Units.inchesToMeters(elevatorPos * 15);
 
         (useRealPoses ? realComponentPosePublisher : targetComponentPosePublisher).set(new Pose3d[] {
             new Pose3d(

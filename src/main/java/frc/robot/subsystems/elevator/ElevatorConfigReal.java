@@ -13,7 +13,7 @@ class ElevatorConfigReal {
 
     private static final Slot0Configs SLOT_0_CONFIGS = new Slot0Configs();
 
-    static final TalonFXConfiguration primaryTalonFXConfigs = new TalonFXConfiguration();
+    static final TalonFXConfiguration primaryTalonFXConfigs = new TalonFXConfiguration().withSlot0(SLOT_0_CONFIGS);
     static final TalonFXConfiguration secondaryTalonFXConfigs = new TalonFXConfiguration();
 
     static final CANrangeConfiguration canRangeElevatorConfigs = new CANrangeConfiguration();

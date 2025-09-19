@@ -230,13 +230,13 @@ public class RobotContainer {
         new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
     }
 
-    //    public void updateMechanisms() {
-    //        mechanisms.publishComponentPoses(
-    //                elevator.getCurrentPosition(), arm.getCurrentPosition(), wrist.getCurrentPosition(), true);
-    //        mechanisms.publishComponentPoses(
-    //                elevator.getTargetPosition(), arm.getTargetPosition(), wrist.getTargetPosition(), false);
-    //        mechanisms.updateElevatorArmMech(elevator.getCurrentPosition(), arm.getCurrentPosition());
-    //    }
+//    public void updateMechanisms() {
+//        mechanisms.publishComponentPoses(
+//                elevator.getCurrentPosition(), true);
+//        mechanisms.publishComponentPoses(
+//                elevator.getTargetPosition(), false);
+//        mechanisms.updateElevatorMech(elevator.getCurrentPosition());
+//    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -12,8 +12,8 @@ public class RampIOTalonFX implements RampIO {
 
     public RampIOTalonFX() {
         roller = new TalonFX(RampConfigTalonFXReal.rollerID, Constants.motorCANBus);
-        innerRampSensor = new CANrange(RampConfigTalonFXReal.innerRampSensorID, Constants.motorCANBus);
-        outerRampSensor = new CANrange(RampConfigTalonFXReal.outerRampSensorID, Constants.motorCANBus);
+        innerRampSensor = new CANrange(RampConfigTalonFXReal.innerRampSensorID, Constants.rampCANBus);
+        outerRampSensor = new CANrange(RampConfigTalonFXReal.outerRampSensorID, Constants.rampCANBus);
     }
 
     @Override
@@ -22,6 +22,7 @@ public class RampIOTalonFX implements RampIO {
         inputs.rollerVoltage = roller.getMotorVoltage().getValueAsDouble();
         inputs.outerSensorDetected = outerRampSensor.getIsDetected().getValue();
         inputs.innerSensorDetected = innerRampSensor.getIsDetected().getValue();
+
     }
 
     @Override

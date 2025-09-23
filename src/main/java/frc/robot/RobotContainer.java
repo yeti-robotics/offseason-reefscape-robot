@@ -143,7 +143,7 @@ public class RobotContainer {
                         new ModuleIOSim(TunerConstants.BackRight));
 
                 score = new ScoreMechSubsystem(new ScoreMechIOSim());
-                elevator = new ElevatorSubsystem(new ElevatorIOSim());
+                elevator = new ElevatorSubsystem(new ElevatorIOTalonFX());
 
                 ramp = new RampSubsystem(new RampIOSim());
                 break;

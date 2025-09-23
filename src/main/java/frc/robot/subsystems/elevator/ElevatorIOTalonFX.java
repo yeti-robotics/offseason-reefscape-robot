@@ -22,13 +22,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         primaryElevatorMotor = new TalonFX(ElevatorConfig.primaryElevatorMotorID, motorCANBus);
         secondaryElevatorMotor = new TalonFX(ElevatorConfig.secondaryElevatorMotorID, motorCANBus);
         canRangeElevator = new CANrange(ElevatorConfig.canRangeID, motorCANBus);
-        if(Robot.isSimulation()){
+        if (Robot.isSimulation()) {
             PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
         }
         primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);
         secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
-        secondaryElevatorMotor.setControl(
-                new Follower(ElevatorConfig.primaryElevatorMotorID, true));
+        secondaryElevatorMotor.setControl(new Follower(ElevatorConfig.primaryElevatorMotorID, true));
 
         zeroPosition();
     }
@@ -38,7 +37,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         inputs.positionRotation = primaryElevatorMotor.getPosition().getValueAsDouble();
         inputs.velocityRPM = primaryElevatorMotor.getVelocity().getValueAsDouble();
         inputs.isAtBottom = canRangeElevator.getIsDetected().getValue();
-        inputs.targetPositionRotation = primaryElevatorMotor.getClosedLoopReference().getValueAsDouble();
+        inputs.targetPositionRotation =
+                primaryElevatorMotor.getClosedLoopReference().getValueAsDouble();
     }
 
     @Override

@@ -155,7 +155,6 @@ public class RobotContainer {
                 score = new ScoreMechSubsystem(new ScoreMechIO() {});
                 elevator = new ElevatorSubsystem(new ElevatorIO() {});
 
-
                 ramp = new RampSubsystem(new RampIO() {});
 
                 break;
@@ -240,10 +239,8 @@ public class RobotContainer {
     }
 
     public void updateMechanisms() {
-        mechanisms.publishComponentPoses(
-                elevator.getCurrentPosition(), true);
-        mechanisms.publishComponentPoses(
-                elevator.getTargetPosition(), false);
+        mechanisms.publishComponentPoses(elevator.getCurrentPosition(), true);
+        mechanisms.publishComponentPoses(elevator.getTargetPosition(), false);
         mechanisms.updateElevatorMech(elevator.getCurrentPosition());
     }
 

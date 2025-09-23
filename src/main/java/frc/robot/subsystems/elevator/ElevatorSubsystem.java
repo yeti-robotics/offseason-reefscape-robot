@@ -6,9 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private ElevatorIO io;
-    private ElevatorIOInputsAutoLogged inputs;
-
-    private final MotionMagicTorqueCurrentFOC magicRequest = new MotionMagicTorqueCurrentFOC(0).withSlot(0);
+    private ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();;
 
     public ElevatorSubsystem(ElevatorIO io) {
         this.io = io;
@@ -27,9 +25,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         return inputs.isAtBottom;
     }
 
-    public double getCurrentPosition(){return inputs.positionRotation;}
+    public double getCurrentPosition() {
+        return inputs.positionRotation;
+    }
 
-    public double getTargetPosition(){return inputs.targetPositionRotation;}
+    public double getTargetPosition() {
+        return inputs.targetPositionRotation;
+    }
 }
-
-

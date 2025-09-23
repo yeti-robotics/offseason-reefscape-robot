@@ -1,13 +1,14 @@
 package frc.robot.subsystems.elevator;
 
 import static frc.robot.constants.Constants.motorCANBus;
-import static frc.robot.subsystems.elevator.ElevatorConfigReal.primaryTalonFXConfigs;
-import static frc.robot.subsystems.elevator.ElevatorConfigReal.secondaryTalonFXConfigs;
+import static frc.robot.subsystems.elevator.ElevatorConfig.primaryTalonFXConfigs;
+import static frc.robot.subsystems.elevator.ElevatorConfig.secondaryTalonFXConfigs;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import frc.robot.Robot;
 import frc.robot.util.sim.PhysicsSim;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
@@ -15,17 +16,20 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     public final TalonFX secondaryElevatorMotor;
     public final CANrange canRangeElevator;
 
-    private final MotionMagicTorqueCurrentFOC magicRequest = new MotionMagicTorqueCurrentFOC(0).withSlot(0);
+    private final MotionMagicTorqueCurrentFOC magicRequest = new MotionMagicTorqueCurrentFOC(0).withSlot(Robot.isReal() ? 0 : 1);
 
     public ElevatorIOTalonFX() {
-        primaryElevatorMotor = new TalonFX(ElevatorConfigReal.primaryElevatorMotorID, motorCANBus);
-        secondaryElevatorMotor = new TalonFX(ElevatorConfigReal.secondaryElevatorMotorID, motorCANBus);
-        canRangeElevator = new CANrange(ElevatorConfigReal.canRangeID, motorCANBus);
+        primaryElevatorMotor = new TalonFX(ElevatorConfig.primaryElevatorMotorID, motorCANBus);
+        secondaryElevatorMotor = new TalonFX(ElevatorConfig.secondaryElevatorMotorID, motorCANBus);
+        canRangeElevator = new CANrange(ElevatorConfig.canRangeID, motorCANBus);
         PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
+        if(Robot.isSimulation()){
+            PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
+        }
         primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);
         secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
         secondaryElevatorMotor.setControl(
-                new Follower(ElevatorConfigReal.primaryElevatorMotorID, true));
+                new Follower(ElevatorConfig.primaryElevatorMotorID, true));
 
         zeroPosition();
     }

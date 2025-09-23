@@ -22,7 +22,6 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         primaryElevatorMotor = new TalonFX(ElevatorConfig.primaryElevatorMotorID, motorCANBus);
         secondaryElevatorMotor = new TalonFX(ElevatorConfig.secondaryElevatorMotorID, motorCANBus);
         canRangeElevator = new CANrange(ElevatorConfig.canRangeID, motorCANBus);
-        PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
         if(Robot.isSimulation()){
             PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
         }

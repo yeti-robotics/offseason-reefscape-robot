@@ -1,12 +1,12 @@
 package frc.robot.subsystems.elevator;
 
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private ElevatorIO io;
-    private ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();;
+    private ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
+    ;
 
     public ElevatorSubsystem(ElevatorIO io) {
         this.io = io;

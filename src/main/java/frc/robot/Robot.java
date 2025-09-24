@@ -112,6 +112,7 @@ public class Robot extends LoggedRobot {
         // Threads.setCurrentThreadPriority(false, 10);
         robotContainer.updateVisionSim();
         robotContainer.updateVision();
+        robotContainer.updateMechanisms();
     }
 
     /** This function is called once when the robot is disabled. */
@@ -128,7 +129,7 @@ public class Robot extends LoggedRobot {
         autonomousCommand = robotContainer.getAutonomousCommand();
         Elastic.selectTab("Autonomous");
 
-        // schedule the autonomous command (example)
+        //         schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }

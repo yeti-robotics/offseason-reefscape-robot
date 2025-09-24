@@ -43,7 +43,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     @Override
     public void moveToPosition(double position) {
-        primaryElevatorMotor.setControl(magicRequest);
+        primaryElevatorMotor.setControl(magicRequest.withPosition(position));
     }
 
     @Override

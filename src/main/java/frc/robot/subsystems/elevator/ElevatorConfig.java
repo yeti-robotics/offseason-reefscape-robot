@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -11,7 +12,7 @@ class ElevatorConfig {
     static final int secondaryElevatorMotorID = 15;
     static final int canRangeID = 16;
 
-    static final double gearRatio = 0;
+    static final double gearRatio = 44.0 / 18.0;
 
     private static final Slot0Configs SLOT_0_CONFIGS = Robot.isSimulation()
             ? new Slot0Configs()
@@ -25,7 +26,9 @@ class ElevatorConfig {
                     .withGravityType(GravityTypeValue.Elevator_Static)
             : new Slot0Configs();
 
-    static final TalonFXConfiguration primaryTalonFXConfigs = new TalonFXConfiguration().withSlot0(SLOT_0_CONFIGS);
+    static final TalonFXConfiguration primaryTalonFXConfigs = new TalonFXConfiguration()
+            .withSlot0(SLOT_0_CONFIGS)
+            .withFeedback(new FeedbackConfigs().withRotorToSensorRatio(1).withSensorToMechanismRatio(gearRatio));
     static final TalonFXConfiguration secondaryTalonFXConfigs = new TalonFXConfiguration();
 
     static final CANrangeConfiguration canRangeElevatorConfigs = new CANrangeConfiguration();

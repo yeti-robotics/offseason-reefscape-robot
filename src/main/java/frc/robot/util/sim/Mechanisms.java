@@ -35,11 +35,6 @@ public class Mechanisms {
                 .append(new MechanismLigament2d("bottom", Units.feetToMeters(3), 0, 6, new Color8Bit(Color.kGreen)));
     }
 
-    @Logged(name = "CoralManipulators")
-    public Mechanism2d getCoralManipulatorMech() {
-        return elevatorMech;
-    }
-
     public void updateElevatorMech(double elevatorPos) {
         liftLigament.setLength(Units.inchesToMeters((elevatorPos * 6) + 1));
         SmartDashboard.putData("Mechanisms/CoralManipulator", elevatorMech);

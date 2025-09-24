@@ -231,6 +231,7 @@ public class RobotContainer {
 
         controller.rightTrigger().onTrue(score.scoreCoral());
         controller.leftTrigger().onTrue(score.spinUntilCoralSafe());
+        controller.button(4).onTrue(elevator.moveToPosition(1));
     }
 
     private void configureTriggerBindings() {

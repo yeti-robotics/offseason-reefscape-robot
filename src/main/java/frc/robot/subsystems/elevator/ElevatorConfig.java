@@ -1,10 +1,9 @@
 package frc.robot.subsystems.elevator;
 
-import com.ctre.phoenix6.configs.CANrangeConfiguration;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Robot;
 
 class ElevatorConfig {
@@ -28,8 +27,23 @@ class ElevatorConfig {
 
     static final TalonFXConfiguration primaryTalonFXConfigs = new TalonFXConfiguration()
             .withSlot0(SLOT_0_CONFIGS)
-            .withFeedback(new FeedbackConfigs().withRotorToSensorRatio(1).withSensorToMechanismRatio(gearRatio));
-    static final TalonFXConfiguration secondaryTalonFXConfigs = new TalonFXConfiguration();
+            .withMotionMagic(new MotionMagicConfigs()
+                    .withMotionMagicAcceleration(1)
+                    .withMotionMagicCruiseVelocity(2)
+                    .withMotionMagicJerk(0))
+            .withFeedback(new FeedbackConfigs()
+                    .withRotorToSensorRatio(1)
+                    .withSensorToMechanismRatio(gearRatio))
+            .withMotorOutput(new MotorOutputConfigs()
+                    .withInverted(InvertedValue.CounterClockwise_Positive)
+                    .withNeutralMode(NeutralModeValue.Brake));
+    static final TalonFXConfiguration secondaryTalonFXConfigs = new TalonFXConfiguration()
+            .withMotorOutput(new MotorOutputConfigs()
+                    .withInverted(InvertedValue.Clockwise_Positive)
+                    .withNeutralMode(NeutralModeValue.Brake))
+            .withFeedback(new FeedbackConfigs()
+                    .withRotorToSensorRatio(1)
+                    .withSensorToMechanismRatio(gearRatio));
 
     static final CANrangeConfiguration canRangeElevatorConfigs = new CANrangeConfiguration();
 

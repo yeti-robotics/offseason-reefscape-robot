@@ -1,8 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import static frc.robot.constants.Constants.motorCANBus;
-import static frc.robot.subsystems.elevator.ElevatorConfig.primaryTalonFXConfigs;
-import static frc.robot.subsystems.elevator.ElevatorConfig.secondaryTalonFXConfigs;
+import static frc.robot.subsystems.elevator.ElevatorConfig.*;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
@@ -24,10 +23,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         canRangeElevator = new CANrange(ElevatorConfig.canRangeID, motorCANBus);
         if (Robot.isSimulation()) {
             PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
+            PhysicsSim.getInstance().addTalonFX(secondaryElevatorMotor);
         }
         primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);
         secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
         secondaryElevatorMotor.setControl(new Follower(ElevatorConfig.primaryElevatorMotorID, true));
+        canRangeElevator.getConfigurator().apply(canRangeElevatorConfigs);
 
         zeroPosition();
     }

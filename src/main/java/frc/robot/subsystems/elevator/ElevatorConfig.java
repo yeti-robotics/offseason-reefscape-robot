@@ -15,13 +15,13 @@ class ElevatorConfig {
 
     private static final Slot0Configs SLOT_0_CONFIGS = Robot.isSimulation()
             ? new Slot0Configs()
-                    .withKP(4)
+                    .withKP(128)
                     .withKI(0)
-                    .withKD(48)
+                    .withKD(12)
                     .withKG(0)
                     .withKV(0)
                     .withKA(1)
-                    .withKS(0.5)
+                    .withKS(1)
                     .withGravityType(GravityTypeValue.Elevator_Static)
             : new Slot0Configs();
 

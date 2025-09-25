@@ -2,6 +2,7 @@ package frc.robot.subsystems.scoreMech;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class ScoreMechSubsystem extends SubsystemBase {
     private ScoreMechIO io;
@@ -14,6 +15,7 @@ public class ScoreMechSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
+        Logger.processInputs("Scoring Mechanism", inputs);
     }
 
     public boolean innerSensorDetected() {

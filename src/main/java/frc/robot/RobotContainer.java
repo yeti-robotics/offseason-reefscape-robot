@@ -212,26 +212,10 @@ public class RobotContainer {
         drive.setDefaultCommand(DriveCommands.joystickDrive(
                 drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), () -> -controller.getRightX()));
 
-        // Lock to 0° when A button is held
-        controller
-                .a()
-                .whileTrue(DriveCommands.joystickDriveAtAngle(
-                        drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), Rotation2d::new));
-
-        // Switch to X pattern when X button is pressed
-        controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
-        // Reset gyro to 0° when B button is pressed
-        controller
-                .b()
-                .onTrue(Commands.runOnce(
-                                () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                                drive)
-                        .ignoringDisable(true));
-
         controller.rightTrigger().onTrue(score.scoreCoral());
-        controller.leftTrigger().onTrue(score.spinUntilCoralSafe());
-        controller.button(4).onTrue(elevator.moveToPosition(0));
+        controller.leftTrigger().onTrue(ramp.setRoller(5)); //voltage?
+
+
     }
 
     private void configureTriggerBindings() {

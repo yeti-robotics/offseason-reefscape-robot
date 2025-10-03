@@ -10,13 +10,11 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,7 +40,6 @@ import frc.robot.subsystems.scoreMech.ScoreMechSubsystem;
 import frc.robot.subsystems.vision.PhotonAprilTagSystem;
 import frc.robot.subsystems.vision.apriltag.AprilTagPose;
 import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
-import frc.robot.util.CommandGigaStation;
 import frc.robot.util.sim.Mechanisms;
 import frc.robot.util.sim.vision.AprilTagCamSim;
 import frc.robot.util.sim.vision.AprilTagCamSimBuilder;
@@ -219,31 +216,34 @@ public class RobotContainer {
                 drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), () -> -controller.getRightX()));
 
         controller.rightTrigger().onTrue(score.scoreCoral());
-        controller.leftTrigger().onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight()).andThen(ramp.setRoller(0.5).andThen(score.spinUntilCoralSafe()))); // check voltage?
-
+        controller
+                .leftTrigger()
+                .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())
+                        .andThen(ramp.setRoller(0.5).andThen(score.spinUntilCoralSafe()))); // check voltage?
 
         controller.start().onTrue(new InstantCommand(() -> drive.setPose(Pose2d.kZero)));
         controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
         controller.povLeft().onTrue(score.spinUntilCoralSafe());
 
-
-            controller.y().onTrue(Commands.either(
-                    elevator.moveToPosition(ElevatorPosition.BARGE.getHeight()),
-                    elevator.moveToPosition(ElevatorPosition.L4.getHeight()),
-                    () -> algaeMode));
-            controller.x().onTrue(Commands.either(
-                    elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
-                    elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
-                    () -> algaeMode));
-            controller.b().onTrue(Commands.either(
-                    elevator.moveToPosition(ElevatorPosition.LOW_ALGAE.getHeight()),
-                    elevator.moveToPosition(ElevatorPosition.L2.getHeight()),
-                    () -> algaeMode));
-            controller.a().onTrue(Commands.either(
-                    elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
-                    elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
-                    () -> algaeMode));
-
+        controller.y().onTrue(elevator.moveToPosition(ElevatorPosition.L4.getHeight()));
+        controller
+                .x()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
+                        () -> algaeMode));
+        controller
+                .b()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.LOW_ALGAE.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L2.getHeight()),
+                        () -> algaeMode));
+        controller
+                .a()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
+                        () -> algaeMode));
     }
 
     private void configureTriggerBindings() {

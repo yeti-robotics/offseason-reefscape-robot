@@ -217,7 +217,7 @@ public class RobotContainer {
                 drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), () -> -controller.getRightX()));
 
         controller.rightTrigger().onTrue(score.scoreCoral());
-        controller.leftTrigger().onTrue(ramp.setRoller(0.5).andThen(score.spinUntilCoralSafe())); // check voltage?
+        controller.leftTrigger().onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight()).andThen(ramp.setRoller(0.5).andThen(score.spinUntilCoralSafe()))); // check voltage?
 
 
         controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));

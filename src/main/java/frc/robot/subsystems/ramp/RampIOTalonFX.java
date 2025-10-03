@@ -11,7 +11,7 @@ public class RampIOTalonFX implements RampIO {
     private final CANrange outerRampSensor;
 
     public RampIOTalonFX() {
-        roller = new TalonFX(RampConfigTalonFXReal.rollerID, Constants.motorCANBus);
+        roller = new TalonFX(RampConfigTalonFXReal.rollerID, Constants.rampCANBus);
         innerRampSensor = new CANrange(RampConfigTalonFXReal.innerRampSensorID, Constants.motorCANBus);
         outerRampSensor = new CANrange(RampConfigTalonFXReal.outerRampSensorID, Constants.motorCANBus);
     }

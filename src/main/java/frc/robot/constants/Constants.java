@@ -43,6 +43,7 @@ public final class Constants {
 
     public static final CANBus drivetrainCANBus = new CANBus(TunerConstants.kCANBus.getName(), "./logs/example.hoot");
     public static final CANBus motorCANBus = CANBus.systemCore(1);
+    public static final CANBus rampCANBus = CANBus.systemCore(2);
 
     // Front Camera Red
     public static final Transform3d frontCamTrans = new Transform3d(

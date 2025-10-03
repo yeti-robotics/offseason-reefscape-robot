@@ -7,33 +7,31 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Robot;
 
 class ElevatorConfig {
-    static final int primaryElevatorMotorID = 14;
-    static final int secondaryElevatorMotorID = 15;
-    static final int canRangeID = 16;
+    static final int primaryElevatorMotorID = 11;
+    static final int secondaryElevatorMotorID = 22;
+    static final int canRangeID = 0;
 
     static final double gearRatio = 44.0 / 18.0;
 
     private static final Slot0Configs SLOT_0_CONFIGS = Robot.isSimulation()
             ? new Slot0Configs()
-                    .withKP(128)
+                    .withKP(800)
                     .withKI(0)
-                    .withKD(12)
-                    .withKG(0)
+                    .withKD(8)
+                    .withKG(32)
                     .withKV(0)
-                    .withKA(1)
-                    .withKS(1)
+                    .withKA(4)
+                    .withKS(2)
                     .withGravityType(GravityTypeValue.Elevator_Static)
             : new Slot0Configs();
 
     static final TalonFXConfiguration primaryTalonFXConfigs = new TalonFXConfiguration()
             .withSlot0(SLOT_0_CONFIGS)
             .withMotionMagic(new MotionMagicConfigs()
-                    .withMotionMagicAcceleration(1)
-                    .withMotionMagicCruiseVelocity(2)
+                    .withMotionMagicAcceleration(5)
+                    .withMotionMagicCruiseVelocity(5)
                     .withMotionMagicJerk(0))
-            .withFeedback(new FeedbackConfigs()
-                    .withRotorToSensorRatio(1)
-                    .withSensorToMechanismRatio(gearRatio))
+            .withFeedback(new FeedbackConfigs().withRotorToSensorRatio(1).withSensorToMechanismRatio(gearRatio))
             .withMotorOutput(new MotorOutputConfigs()
                     .withInverted(InvertedValue.CounterClockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Brake));
@@ -41,9 +39,7 @@ class ElevatorConfig {
             .withMotorOutput(new MotorOutputConfigs()
                     .withInverted(InvertedValue.Clockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Brake))
-            .withFeedback(new FeedbackConfigs()
-                    .withRotorToSensorRatio(1)
-                    .withSensorToMechanismRatio(gearRatio));
+            .withFeedback(new FeedbackConfigs().withRotorToSensorRatio(1).withSensorToMechanismRatio(gearRatio));
 
     static final CANrangeConfiguration canRangeElevatorConfigs = new CANrangeConfiguration();
 

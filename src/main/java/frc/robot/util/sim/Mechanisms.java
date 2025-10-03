@@ -45,9 +45,17 @@ public class Mechanisms {
         double elevatorStageHeight = Units.inchesToMeters(elevatorPos * 8.6);
         double carriageHeight = Units.inchesToMeters(elevatorPos * 15);
 
-        Logger.recordOutput("ComponentPoses/" + (useRealPoses ? "Real" : "Target"),
-            new Pose3d(Units.inchesToMeters(-8), 0.0, Units.inchesToMeters(2.625) + elevatorStageHeight, Rotation3d.kZero),
-            new Pose3d(Units.inchesToMeters(-4.13), 0, Units.inchesToMeters(10.22) + carriageHeight, Rotation3d.kZero)
-        );
+        Logger.recordOutput(
+                "ComponentPoses/" + (useRealPoses ? "Real" : "Target"),
+                new Pose3d(
+                        Units.inchesToMeters(-8),
+                        0.0,
+                        Units.inchesToMeters(2.625) + elevatorStageHeight,
+                        Rotation3d.kZero),
+                new Pose3d(
+                        Units.inchesToMeters(-4.13),
+                        0,
+                        Units.inchesToMeters(10.22) + carriageHeight,
+                        Rotation3d.kZero));
     }
 }

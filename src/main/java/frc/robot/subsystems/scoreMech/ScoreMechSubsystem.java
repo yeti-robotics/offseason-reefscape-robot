@@ -42,6 +42,10 @@ public class ScoreMechSubsystem extends SubsystemBase {
         return runEnd(() -> io.setPower(1), () -> io.setPower(0)).until(this::coralIsSafe);
     }
 
+    public Command spinManual(double power) {
+        return runEnd(() -> io.setPower(power), () -> io.setPower(0));
+    }
+
     public Command scoreCoral() {
         return runEnd(() -> io.setPower(coralIsSafe() ? 0.5 : 0), this::stopMotor);
     }

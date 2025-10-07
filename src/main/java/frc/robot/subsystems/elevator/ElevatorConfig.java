@@ -13,7 +13,7 @@ class ElevatorConfig {
 
     static final double gearRatio = 44.0 / 18.0;
 
-    private static final Slot0Configs SLOT_0_CONFIGS = Robot.isSimulation()
+    private static final Slot0Configs SLOT_0_CONFIGS = Robot.isReal()
             ? new Slot0Configs()
                     .withKP(800)
                     .withKI(0)

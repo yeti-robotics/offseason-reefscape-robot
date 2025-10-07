@@ -5,7 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 
 public class RampConfigTalonFXReal {
-    static final int rollerID = 15;
+    static final int rollerID = 33;
     static final int innerRampSensorID = 2;
     static final int outerRampSensorID = 1;
 

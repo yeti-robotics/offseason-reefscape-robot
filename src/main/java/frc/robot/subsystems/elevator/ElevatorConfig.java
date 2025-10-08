@@ -9,7 +9,7 @@ import frc.robot.Robot;
 class ElevatorConfig {
     static final int primaryElevatorMotorID = 11;
     static final int secondaryElevatorMotorID = 22;
-    static final int canRangeID = 0;
+    static final int canRangeID = 1;
 
     static final double gearRatio = 44.0 / 18.0;
 

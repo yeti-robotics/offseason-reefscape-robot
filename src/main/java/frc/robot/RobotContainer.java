@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeAlignPPOTF;
 import frc.robot.commands.ReefAlignPPOTF;
 import frc.robot.constants.Constants;
@@ -224,46 +225,43 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-//        controller.rightTrigger().whileTrue(score.spinManual(0.2));
-//        controller
-//                .leftTrigger()
-//                .whileTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())
-//                        .andThen(ramp.setRoller(0.75))
-//                        .andThen(score.spinUntilCoralSafe())); // check voltage?
-//
-//        controller.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-//        controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
-//        controller.povLeft().onTrue(ramp.setRoller(-0.1));
-//
-//        controller.y().onTrue(elevator.moveToPosition(ElevatorPosition.L4.getHeight()));
-//        controller
-//                .x()
-//                .onTrue(Commands.either(
-//                        elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
-//                        elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
-//                        () -> algaeMode));
-//        controller
-//                .b()
-//                .onTrue(Commands.either(
-//                        elevator.moveToPosition(ElevatorPosition.LOW_ALGAE.getHeight()),
-//                        elevator.moveToPosition(ElevatorPosition.L2.getHeight()),
-//                        () -> algaeMode));
-//        controller
-//                .a()
-//                .onTrue(Commands.either(
-//                        elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
-//                        elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
-//                        () -> algaeMode));
+        controller.rightTrigger().whileTrue(score.spinManual(0.2));
+        controller.rightBumper().whileTrue(score.spinManual(-0.5));
+        controller
+                .leftTrigger()
+                .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
 
-        controller.button(1).onTrue(reefAlignPPOTF.reefAlign());
-        controller.button(2).onTrue(algaeAlignPPOTF.algaeAlign());
+        controller.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
+        controller.povLeft().whileTrue(ramp.setRoller(-0.1).alongWith(score.spinManual(-0.2)));
+        controller.povUp().whileTrue(ramp.setRoller(0.75).andThen(score.spinManual(0.2)));
+
+        controller.y().onTrue(elevator.moveToPosition(ElevatorPosition.L4.getHeight()));
+        controller
+                .x()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
+                        () -> algaeMode));
+        controller
+                .b()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.LOW_ALGAE.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L2.getHeight()),
+                        () -> algaeMode));
+        controller
+                .a()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
+                        () -> algaeMode));
     }
 
     private void configureTriggerBindings() {
         // Trigger for coral detection in ramp - will automatically set coral position for handoff
-        //        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.75));
-        //        new Trigger(ramp::innerRollerDetection)
-        //                .onTrue(score.spinUntilCoralSafe().andThen(ramp.setRoller(0)));
+        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.75));
+        new Trigger(ramp::innerRollerDetection)
+                .onTrue(score.spinUntilCoralSafe().andThen(ramp.setRoller(0)));
     }
 
     public void updateMechanisms() {

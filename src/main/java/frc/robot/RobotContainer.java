@@ -225,7 +225,7 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-        controller.rightTrigger().whileTrue(score.spinManual(0.2));
+        controller.rightTrigger().onTrue(score.spinUntilCoralSafe());
         controller.rightBumper().whileTrue(score.spinManual(-0.5));
         controller
                 .leftTrigger()
@@ -259,9 +259,8 @@ public class RobotContainer {
 
     private void configureTriggerBindings() {
         // Trigger for coral detection in ramp - will automatically set coral position for handoff
-        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.75));
-        new Trigger(ramp::innerRollerDetection)
-                .onTrue(score.spinUntilCoralSafe().andThen(ramp.setRoller(0)));
+        new Trigger(ramp::outerRampDetection).whileTrue(ramp.setRoller(0.75));
+        new Trigger(ramp::innerRampDetection).onTrue(score.spinUntilCoralSafe().andThen(ramp.setRoller(0)));
     }
 
     public void updateMechanisms() {

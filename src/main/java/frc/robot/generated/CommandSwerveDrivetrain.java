@@ -28,10 +28,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
-import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
 import java.util.function.Supplier;
+import org.json.simple.parser.ParseException;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -42,7 +41,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     RobotConfig config;
-    @NotLogged SwerveDriveKinematics m_kinematics;
+
+    @NotLogged
+    SwerveDriveKinematics m_kinematics;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -71,7 +72,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     private final SwerveRequest.ApplyRobotSpeeds AutoReq = new SwerveRequest.ApplyRobotSpeeds();
-
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -131,7 +131,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
      * @param modules               Constants for each specific module
      */
-
     public ChassisSpeeds getChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
@@ -159,10 +158,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     (ChassisSpeeds speeds) -> this.setControl(AutoReq.withSpeeds(speeds)),
                     driveController,
                     config,
-                    () ->
-                            DriverStation.getAlliance()
-                                    .filter(value -> value == Alliance.Red)
-                                    .isPresent(),
+                    () -> DriverStation.getAlliance()
+                            .filter(value -> value == Alliance.Red)
+                            .isPresent(),
                     this);
         }
     }

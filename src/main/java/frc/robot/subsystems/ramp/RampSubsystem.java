@@ -17,11 +17,11 @@ public class RampSubsystem extends SubsystemBase {
         this.io = io;
     }
 
-    public boolean outerRollerDetection() {
+    public boolean outerRampDetection() {
         return inputs.outerSensorDetected;
     }
 
-    public boolean innerRollerDetection() {
+    public boolean innerRampDetection() {
         return inputs.innerSensorDetected;
     }
 
@@ -33,6 +33,6 @@ public class RampSubsystem extends SubsystemBase {
                         () -> {
                             io.setRollerDuty(0);
                         })
-                .until(this::innerRollerDetection);
+                .until(this::innerRampDetection);
     }
 }

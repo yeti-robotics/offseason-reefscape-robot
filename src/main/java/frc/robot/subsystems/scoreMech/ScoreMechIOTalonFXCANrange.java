@@ -33,7 +33,7 @@ public class ScoreMechIOTalonFXCANrange implements ScoreMechIO {
         CANrangeConfig.FovParams.FOVCenterY = 11.8;
         CANrangeConfig.FovParams.FOVRangeX = 6.75;
         CANrangeConfig.FovParams.FOVRangeY = 6.75;
-        CANrangeConfig.ProximityParams.ProximityThreshold = 0.10;
+        CANrangeConfig.ProximityParams.ProximityThreshold = 0.17;
         CANrangeConfig.ProximityParams.ProximityHysteresis = 0.02;
         innerCANrange.getConfigurator().apply(CANrangeConfig);
 

@@ -1,7 +1,5 @@
 package frc.robot.subsystems.ramp;
 
-import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,13 +25,13 @@ public class RampSubsystem extends SubsystemBase {
         return inputs.innerSensorDetected;
     }
 
-    public Command setRoller(double voltage) {
+    public Command setRoller(double power) {
         return runEnd(
                         () -> {
-                            io.setRollerVoltage(voltage);
+                            io.setRollerDuty(power);
                         },
                         () -> {
-                            io.setRollerVoltage(0);
+                            io.setRollerDuty(0);
                         })
                 .until(this::innerRollerDetection);
     }

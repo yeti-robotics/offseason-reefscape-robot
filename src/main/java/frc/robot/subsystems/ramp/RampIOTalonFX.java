@@ -1,9 +1,10 @@
 package frc.robot.subsystems.ramp;
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
-import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.UpdateModeValue;
 import frc.robot.constants.Constants;
 
 public class RampIOTalonFX implements RampIO {
@@ -15,6 +16,7 @@ public class RampIOTalonFX implements RampIO {
         roller = new TalonFX(RampConfigTalonFXReal.rollerID, Constants.rampCANBus);
         innerRampSensor = new CANrange(RampConfigTalonFXReal.innerRampSensorID, Constants.motorCANBus);
         outerRampSensor = new CANrange(RampConfigTalonFXReal.outerRampSensorID, Constants.motorCANBus);
+        applyConfigs();
     }
 
     @Override
@@ -45,7 +47,7 @@ public class RampIOTalonFX implements RampIO {
     }
 
     @Override
-    public void setRollerVoltage(double power) {
+    public void setRollerDuty(double power) {
         roller.setControl(new DutyCycleOut(power));
     }
 }

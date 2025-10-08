@@ -15,5 +15,5 @@ public interface RampIO {
 
     public default void updateInputs(RampIOInputs inputs) {}
 
-    public default void setRollerVoltage(double volts) {}
+    public default void setRollerDuty(double volts) {}
 }

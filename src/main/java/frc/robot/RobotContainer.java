@@ -9,14 +9,14 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.Constants;
 import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.generated.TunerConstants;
@@ -29,9 +29,13 @@ import frc.robot.subsystems.scoreMech.ScoreMechIO;
 import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
 import frc.robot.subsystems.scoreMech.ScoreMechIOTalonFXCANrange;
 import frc.robot.subsystems.scoreMech.ScoreMechSubsystem;
+import frc.robot.subsystems.vision.PhotonAprilTagSystem;
+import frc.robot.subsystems.vision.apriltag.AprilTagPose;
+import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
 import frc.robot.util.sim.Mechanisms;
 import frc.robot.util.sim.vision.AprilTagSimulator;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import java.util.List;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,52 +54,52 @@ public class RobotContainer {
     private boolean algaeMode = false;
 
     // Vision
-    //    public final PhotonAprilTagSystem frontCam;
-    //    public final PhotonAprilTagSystem rearCam;
-    //    private final AprilTagSubsystem[] aprilTagSubsystems;
+    public final PhotonAprilTagSystem frontCam;
+    public final PhotonAprilTagSystem rearCam;
+    private final AprilTagSubsystem[] aprilTagSubsystems;
     final Mechanisms mechanisms;
 
     AprilTagSimulator aprilTagCamSim = new AprilTagSimulator();
 
-    //    public void updateVision() {
-    //        for (AprilTagSubsystem aprilTagSubsystem : aprilTagSubsystems) {
-    //            List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
-    //
-    //            if (!aprilTagPoseOpt.isEmpty() && !drive.isMotionBlur()) {
-    //                for (AprilTagPose pose : aprilTagPoseOpt) {
-    //                    if (pose.numTags() > 0) {
-    //                        drive.addVisionMeasurement(
-    //                                pose.estimatedRobotPose(), pose.timestamp(), pose.standardDeviations());
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
+    public void updateVision() {
+        for (AprilTagSubsystem aprilTagSubsystem : aprilTagSubsystems) {
+            List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
 
-    //    public void updateVisionSim() {
-    //        aprilTagCamSim.update(drive.getPose());
-    //        Pose3d frontCameraPose = new Pose3d(drive.getPose())
-    //                .transformBy(new Transform3d(
-    //                        Constants.frontCamTrans.getX(),
-    //                        Constants.frontCamTrans.getY(),
-    //                        Constants.frontCamTrans.getZ(),
-    //                        Constants.frontCamTrans.getRotation()));
-    //
-    //        Pose3d rearCameraPose = new Pose3d(drive.getPose())
-    //                .transformBy(new Transform3d(
-    //                        Constants.rearCamTrans.getX(),
-    //                        Constants.rearCamTrans.getY(),
-    //                        Constants.rearCamTrans.getZ(),
-    //                        Constants.rearCamTrans.getRotation()));
-    //
-    //        Logger.recordOutput("Front Cam Transform", frontCameraPose);
-    //        Logger.recordOutput("Rear Cam Transform", rearCameraPose);
-    //    }
+            if (!aprilTagPoseOpt.isEmpty() && !drivetrain.isMotionBlur()) {
+                for (AprilTagPose pose : aprilTagPoseOpt) {
+                    if (pose.numTags() > 0) {
+                        drivetrain.addVisionMeasurement(
+                                pose.estimatedRobotPose(), pose.timestamp(), pose.standardDeviations());
+                    }
+                }
+            }
+        }
+    }
 
-    //    private final SwerveRequest.FieldCentric driveForward = new SwerveRequest.FieldCentric()
-    //            .withDeadband(TunerConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
-    //            .withRotationalDeadband(TunerConstants.MaFxAngularRate * 0.1)
-    //            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
+    public void updateVisionSim() {
+        aprilTagCamSim.update(drivetrain.getPose());
+        Pose3d frontCameraPose = new Pose3d(drive.getPose())
+                .transformBy(new Transform3d(
+                        Constants.frontCamTrans.getX(),
+                        Constants.frontCamTrans.getY(),
+                        Constants.frontCamTrans.getZ(),
+                        Constants.frontCamTrans.getRotation()));
+
+        Pose3d rearCameraPose = new Pose3d(drive.getPose())
+                .transformBy(new Transform3d(
+                        Constants.rearCamTrans.getX(),
+                        Constants.rearCamTrans.getY(),
+                        Constants.rearCamTrans.getZ(),
+                        Constants.rearCamTrans.getRotation()));
+
+        Logger.recordOutput("Front Cam Transform", frontCameraPose);
+        Logger.recordOutput("Rear Cam Transform", rearCameraPose);
+    }
+
+    private final SwerveRequest.FieldCentric driveForward = new SwerveRequest.FieldCentric()
+            .withDeadband(TunerConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
+            .withRotationalDeadband(TunerConstants.MaFxAngularRate * 0.1)
+            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     // Controller
     private final CommandXboxController controller = new CommandXboxController(Constants.PRIMARY_CONTROLLER_PORT);
@@ -107,7 +111,7 @@ public class RobotContainer {
             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     // Dashboard inputs
-    private final LoggedDashboardChooser<Command> autoChooser;
+    //    private final LoggedDashboardChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -143,10 +147,10 @@ public class RobotContainer {
         }
 
         // Set up auto routines
-        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+        //        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-        //        frontCam = new PhotonAprilTagSystem("FrontCam", Constants.frontCamTrans, drive);
-        //        rearCam = new PhotonAprilTagSystem("RearCam", Constants.rearCamTrans, drive);
+        frontCam = new PhotonAprilTagSystem("FrontCam", Constants.frontCamTrans, drivetrain);
+        rearCam = new PhotonAprilTagSystem("RearCam", Constants.rearCamTrans, drivetrain);
 
         mechanisms = new Mechanisms();
 
@@ -190,12 +194,12 @@ public class RobotContainer {
         controller
                 .leftTrigger()
                 .whileTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())
-                        .andThen(ramp.setRoller(0.5))
-                        .andThen(score.spinManual(0.5))); // check voltage?
+                        .andThen(ramp.setRoller(0.75))
+                        .andThen(score.spinUntilCoralSafe())); // check voltage?
 
         controller.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
-        controller.povLeft().onTrue(score.spinUntilCoralSafe());
+        controller.povLeft().onTrue(ramp.setRoller(-0.1));
 
         controller.y().onTrue(elevator.moveToPosition(ElevatorPosition.L4.getHeight()));
         controller
@@ -220,9 +224,9 @@ public class RobotContainer {
 
     private void configureTriggerBindings() {
         // Trigger for coral detection in ramp - will automatically set coral position for handoff
-        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.5));
-        new Trigger(ramp::innerRollerDetection)
-                .onTrue(score.spinUntilCoralSafe().andThen(ramp.setRoller(0)));
+        //        new Trigger(ramp::outerRollerDetection).whileTrue(ramp.setRoller(0.75));
+        //        new Trigger(ramp::innerRollerDetection)
+        //                .onTrue(score.spinUntilCoralSafe().andThen(ramp.setRoller(0)));
     }
 
     public void updateMechanisms() {
@@ -237,6 +241,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.get();
+        return null;
     }
 }

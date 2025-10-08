@@ -5,10 +5,11 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.TagConstants;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.apriltag.*;
 import frc.robot.subsystems.vision.util.AprilTagDetectionHelpers;
 import java.util.*;
@@ -25,7 +26,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
     private PhotonCamera camera;
     private final Transform3d cameraTransform;
     private final PhotonPoseEstimator photonPoseEstimator;
-    private final Drive drivetrain;
+    private final CommandSwerveDrivetrain drivetrain;
 
     private static final double translationBaseStdev = 0.7;
     private static final double rotationBaseStdev = Math.toRadians(30);
@@ -38,7 +39,8 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
     private double bestDetectionTimestamp;
     private final List<AprilTagPose> poseEstimates = new ArrayList<>();
 
-    public PhotonAprilTagSystem(String cameraName, Transform3d cameraTransform, Drive commandSwerveDrivetrain) {
+    public PhotonAprilTagSystem(
+            String cameraName, Transform3d cameraTransform, CommandSwerveDrivetrain commandSwerveDrivetrain) {
         this.camera = new PhotonCamera(cameraName);
         this.cameraTransform = cameraTransform;
         this.photonPoseEstimator = new PhotonPoseEstimator(
@@ -52,8 +54,8 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
 
     @Override
     public void periodic() {
-        //        photonPoseEstimator.addHeadingData(
-        //                Timer.getFPGATimestamp(), drivetrain.getPigeon2().getRotation2d());
+        photonPoseEstimator.addHeadingData(
+                Timer.getFPGATimestamp(), drivetrain.getPigeon2().getRotation2d());
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
         if (results.isEmpty()) {

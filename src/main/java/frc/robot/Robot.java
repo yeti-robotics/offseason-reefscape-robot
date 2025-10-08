@@ -174,7 +174,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void simulationPeriodic() {
         PhysicsSim.getInstance().run();
-        //        robotContainer.updateVisionSim();
+        robotContainer.updateVisionSim();
         robotContainer.updateMechanisms();
     }
 }

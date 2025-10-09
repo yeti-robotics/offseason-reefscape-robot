@@ -225,7 +225,7 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-        controller.rightTrigger().onTrue(score.spinUntilCoralSafe());
+        controller.rightTrigger().onTrue(score.spinManual(0.2).withTimeout(3));
         controller.rightBumper().whileTrue(score.spinManual(-0.5));
         controller
                 .leftTrigger()
@@ -255,12 +255,17 @@ public class RobotContainer {
                         elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
                         elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
                         () -> algaeMode));
+
+        controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
     }
 
     private void configureTriggerBindings() {
         // Trigger for coral detection in ramp - will automatically set coral position for handoff
-        new Trigger(ramp::outerRampDetection).whileTrue(ramp.setRoller(0.75));
-        new Trigger(ramp::innerRampDetection).onTrue(score.spinUntilCoralSafe().andThen(ramp.setRoller(0)));
+        new Trigger(ramp::outerRampDetection).or(ramp::innerRampDetection).whileTrue(ramp.setRoller(0.75));
+        new Trigger(score::innerSensorDetected)
+                .debounce(0.5)
+                .onTrue(score.spinUntilCoralSafe()
+                        .andThen(score.spinManual(-0.1).until(score::innerSensorDetected)));
     }
 
     public void updateMechanisms() {

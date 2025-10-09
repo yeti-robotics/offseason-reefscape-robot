@@ -1,10 +1,12 @@
 package frc.robot.subsystems.elevator;
 
 import static frc.robot.constants.Constants.motorCANBus;
+import static frc.robot.constants.Constants.rampCANBus;
 import static frc.robot.subsystems.elevator.ElevatorConfig.*;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.Angle;
@@ -21,7 +23,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     public ElevatorIOTalonFX() {
         primaryElevatorMotor = new TalonFX(ElevatorConfig.primaryElevatorMotorID, motorCANBus);
         secondaryElevatorMotor = new TalonFX(ElevatorConfig.secondaryElevatorMotorID, motorCANBus);
-        canRangeElevator = new CANrange(ElevatorConfig.canRangeID, motorCANBus);
+        canRangeElevator = new CANrange(ElevatorConfig.canRangeID, rampCANBus);
         if (Robot.isSimulation()) {
             PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
             PhysicsSim.getInstance().addTalonFX(secondaryElevatorMotor);
@@ -38,7 +40,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     public void updateInputs(ElevatorIOInputs inputs) {
         inputs.positionRotation = primaryElevatorMotor.getPosition().getValueAsDouble();
         inputs.velocityRPM = primaryElevatorMotor.getVelocity().getValueAsDouble();
-        inputs.isAtBottom = canRangeElevator.getIsDetected().getValue();
+        inputs.isAtBottom = primaryElevatorMotor.getPosition().getValueAsDouble() < 0.03;
         inputs.targetPositionRotation =
                 primaryElevatorMotor.getClosedLoopReference().getValueAsDouble();
     }
@@ -51,5 +53,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     @Override
     public void zeroPosition() {
         primaryElevatorMotor.setPosition(0);
+    }
+
+    @Override
+    public void neutralizeElevator() {
+        primaryElevatorMotor.setControl(new NeutralOut());
     }
 }

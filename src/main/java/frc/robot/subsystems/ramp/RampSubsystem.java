@@ -27,12 +27,11 @@ public class RampSubsystem extends SubsystemBase {
 
     public Command setRoller(double power) {
         return runEnd(
-                        () -> {
-                            io.setRollerDuty(power);
-                        },
-                        () -> {
-                            io.setRollerDuty(0);
-                        })
-                .until(this::innerRampDetection);
+                () -> {
+                    io.setRollerDuty(power);
+                },
+                () -> {
+                    io.setRollerDuty(0);
+                });
     }
 }

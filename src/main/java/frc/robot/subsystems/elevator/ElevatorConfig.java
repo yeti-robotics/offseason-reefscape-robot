@@ -31,9 +31,7 @@ class ElevatorConfig {
                     .withMotionMagicAcceleration(1)
                     .withMotionMagicCruiseVelocity(2)
                     .withMotionMagicJerk(0))
-            .withFeedback(new FeedbackConfigs()
-                    .withRotorToSensorRatio(1)
-                    .withSensorToMechanismRatio(gearRatio))
+            .withFeedback(new FeedbackConfigs().withRotorToSensorRatio(1).withSensorToMechanismRatio(gearRatio))
             .withMotorOutput(new MotorOutputConfigs()
                     .withInverted(InvertedValue.CounterClockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Brake));
@@ -41,9 +39,7 @@ class ElevatorConfig {
             .withMotorOutput(new MotorOutputConfigs()
                     .withInverted(InvertedValue.Clockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Brake))
-            .withFeedback(new FeedbackConfigs()
-                    .withRotorToSensorRatio(1)
-                    .withSensorToMechanismRatio(gearRatio));
+            .withFeedback(new FeedbackConfigs().withRotorToSensorRatio(1).withSensorToMechanismRatio(gearRatio));
 
     static final CANrangeConfiguration canRangeElevatorConfigs = new CANrangeConfiguration();
 

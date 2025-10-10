@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.Robot;
 import frc.robot.util.sim.PhysicsSim;
 
@@ -43,7 +44,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     }
 
     @Override
-    public void moveToPosition(double position) {
+    public void moveToPosition(Angle position) {
         primaryElevatorMotor.setControl(magicRequest.withPosition(position));
     }
 

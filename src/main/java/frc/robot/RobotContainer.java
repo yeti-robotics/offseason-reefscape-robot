@@ -143,8 +143,8 @@ public class RobotContainer {
                 elevator = new ElevatorSubsystem(new ElevatorIOTalonFX());
                 ramp = new RampSubsystem(new RampIOTalonFX());
 
-                frontCam = new PhotonAprilTagSystem("FrontCam", Constants.frontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("RearCam", Constants.rearCamTrans, drivetrain);
+                frontCam = new PhotonAprilTagSystem("Front Camera", Constants.frontCamTrans, drivetrain);
+                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
                 reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontCam, rearCam);
                 algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontCam, rearCam);
@@ -159,8 +159,8 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIOSim());
 
-                frontCam = new PhotonAprilTagSystem("FrontCam", Constants.frontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("RearCam", Constants.rearCamTrans, drivetrain);
+                frontCam = new PhotonAprilTagSystem("Front Camera", Constants.frontCamTrans, drivetrain);
+                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
                 reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontCam, rearCam);
                 algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontCam, rearCam);
@@ -175,8 +175,8 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIO() {});
 
-                frontCam = new PhotonAprilTagSystem("FrontCam", Constants.frontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("RearCam", Constants.rearCamTrans, drivetrain);
+                frontCam = new PhotonAprilTagSystem("Front Camera", Constants.frontCamTrans, drivetrain);
+                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
                 reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontCam, rearCam);
                 algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontCam, rearCam);
@@ -190,14 +190,14 @@ public class RobotContainer {
         mechanisms = new Mechanisms();
 
         AprilTagCamSim simCam1 = AprilTagCamSimBuilder.newCamera()
-                .withCameraName("FrontCam")
+                .withCameraName("Front Camera")
                 .withTransform(Constants.frontCamTrans)
                 .build();
         aprilTagCamSim.addCamera(simCam1);
         frontCam.setCamera(simCam1.getCam());
 
         AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
-                .withCameraName("RearCam")
+                .withCameraName("Rear Camera")
                 .withTransform(Constants.rearCamTrans)
                 .build();
         aprilTagCamSim.addCamera(simCam2);
@@ -226,7 +226,6 @@ public class RobotContainer {
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
         controller.rightTrigger().onTrue(score.spinManual(0.2).withTimeout(3));
-        controller.rightBumper().whileTrue(score.spinManual(-0.5));
         controller
                 .leftTrigger()
                 .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
@@ -257,6 +256,8 @@ public class RobotContainer {
                         () -> algaeMode));
 
         controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
+
+        controller.leftBumper().onTrue(reefAlignPPOTF.reefAlign());
     }
 
     private void configureTriggerBindings() {
@@ -265,7 +266,8 @@ public class RobotContainer {
         new Trigger(score::innerSensorDetected)
                 .debounce(0.5)
                 .onTrue(score.spinUntilCoralSafe()
-                        .andThen(score.spinManual(-0.1).until(score::innerSensorDetected)));
+                        .andThen(score.spinManual(-0.1).until(score::innerSensorDetected))
+                        .onlyIf(() -> elevator.getCurrentPosition() <= 0.05));
     }
 
     public void updateMechanisms() {

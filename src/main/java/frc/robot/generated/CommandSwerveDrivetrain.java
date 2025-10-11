@@ -61,7 +61,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             new SwerveRequest.SysIdSwerveRotation();
 
     public final PPHolonomicDriveController driveController =
-            new PPHolonomicDriveController(new PIDConstants(40.0, 0.0, 0.0), new PIDConstants(7.0, 0.0, 0.0));
+            new PPHolonomicDriveController(new PIDConstants(40.0, 0.0, 5.0), new PIDConstants(7.0, 0.0, 0.0));
 
     public AngularVelocity getSpin() {
         return this.getPigeon2().getAngularVelocityZWorld().getValue();

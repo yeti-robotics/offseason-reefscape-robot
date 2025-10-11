@@ -231,7 +231,7 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-        controller.rightTrigger().onTrue(score.spinManual(0.2).withTimeout(3));
+        controller.rightTrigger().onTrue(score.spinManual(0.5).withTimeout(3));
         controller
                 .leftTrigger()
                 .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?

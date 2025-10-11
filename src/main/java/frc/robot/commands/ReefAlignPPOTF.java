@@ -35,7 +35,7 @@ public class ReefAlignPPOTF {
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
 
     private static final Transform2d leftBranchTransform = new Transform2d(
-            Units.inchesToMeters(8),
+            Units.inchesToMeters(6),
             Units.inchesToMeters(-3.5),
             Rotation2d.k180deg); // negative x gets you closer, positive is further
     private static final Transform2d rightBranchTransform = new Transform2d(

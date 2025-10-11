@@ -24,6 +24,7 @@ import frc.robot.subsystems.vision.util.AprilTagDetectionHelpers;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.littletonrobotics.junction.Logger;
 
 public class ReefAlignPPOTF {
     private final CommandSwerveDrivetrain commandSwerveDrivetrain;
@@ -34,20 +35,15 @@ public class ReefAlignPPOTF {
     private static final SwerveRequest.FieldCentricFacingAngle swerveReq = new SwerveRequest.FieldCentricFacingAngle();
     private static final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
-    private boolean isRightCam = false;
 
-    private static final Transform2d leftBranchTransform =
-            new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(-0.5), Rotation2d.kZero);
-    private static final Transform2d rightBranchTransform =
-            new Transform2d(Units.inchesToMeters(15), Units.inchesToMeters(8.5), Rotation2d.kZero);
-
-    private static final Transform2d leftBranchClimbTransform =
-            new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(-9.5), Rotation2d.kZero);
-    private static final Transform2d rightBranchClimbTransform =
-            new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(2.0), Rotation2d.kZero);
-
-    private static final Transform2d rightTurnTransform = new Transform2d(0, 0, Rotation2d.kCCW_90deg);
-    private static final Transform2d leftTurnTransform = new Transform2d(0, 0, Rotation2d.kCW_90deg);
+    private static final Transform2d leftBranchTransform = new Transform2d(
+            Units.inchesToMeters(18),
+            Units.inchesToMeters(-2.5),
+            Rotation2d.k180deg); // negative x gets you closer, positive is further
+    private static final Transform2d rightBranchTransform = new Transform2d(
+            Units.inchesToMeters(18),
+            Units.inchesToMeters(8.5),
+            Rotation2d.k180deg); // negative y moves you left, positive moves right
 
     public enum Branch {
         LEFT,
@@ -80,7 +76,6 @@ public class ReefAlignPPOTF {
     }
 
     public Optional<AprilTagDetection> getReefCamDetection() {
-        isRightCam = false;
         Optional<AprilTagDetection> detection1 = reefCam1.getBestDetection();
         Optional<AprilTagDetection> detection2 = reefCam2.getBestDetection();
 
@@ -96,24 +91,12 @@ public class ReefAlignPPOTF {
                         AprilTagDetectionHelpers.getDetectionDistance(fiducial1.getRobotToTargetPose())
                                 < AprilTagDetectionHelpers.getDetectionDistance(fiducial2.getRobotToTargetPose());
 
-                if (!fiducial1Closer) {
-                    isRightCam = true;
-                }
-
                 return fiducial1Closer ? detection1 : detection2;
             }
-
-            if (fiducial2IsOnReef) {
-                isRightCam = true;
-            }
-
             return fiducial1IsOnReef ? detection1 : detection2;
         }
 
-        return detection1.or(() -> {
-            isRightCam = true;
-            return detection2;
-        });
+        return detection1.or(() -> detection2);
     }
 
     public Optional<Pose2d> getBranchPoseFromTagID(int id) {
@@ -169,18 +152,16 @@ public class ReefAlignPPOTF {
 
         Transform2d branchTransform;
 
-        if (!isRightCam) {
-            branchTransform = branch == Branch.LEFT ? leftBranchClimbTransform : rightBranchClimbTransform;
-        } else {
-            branchTransform = branch == Branch.LEFT ? leftBranchTransform : rightBranchTransform;
-        }
+        branchTransform = branch == Branch.LEFT ? leftBranchTransform : rightBranchTransform;
 
         // Get the target position from the branch pose but keep the current rotation
         Pose2d currentPose = commandSwerveDrivetrain.getState().Pose;
         Pose2d targetPosition = reefFaceTargetPose.transformBy(branchTransform);
+
+        Logger.recordOutput("Target pose", targetPosition);
         // Create a new pose with the target position but current rotation
         Pose2d reefBranchPose = new Pose2d(
-                targetPosition.getX(), targetPosition.getY(), currentPose.getRotation() // Keep the current rotation
+                targetPosition.getX(), targetPosition.getY(), targetPosition.getRotation() // Keep the current rotation
                 );
 
         return Commands.defer(

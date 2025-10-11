@@ -30,14 +30,13 @@ public class ReefAlignPPOTF {
     private final CommandSwerveDrivetrain commandSwerveDrivetrain;
 
     private final AprilTagSubsystem reefCam1;
-    private final AprilTagSubsystem reefCam2;
 
     private static final SwerveRequest.FieldCentricFacingAngle swerveReq = new SwerveRequest.FieldCentricFacingAngle();
     private static final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
 
     private static final Transform2d leftBranchTransform = new Transform2d(
-            Units.inchesToMeters(18),
+            Units.inchesToMeters(21),
             Units.inchesToMeters(-2.5),
             Rotation2d.k180deg); // negative x gets you closer, positive is further
     private static final Transform2d rightBranchTransform = new Transform2d(
@@ -56,7 +55,6 @@ public class ReefAlignPPOTF {
             CommandSwerveDrivetrain commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2) {
         this.commandSwerveDrivetrain = commandSwerveDrivetrain;
         this.reefCam1 = reefCam1;
-        this.reefCam2 = reefCam2;
 
         swerveReq.HeadingController.setPID(10, 0, 1);
         swerveReq.HeadingController.setTolerance(0.07);
@@ -76,33 +74,10 @@ public class ReefAlignPPOTF {
     }
 
     public Optional<AprilTagDetection> getReefCamDetection() {
-        Optional<AprilTagDetection> detection1 = reefCam1.getBestDetection();
-        Optional<AprilTagDetection> detection2 = reefCam2.getBestDetection();
-
-        if (detection1.isPresent() && detection2.isPresent()) {
-            AprilTagDetection fiducial1 = detection1.get();
-            AprilTagDetection fiducial2 = detection2.get();
-
-            boolean fiducial1IsOnReef = isOnReef(fiducial1.getFiducialID());
-            boolean fiducial2IsOnReef = isOnReef(fiducial2.getFiducialID());
-
-            if (fiducial1IsOnReef && fiducial2IsOnReef) {
-                boolean fiducial1Closer =
-                        AprilTagDetectionHelpers.getDetectionDistance(fiducial1.getRobotToTargetPose())
-                                < AprilTagDetectionHelpers.getDetectionDistance(fiducial2.getRobotToTargetPose());
-
-                return fiducial1Closer ? detection1 : detection2;
-            }
-            return fiducial1IsOnReef ? detection1 : detection2;
-        }
-
-        return detection1.or(() -> detection2);
+        return reefCam1.getBestDetection();
     }
 
     public Optional<Pose2d> getBranchPoseFromTagID(int id) {
-        //        DogLog.log("ReefAlignCmd/TagID", id);
-        //        DogLog.log("ReefAlignCmd/isRedReef", isRedReef(id));
-        //        DogLog.log("ReefAlignCmd/isBlueReef", isBlueReef(id));
         boolean isRedAllianceReef = isRedReef(id);
 
         if (!isRedAllianceReef && !isBlueReef(id)) {

@@ -162,18 +162,10 @@ public class ReefAlignPPOTF {
                     PathPlannerTrajectoryState endState = new PathPlannerTrajectoryState();
                     endState.pose = reefBranchPose;
 
+                    Command positionPIDCommand = PositionPIDCommand.generateCommand(commandSwerveDrivetrain, reefBranchPose, Seconds.of(3));
+
                     return AutoBuilder.followPath(path)
-                            .andThen(Commands.run(
-                                    () -> commandSwerveDrivetrain.setControl(robotSpeeds.withSpeeds(
-                                            commandSwerveDrivetrain.driveController.calculateRobotRelativeSpeeds(
-                                                    commandSwerveDrivetrain.getState().Pose, endState))),
-                                    commandSwerveDrivetrain))
-                            .until(() -> new Transform2d(commandSwerveDrivetrain.getState().Pose, reefBranchPose)
-                                            .getTranslation()
-                                            .getNorm()
-                                    < 0.01)
-                            .andThen(Commands.runOnce(
-                                    () -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain));
+                            .andThen(positionPIDCommand);
                 },
                 Set.of(commandSwerveDrivetrain));
     }

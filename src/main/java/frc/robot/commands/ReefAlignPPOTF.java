@@ -161,10 +161,10 @@ public class ReefAlignPPOTF {
                     PathPlannerTrajectoryState endState = new PathPlannerTrajectoryState();
                     endState.pose = reefBranchPose;
 
-                    Command positionPIDCommand = PositionPIDCommand.generateCommand(commandSwerveDrivetrain, reefBranchPose, Seconds.of(3));
+                    Command positionPIDCommand =
+                            PositionPIDCommand.generateCommand(commandSwerveDrivetrain, reefBranchPose, Seconds.of(3));
 
-                    return AutoBuilder.followPath(path)
-                            .andThen(positionPIDCommand);
+                    return AutoBuilder.followPath(path).andThen(positionPIDCommand);
                 },
                 Set.of(commandSwerveDrivetrain));
     }

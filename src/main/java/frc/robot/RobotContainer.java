@@ -231,40 +231,40 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-//        controller.rightTrigger().onTrue(score.spinManual(0.5).withTimeout(3));
-//        controller
-//                .leftTrigger()
-//                .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
-//
-//        controller.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-//        controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
-//        controller.povLeft().whileTrue(ramp.setRoller(-0.1).alongWith(score.spinManual(-0.2)));
-//        controller.povUp().whileTrue(ramp.setRoller(0.75).andThen(score.spinManual(0.2)));
-//
-//        controller.y().onTrue(elevator.moveToPosition(ElevatorPosition.L4.getHeight()));
-//        controller
-//                .x()
-//                .onTrue(Commands.either(
-//                        elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
-//                        elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
-//                        () -> algaeMode));
-//        controller
-//                .b()
-//                .onTrue(Commands.either(
-//                        elevator.moveToPosition(ElevatorPosition.LOW_ALGAE.getHeight()),
-//                        elevator.moveToPosition(ElevatorPosition.L2.getHeight()),
-//                        () -> algaeMode));
-//        controller
-//                .a()
-//                .onTrue(Commands.either(
-//                        elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
-//                        elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
-//                        () -> algaeMode));
-//
-//        controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
+        controller.rightTrigger().onTrue(score.spinManual(0.5).withTimeout(3));
+        controller
+                .leftTrigger()
+                .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
 
-        controller.button(1).whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
-        controller.button(2).whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));
+        controller.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
+        controller.povLeft().whileTrue(ramp.setRoller(-0.1).alongWith(score.spinManual(-0.2)));
+        controller.povUp().whileTrue(ramp.setRoller(0.75).andThen(score.spinManual(0.2)));
+
+        controller.y().onTrue(elevator.moveToPosition(ElevatorPosition.L4.getHeight()));
+        controller
+                .x()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
+                        () -> algaeMode));
+        controller
+                .b()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.LOW_ALGAE.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L2.getHeight()),
+                        () -> algaeMode));
+        controller
+                .a()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
+                        () -> algaeMode));
+
+        controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
+
+        controller.leftBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
+        controller.rightBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));
     }
 
     private void configureTriggerBindings() {

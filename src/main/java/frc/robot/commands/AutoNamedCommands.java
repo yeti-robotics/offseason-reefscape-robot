@@ -19,8 +19,12 @@ public class AutoNamedCommands {
     }
 
     public void registerCommands() {
-        NamedCommands.registerCommand("ReefAlignLeft", reefAlignCommand.reefAlign(ReefAlignPPOTF.Branch.LEFT).asProxy());
-        NamedCommands.registerCommand("ReefAlignRight", reefAlignCommand.reefAlign(ReefAlignPPOTF.Branch.RIGHT).asProxy());
+        NamedCommands.registerCommand(
+                "ReefAlignLeft",
+                reefAlignCommand.reefAlign(ReefAlignPPOTF.Branch.LEFT).asProxy());
+        NamedCommands.registerCommand(
+                "ReefAlignRight",
+                reefAlignCommand.reefAlign(ReefAlignPPOTF.Branch.RIGHT).asProxy());
         NamedCommands.registerCommand(
                 "L4", elevator.moveToPosition(ElevatorPosition.L4.getHeight()).andThen(score.scoreCoral()));
         NamedCommands.registerCommand(

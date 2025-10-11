@@ -272,7 +272,7 @@ public class RobotContainer {
         new Trigger(ramp::outerRampDetection).or(ramp::innerRampDetection).whileTrue(ramp.setRoller(0.75));
         new Trigger(score::innerSensorDetected)
                 .and(() -> !score.outerSensorDetected())
-                .debounce(0.5)
+                .debounce(0.2)
                 .onTrue(score.spinUntilCoralSafe()
                         .andThen(score.spinManual(-0.07).until(score::innerSensorDetected))
                         .onlyIf(() -> elevator.getCurrentPosition() <= 0.05));

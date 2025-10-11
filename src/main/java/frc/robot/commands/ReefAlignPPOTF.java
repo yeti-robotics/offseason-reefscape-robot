@@ -39,8 +39,8 @@ public class ReefAlignPPOTF {
             Units.inchesToMeters(-2.5),
             Rotation2d.k180deg); // negative x gets you closer, positive is further
     private static final Transform2d rightBranchTransform = new Transform2d(
-            Units.inchesToMeters(18),
-            Units.inchesToMeters(8.5),
+            Units.inchesToMeters(6),
+            Units.inchesToMeters(2.5),
             Rotation2d.k180deg); // negative y moves you left, positive moves right
 
     public enum Branch {

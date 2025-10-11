@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "lineE"
+            "pathName": "lineToEF"
           }
         },
         {
@@ -19,25 +19,25 @@
         {
           "type": "named",
           "data": {
-            "name": "Score4"
+            "name": "L4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "eHP"
+            "pathName": "efToHP"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "HPIntake"
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "hpD"
+            "pathName": "hpToCD"
           }
         },
         {
@@ -49,13 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "dHP"
+            "name": "L4"
           }
         }
       ]

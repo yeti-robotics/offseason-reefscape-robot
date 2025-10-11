@@ -37,7 +37,7 @@ public class ReefAlignPPOTF {
     private boolean isRightCam = false;
 
     private static final Transform2d leftBranchTransform =
-            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(-2.5), Rotation2d.kZero);
+            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(-2.0), Rotation2d.kZero);
     private static final Transform2d rightBranchTransform =
             new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(8.5), Rotation2d.kZero);
 
@@ -180,45 +180,46 @@ public class ReefAlignPPOTF {
         Pose2d targetPosition = reefFaceTargetPose.transformBy(branchTransform);
         // Create a new pose with the target position but current rotation
         Pose2d reefBranchPose = new Pose2d(
-                targetPosition.getX(),
-                targetPosition.getY(),
-                currentPose.getRotation()  // Keep the current rotation
-        );
+                targetPosition.getX(), targetPosition.getY(), currentPose.getRotation() // Keep the current rotation
+                );
 
-        return Commands.defer(() -> {
-            SwerveDrivetrain.SwerveDriveState state = commandSwerveDrivetrain.getState();
-            Pose2d drivetrainPose = state.Pose;
+        return Commands.defer(
+                () -> {
+                    SwerveDrivetrain.SwerveDriveState state = commandSwerveDrivetrain.getState();
+                    Pose2d drivetrainPose = state.Pose;
 
-            List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drivetrainPose, reefBranchPose);
+                    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drivetrainPose, reefBranchPose);
 
-            PathPlannerPath path = new PathPlannerPath(
-                    waypoints,
-                    new PathConstraints(
-                            MetersPerSecond.of(1),
-                            MetersPerSecondPerSecond.of(2),
-                            RadiansPerSecond.of(2 * Math.PI),
-                            RadiansPerSecondPerSecond.of(4 * Math.PI)),
-                    new IdealStartingState(
-                            getChassisVelocity(state.Speeds),
-                            commandSwerveDrivetrain.getRotation3d().toRotation2d()),
-                    new GoalEndState(0.0, reefBranchPose.getRotation()));
-            path.preventFlipping = true;
+                    PathPlannerPath path = new PathPlannerPath(
+                            waypoints,
+                            new PathConstraints(
+                                    MetersPerSecond.of(1),
+                                    MetersPerSecondPerSecond.of(2),
+                                    RadiansPerSecond.of(2 * Math.PI),
+                                    RadiansPerSecondPerSecond.of(4 * Math.PI)),
+                            new IdealStartingState(
+                                    getChassisVelocity(state.Speeds),
+                                    commandSwerveDrivetrain.getRotation3d().toRotation2d()),
+                            new GoalEndState(0.0, reefBranchPose.getRotation()));
+                    path.preventFlipping = true;
 
-            PathPlannerTrajectoryState endState = new PathPlannerTrajectoryState();
-            endState.pose = reefBranchPose;
+                    PathPlannerTrajectoryState endState = new PathPlannerTrajectoryState();
+                    endState.pose = reefBranchPose;
 
-            return AutoBuilder.followPath(path)
-                    .andThen(Commands.run(
-                            () -> commandSwerveDrivetrain.setControl(robotSpeeds.withSpeeds(
-                                    commandSwerveDrivetrain.driveController.calculateRobotRelativeSpeeds(
-                                            commandSwerveDrivetrain.getState().Pose, endState))),
-                            commandSwerveDrivetrain))
-                    .until(() -> new Transform2d(commandSwerveDrivetrain.getState().Pose, reefBranchPose)
-                            .getTranslation()
-                            .getNorm()
-                            < 0.01)
-                    .andThen(Commands.runOnce(() -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain));
-        }, Set.of(commandSwerveDrivetrain));
+                    return AutoBuilder.followPath(path)
+                            .andThen(Commands.run(
+                                    () -> commandSwerveDrivetrain.setControl(robotSpeeds.withSpeeds(
+                                            commandSwerveDrivetrain.driveController.calculateRobotRelativeSpeeds(
+                                                    commandSwerveDrivetrain.getState().Pose, endState))),
+                                    commandSwerveDrivetrain))
+                            .until(() -> new Transform2d(commandSwerveDrivetrain.getState().Pose, reefBranchPose)
+                                            .getTranslation()
+                                            .getNorm()
+                                    < 0.01)
+                            .andThen(Commands.runOnce(
+                                    () -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain));
+                },
+                Set.of(commandSwerveDrivetrain));
     }
 
     public Command reefAlign(Branch branch) {

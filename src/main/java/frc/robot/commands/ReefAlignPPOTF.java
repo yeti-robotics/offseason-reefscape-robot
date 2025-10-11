@@ -182,8 +182,7 @@ public class ReefAlignPPOTF {
         }
 
         Pose2d reefBranchPose = reefFaceTargetPose
-                .transformBy(branchTransform)
-                .transformBy(isRightCam ? rightTurnTransform : leftTurnTransform);
+                .transformBy(branchTransform);
 
         //   DogLog.log("ReefAlignCmd/ReefTarget", reefBranchPose);
 

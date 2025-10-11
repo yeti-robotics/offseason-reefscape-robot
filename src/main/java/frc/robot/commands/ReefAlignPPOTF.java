@@ -20,7 +20,6 @@ import frc.robot.constants.FieldConstants.Reef;
 import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.apriltag.AprilTagDetection;
 import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
-import frc.robot.subsystems.vision.util.AprilTagDetectionHelpers;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,7 +35,7 @@ public class ReefAlignPPOTF {
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
 
     private static final Transform2d leftBranchTransform = new Transform2d(
-            Units.inchesToMeters(21),
+            Units.inchesToMeters(17),
             Units.inchesToMeters(-2.5),
             Rotation2d.k180deg); // negative x gets you closer, positive is further
     private static final Transform2d rightBranchTransform = new Transform2d(

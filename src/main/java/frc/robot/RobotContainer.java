@@ -12,7 +12,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
@@ -189,7 +188,7 @@ public class RobotContainer {
         }
 
         // Set up auto routines
-        var namedCommands = new AutoNamedCommands(score,elevator, reefAlignPPOTF);
+        var namedCommands = new AutoNamedCommands(score, elevator, reefAlignPPOTF);
         namedCommands.registerCommands();
 
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -270,7 +269,7 @@ public class RobotContainer {
     private void configureTriggerBindings() {
         // Trigger for coral detection in ramp - will automatically set coral position for handoff
         new Trigger(ramp::outerRampDetection).or(ramp::innerRampDetection).whileTrue(ramp.setRoller(0.75));
-        new Trigger(score::innerSensorDetected)
+        new Trigger(score::innerSensorDetected).and(() -> !score.outerSensorDetected())
                 .debounce(0.5)
                 .onTrue(score.spinUntilCoralSafe()
                         .andThen(score.spinManual(-0.07).until(score::innerSensorDetected))

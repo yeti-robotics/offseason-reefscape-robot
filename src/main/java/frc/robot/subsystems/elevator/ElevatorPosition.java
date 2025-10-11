@@ -8,7 +8,7 @@ public enum ElevatorPosition {
     L1(0.2),
     L2(1.038916),
     L3(2.493066),
-    L4(5),
+    L4(5.05),
     HP_INAKE(0.0),
     BARGE(0.0),
     HIGH_ALGAE(3.403564),

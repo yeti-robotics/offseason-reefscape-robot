@@ -27,7 +27,7 @@ public class RampIOSim implements RampIO {
     }
 
     @Override
-    public void setRollerVoltage(double volts) {
+    public void setRollerDuty(double volts) {
         roller.setControl(new VoltageOut(volts));
     }
 }

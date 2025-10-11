@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.*;
@@ -16,7 +17,7 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.FieldConstants.Reef;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.apriltag.AprilTagDetection;
 import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
 import frc.robot.subsystems.vision.util.AprilTagDetectionHelpers;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class AlgaeAlignPPOTF {
-    private final Drive commandSwerveDrivetrain;
+    private final CommandSwerveDrivetrain commandSwerveDrivetrain;
 
     private final AprilTagSubsystem reefCam1;
     private final AprilTagSubsystem reefCam2;
@@ -42,7 +43,8 @@ public class AlgaeAlignPPOTF {
 
     private Pose2d reefFaceTargetPose;
 
-    public AlgaeAlignPPOTF(Drive commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2) {
+    public AlgaeAlignPPOTF(
+            CommandSwerveDrivetrain commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2) {
         this.commandSwerveDrivetrain = commandSwerveDrivetrain;
         this.reefCam1 = reefCam1;
         this.reefCam2 = reefCam2;
@@ -139,7 +141,7 @@ public class AlgaeAlignPPOTF {
         Optional<AprilTagDetection> detectionOpt = getReefCamDetection();
 
         if (detectionOpt.isEmpty()) {
-            return Commands.runOnce(commandSwerveDrivetrain::stop);
+            return Commands.runOnce(() -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain);
         }
 
         int fiducialId = detectionOpt.get().getFiducialID();
@@ -147,7 +149,7 @@ public class AlgaeAlignPPOTF {
         Optional<Pose2d> reefTargetPoseOpt = getBranchPoseFromTagID(fiducialId);
 
         if (reefTargetPoseOpt.isEmpty()) {
-            return Commands.runOnce(commandSwerveDrivetrain::stop);
+            return Commands.runOnce(() -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain);
         }
 
         reefFaceTargetPose = reefTargetPoseOpt.get();
@@ -157,7 +159,8 @@ public class AlgaeAlignPPOTF {
 
         //   DogLog.log("ReefAlignCmd/ReefTarget", reefBranchPose);
 
-        Pose2d drivetrainPose = commandSwerveDrivetrain.getPose();
+        SwerveDrivetrain.SwerveDriveState state = commandSwerveDrivetrain.getState();
+        Pose2d drivetrainPose = state.Pose;
 
         /*
         old midpt pose
@@ -177,8 +180,8 @@ public class AlgaeAlignPPOTF {
                         RadiansPerSecond.of(2 * Math.PI),
                         RadiansPerSecondPerSecond.of(4 * Math.PI)),
                 new IdealStartingState(
-                        getChassisVelocity(commandSwerveDrivetrain.getChassisSpeeds()),
-                        commandSwerveDrivetrain.getRotation()),
+                        getChassisVelocity(state.Speeds),
+                        commandSwerveDrivetrain.getRotation3d().toRotation2d()),
                 new GoalEndState(0.0, reefBranchPose.getRotation()));
         path.preventFlipping = true;
 
@@ -187,15 +190,15 @@ public class AlgaeAlignPPOTF {
 
         return AutoBuilder.followPath(path)
                 .andThen(Commands.run(
-                        () -> commandSwerveDrivetrain.runVelocity(
+                        () -> commandSwerveDrivetrain.setControl(robotSpeeds.withSpeeds(
                                 commandSwerveDrivetrain.driveController.calculateRobotRelativeSpeeds(
-                                        commandSwerveDrivetrain.getPose(), endState)),
+                                        commandSwerveDrivetrain.getState().Pose, endState))),
                         commandSwerveDrivetrain))
-                .until(() -> new Transform2d(commandSwerveDrivetrain.getPose(), reefBranchPose)
+                .until(() -> new Transform2d(commandSwerveDrivetrain.getState().Pose, reefBranchPose)
                                 .getTranslation()
                                 .getNorm()
                         < 0.01)
-                .andThen(Commands.runOnce(commandSwerveDrivetrain::stop, commandSwerveDrivetrain));
+                .andThen(Commands.runOnce(() -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain));
     }
 
     public Command algaeAlign() {

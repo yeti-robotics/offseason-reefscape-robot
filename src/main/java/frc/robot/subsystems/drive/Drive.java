@@ -317,9 +317,9 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    public boolean isMotionBlur() {
-        return getSpin().gte(TunerConstants.MAX_BLUR_SPEED);
-    }
+    //    public boolean isMotionBlur() {
+    //        return getSpin().gte(TunerConstants.MAX_BLUR_SPEED);
+    //    }
 
     @AutoLogOutput(key = "Spin")
     public AngularVelocity getSpin() {

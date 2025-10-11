@@ -263,7 +263,8 @@ public class RobotContainer {
 
         controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
 
-        controller.leftBumper().onTrue(reefAlignPPOTF.reefAlign());
+        controller.leftBumper().onTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
+        controller.rightBumper().onTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));
     }
 
     private void configureTriggerBindings() {

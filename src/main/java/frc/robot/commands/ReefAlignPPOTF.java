@@ -37,9 +37,9 @@ public class ReefAlignPPOTF {
     private boolean isRightCam = false;
 
     private static final Transform2d leftBranchTransform =
-            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(-2.5), Rotation2d.kZero);
+            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(-2.5), Rotation2d.k180deg);
     private static final Transform2d rightBranchTransform =
-            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(8.5), Rotation2d.kZero);
+            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(8.5), Rotation2d.k180deg);
 
     private static final Transform2d leftBranchClimbTransform =
             new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(-9.5), Rotation2d.kZero);
@@ -53,8 +53,6 @@ public class ReefAlignPPOTF {
         LEFT,
         RIGHT
     }
-
-    Branch branch = Branch.LEFT;
 
     private Pose2d reefFaceTargetPose;
 
@@ -79,10 +77,6 @@ public class ReefAlignPPOTF {
 
     public boolean isOnReef(int id) {
         return isRedReef(id) || isBlueReef(id);
-    }
-
-    public Command setBranch(Branch branch) {
-        return Commands.runOnce(() -> this.branch = branch);
     }
 
     public Optional<AprilTagDetection> getReefCamDetection() {
@@ -156,7 +150,7 @@ public class ReefAlignPPOTF {
         return MetersPerSecond.of(new Translation2d(chassisSpeeds.vx, chassisSpeeds.vy).getNorm());
     }
 
-    private Command autoAlign() {
+    private Command autoAlign(Branch branch) {
         Optional<AprilTagDetection> detectionOpt = getReefCamDetection();
 
         if (detectionOpt.isEmpty()) {
@@ -227,7 +221,7 @@ public class ReefAlignPPOTF {
                 .andThen(Commands.runOnce(() -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain));
     }
 
-    public Command reefAlign() {
-        return Commands.defer(this::autoAlign, Set.of(commandSwerveDrivetrain));
+    public Command reefAlign(Branch branch) {
+        return Commands.defer(() -> autoAlign(branch), Set.of(commandSwerveDrivetrain));
     }
 }

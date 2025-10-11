@@ -37,7 +37,7 @@ public class ReefAlignPPOTF {
     private boolean isRightCam = false;
 
     private static final Transform2d leftBranchTransform =
-            new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(-3.5), Rotation2d.kZero);
+            new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(-0.5), Rotation2d.kZero);
     private static final Transform2d rightBranchTransform =
             new Transform2d(Units.inchesToMeters(15), Units.inchesToMeters(8.5), Rotation2d.kZero);
 

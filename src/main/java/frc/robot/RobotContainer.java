@@ -266,7 +266,7 @@ public class RobotContainer {
         new Trigger(score::innerSensorDetected)
                 .debounce(0.5)
                 .onTrue(score.spinUntilCoralSafe()
-                        .andThen(score.spinManual(-0.1).until(score::innerSensorDetected))
+                        .andThen(score.spinManual(-0.07).until(score::innerSensorDetected))
                         .onlyIf(() -> elevator.getCurrentPosition() <= 0.05));
     }
 

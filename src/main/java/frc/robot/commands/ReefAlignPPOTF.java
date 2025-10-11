@@ -166,7 +166,9 @@ public class ReefAlignPPOTF {
                                     () -> commandSwerveDrivetrain.setControl(robotSpeeds.withSpeeds(
                                             commandSwerveDrivetrain.driveController.calculateRobotRelativeSpeeds(
                                                     commandSwerveDrivetrain.getState().Pose, endState))),
-                                    commandSwerveDrivetrain))
+                                    commandSwerveDrivetrain)).alongWith(Commands.run(() -> Logger.recordOutput("Pose error", new Transform2d(commandSwerveDrivetrain.getState().Pose, reefBranchPose)
+                                    .getTranslation()
+                                    .getNorm())))
                             .until(() -> new Transform2d(commandSwerveDrivetrain.getState().Pose, reefBranchPose)
                                             .getTranslation()
                                             .getNorm()

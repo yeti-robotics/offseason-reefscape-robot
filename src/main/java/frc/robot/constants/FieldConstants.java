@@ -21,14 +21,10 @@ public class FieldConstants {
     public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
 
     static {
-        try {
-            if (Robot.isReal()) {
-                APRIL_TAG_FIELD_LAYOUT = new AprilTagFieldLayout("/home/systemcore/deploy/practice_field.json");
-            } else {
-                APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (Robot.isReal()) {
+            APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        } else {
+            APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         }
     }
 

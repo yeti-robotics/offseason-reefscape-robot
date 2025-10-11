@@ -269,7 +269,8 @@ public class RobotContainer {
     private void configureTriggerBindings() {
         // Trigger for coral detection in ramp - will automatically set coral position for handoff
         new Trigger(ramp::outerRampDetection).or(ramp::innerRampDetection).whileTrue(ramp.setRoller(0.75));
-        new Trigger(score::innerSensorDetected).and(() -> !score.outerSensorDetected())
+        new Trigger(score::innerSensorDetected)
+                .and(() -> !score.outerSensorDetected())
                 .debounce(0.5)
                 .onTrue(score.spinUntilCoralSafe()
                         .andThen(score.spinManual(-0.07).until(score::innerSensorDetected))

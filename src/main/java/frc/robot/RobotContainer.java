@@ -56,13 +56,13 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
     // Subsystems
-    private final CommandSwerveDrivetrain drivetrain;
+    public final CommandSwerveDrivetrain drivetrain;
     private final ScoreMechSubsystem score;
     private final ElevatorSubsystem elevator;
 
     private final RampSubsystem ramp;
 
-    private boolean algaeMode = false;
+    public boolean algaeMode = false;
 
     // Vision
     public final PhotonAprilTagSystem frontCam;
@@ -75,7 +75,7 @@ public class RobotContainer {
 
     AprilTagSimulator aprilTagCamSim = new AprilTagSimulator();
 
-    final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
+    public final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
             .getStructTopic("/Pose", Pose2d.struct)
             .publish();
 

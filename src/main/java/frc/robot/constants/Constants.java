@@ -47,12 +47,18 @@ public final class Constants {
     public static final CANBus rampCANBus = CANBus.systemCore(2);
 
     // Front Camera Red
-    public static final Transform3d frontCamTrans = new Transform3d(
-            new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(0), Units.inchesToMeters(9)),
-            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0)));
+    public static final Transform3d leftFrontCamTrans = new Transform3d(
+            new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(-4), Units.inchesToMeters(9)),
+            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(20)));
 
     // Rear Camera Blue
     public static final Transform3d rearCamTrans = new Transform3d(
             new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(8), Units.inchesToMeters(38)),
             new Rotation3d(0, Math.toRadians(15), Math.toRadians(180)));
+
+    // Front Camera Green
+    public static final Transform3d rightFrontCamTrans = new Transform3d(
+            new Translation3d(Units.inchesToMeters(13), Units.inchesToMeters(4), Units.inchesToMeters(9)),
+            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(-20))
+    );
 }

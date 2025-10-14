@@ -28,7 +28,9 @@ import org.littletonrobotics.junction.Logger;
 public class ReefAlignPPOTF {
     private final CommandSwerveDrivetrain commandSwerveDrivetrain;
 
-    private final AprilTagSubsystem reefCam1;
+    private final AprilTagSubsystem leftFrontCamera;
+    private final AprilTagSubsystem rightFrontCamera;
+    private final AprilTagSubsystem rearCamera;
 
     private static final SwerveRequest.FieldCentricFacingAngle swerveReq = new SwerveRequest.FieldCentricFacingAngle();
     private static final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
@@ -51,9 +53,11 @@ public class ReefAlignPPOTF {
     private Pose2d reefFaceTargetPose;
 
     public ReefAlignPPOTF(
-            CommandSwerveDrivetrain commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2) {
+            CommandSwerveDrivetrain commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2, AprilTagSubsystem reefCam3) {
         this.commandSwerveDrivetrain = commandSwerveDrivetrain;
-        this.reefCam1 = reefCam1;
+        this.leftFrontCamera = reefCam1;
+        this.rightFrontCamera = reefCam2;
+        this.rearCamera = reefCam3;
 
         swerveReq.HeadingController.setPID(10, 0, 1);
         swerveReq.HeadingController.setTolerance(0.07);
@@ -73,7 +77,7 @@ public class ReefAlignPPOTF {
     }
 
     public Optional<AprilTagDetection> getReefCamDetection() {
-        return reefCam1.getBestDetection();
+        return leftFrontCamera.getBestDetection();
     }
 
     public Optional<Pose2d> getBranchPoseFromTagID(int id) {

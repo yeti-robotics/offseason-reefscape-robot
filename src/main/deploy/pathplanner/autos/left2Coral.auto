@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "lineJ"
+            "pathName": "lineToIJ"
           }
         },
         {
@@ -19,25 +19,25 @@
         {
           "type": "named",
           "data": {
-            "name": "Score4"
+            "name": "L4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "jHP"
+            "pathName": "IJToHP"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "HPIntake"
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "hpK"
+            "pathName": "hpToKL"
           }
         },
         {
@@ -49,19 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "kHP"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HPIntake"
+            "name": "L4"
           }
         }
       ]

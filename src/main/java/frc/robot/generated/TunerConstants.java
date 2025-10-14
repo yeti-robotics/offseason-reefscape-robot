@@ -75,7 +75,7 @@ public class TunerConstants {
     public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(9.46);
     public static double MAX_VELOCITY_METERS_PER_SECOND =
             kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double MaFxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond);
+    public static double MaFxAngularRate = RotationsPerSecond.of(2).in(RadiansPerSecond);
 
     public static final AngularVelocity MAX_BLUR_SPEED = RotationsPerSecond.of(3);
 

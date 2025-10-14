@@ -20,41 +20,33 @@ import frc.robot.constants.FieldConstants.Reef;
 import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.apriltag.AprilTagDetection;
 import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
-import frc.robot.subsystems.vision.util.AprilTagDetectionHelpers;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.littletonrobotics.junction.Logger;
 
 public class ReefAlignPPOTF {
     private final CommandSwerveDrivetrain commandSwerveDrivetrain;
 
     private final AprilTagSubsystem reefCam1;
-    private final AprilTagSubsystem reefCam2;
 
     private static final SwerveRequest.FieldCentricFacingAngle swerveReq = new SwerveRequest.FieldCentricFacingAngle();
     private static final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
-    private boolean isRightCam = false;
 
-    private static final Transform2d leftBranchTransform =
-            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(-2.5), Rotation2d.kZero);
-    private static final Transform2d rightBranchTransform =
-            new Transform2d(Units.inchesToMeters(18), Units.inchesToMeters(8.5), Rotation2d.kZero);
-
-    private static final Transform2d leftBranchClimbTransform =
-            new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(-9.5), Rotation2d.kZero);
-    private static final Transform2d rightBranchClimbTransform =
-            new Transform2d(Units.inchesToMeters(14), Units.inchesToMeters(2.0), Rotation2d.kZero);
-
-    private static final Transform2d rightTurnTransform = new Transform2d(0, 0, Rotation2d.kCCW_90deg);
-    private static final Transform2d leftTurnTransform = new Transform2d(0, 0, Rotation2d.kCW_90deg);
+    private static final Transform2d leftBranchTransform = new Transform2d(
+            Units.inchesToMeters(6),
+            Units.inchesToMeters(-2.5),
+            Rotation2d.k180deg); // negative x gets you closer, positive is further
+    private static final Transform2d rightBranchTransform = new Transform2d(
+            Units.inchesToMeters(6),
+            Units.inchesToMeters(2.5),
+            Rotation2d.k180deg); // negative y moves you left, positive moves right
 
     public enum Branch {
         LEFT,
         RIGHT
     }
-
-    Branch branch = Branch.LEFT;
 
     private Pose2d reefFaceTargetPose;
 
@@ -62,7 +54,6 @@ public class ReefAlignPPOTF {
             CommandSwerveDrivetrain commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2) {
         this.commandSwerveDrivetrain = commandSwerveDrivetrain;
         this.reefCam1 = reefCam1;
-        this.reefCam2 = reefCam2;
 
         swerveReq.HeadingController.setPID(10, 0, 1);
         swerveReq.HeadingController.setTolerance(0.07);
@@ -81,51 +72,11 @@ public class ReefAlignPPOTF {
         return isRedReef(id) || isBlueReef(id);
     }
 
-    public Command setBranch(Branch branch) {
-        return Commands.runOnce(() -> this.branch = branch);
-    }
-
     public Optional<AprilTagDetection> getReefCamDetection() {
-        isRightCam = false;
-        Optional<AprilTagDetection> detection1 = reefCam1.getBestDetection();
-        Optional<AprilTagDetection> detection2 = reefCam2.getBestDetection();
-
-        if (detection1.isPresent() && detection2.isPresent()) {
-            AprilTagDetection fiducial1 = detection1.get();
-            AprilTagDetection fiducial2 = detection2.get();
-
-            boolean fiducial1IsOnReef = isOnReef(fiducial1.getFiducialID());
-            boolean fiducial2IsOnReef = isOnReef(fiducial2.getFiducialID());
-
-            if (fiducial1IsOnReef && fiducial2IsOnReef) {
-                boolean fiducial1Closer =
-                        AprilTagDetectionHelpers.getDetectionDistance(fiducial1.getRobotToTargetPose())
-                                < AprilTagDetectionHelpers.getDetectionDistance(fiducial2.getRobotToTargetPose());
-
-                if (!fiducial1Closer) {
-                    isRightCam = true;
-                }
-
-                return fiducial1Closer ? detection1 : detection2;
-            }
-
-            if (fiducial2IsOnReef) {
-                isRightCam = true;
-            }
-
-            return fiducial1IsOnReef ? detection1 : detection2;
-        }
-
-        return detection1.or(() -> {
-            isRightCam = true;
-            return detection2;
-        });
+        return reefCam1.getBestDetection();
     }
 
     public Optional<Pose2d> getBranchPoseFromTagID(int id) {
-        //        DogLog.log("ReefAlignCmd/TagID", id);
-        //        DogLog.log("ReefAlignCmd/isRedReef", isRedReef(id));
-        //        DogLog.log("ReefAlignCmd/isBlueReef", isBlueReef(id));
         boolean isRedAllianceReef = isRedReef(id);
 
         if (!isRedAllianceReef && !isBlueReef(id)) {
@@ -156,7 +107,7 @@ public class ReefAlignPPOTF {
         return MetersPerSecond.of(new Translation2d(chassisSpeeds.vx, chassisSpeeds.vy).getNorm());
     }
 
-    private Command autoAlign() {
+    private Command autoAlign(Branch branch) {
         Optional<AprilTagDetection> detectionOpt = getReefCamDetection();
 
         if (detectionOpt.isEmpty()) {
@@ -175,60 +126,50 @@ public class ReefAlignPPOTF {
 
         Transform2d branchTransform;
 
-        if (!isRightCam) {
-            branchTransform = branch == Branch.LEFT ? leftBranchClimbTransform : rightBranchClimbTransform;
-        } else {
-            branchTransform = branch == Branch.LEFT ? leftBranchTransform : rightBranchTransform;
-        }
+        branchTransform = branch == Branch.LEFT ? leftBranchTransform : rightBranchTransform;
 
-        Pose2d reefBranchPose = reefFaceTargetPose
-                .transformBy(branchTransform);
+        // Get the target position from the branch pose but keep the current rotation
+        Pose2d currentPose = commandSwerveDrivetrain.getState().Pose;
+        Pose2d targetPosition = reefFaceTargetPose.transformBy(branchTransform);
 
-        //   DogLog.log("ReefAlignCmd/ReefTarget", reefBranchPose);
+        Logger.recordOutput("Target pose", targetPosition);
+        // Create a new pose with the target position but current rotation
+        Pose2d reefBranchPose = new Pose2d(
+                targetPosition.getX(), targetPosition.getY(), targetPosition.getRotation() // Keep the current rotation
+                );
 
-        SwerveDrivetrain.SwerveDriveState state = commandSwerveDrivetrain.getState();
-        Pose2d drivetrainPose = state.Pose;
+        return Commands.defer(
+                () -> {
+                    SwerveDrivetrain.SwerveDriveState state = commandSwerveDrivetrain.getState();
+                    Pose2d drivetrainPose = state.Pose;
 
-        /*
-        old midpt pose
-        new Pose2d(
-                                reefBranchPose.getTranslation().getX() + 0.2,
-                                reefBranchPose.getTranslation().getY(),
-                                reefBranchPose.getRotation())
-         */
+                    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drivetrainPose, reefBranchPose);
 
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drivetrainPose, reefBranchPose);
+                    PathPlannerPath path = new PathPlannerPath(
+                            waypoints,
+                            new PathConstraints(
+                                    MetersPerSecond.of(1),
+                                    MetersPerSecondPerSecond.of(2),
+                                    RadiansPerSecond.of(2 * Math.PI),
+                                    RadiansPerSecondPerSecond.of(4 * Math.PI)),
+                            new IdealStartingState(
+                                    getChassisVelocity(state.Speeds),
+                                    commandSwerveDrivetrain.getRotation3d().toRotation2d()),
+                            new GoalEndState(0.0, reefBranchPose.getRotation()));
+                    path.preventFlipping = true;
 
-        PathPlannerPath path = new PathPlannerPath(
-                waypoints,
-                new PathConstraints(
-                        MetersPerSecond.of(1),
-                        MetersPerSecondPerSecond.of(2),
-                        RadiansPerSecond.of(2 * Math.PI),
-                        RadiansPerSecondPerSecond.of(4 * Math.PI)),
-                new IdealStartingState(
-                        getChassisVelocity(state.Speeds),
-                        commandSwerveDrivetrain.getRotation3d().toRotation2d()),
-                new GoalEndState(0.0, reefBranchPose.getRotation()));
-        path.preventFlipping = true;
+                    PathPlannerTrajectoryState endState = new PathPlannerTrajectoryState();
+                    endState.pose = reefBranchPose;
 
-        PathPlannerTrajectoryState endState = new PathPlannerTrajectoryState();
-        endState.pose = reefBranchPose;
+                    Command positionPIDCommand =
+                            PositionPIDCommand.generateCommand(commandSwerveDrivetrain, reefBranchPose, Seconds.of(3));
 
-        return AutoBuilder.followPath(path)
-                .andThen(Commands.run(
-                        () -> commandSwerveDrivetrain.setControl(robotSpeeds.withSpeeds(
-                                commandSwerveDrivetrain.driveController.calculateRobotRelativeSpeeds(
-                                        commandSwerveDrivetrain.getState().Pose, endState))),
-                        commandSwerveDrivetrain))
-                .until(() -> new Transform2d(commandSwerveDrivetrain.getState().Pose, reefBranchPose)
-                                .getTranslation()
-                                .getNorm()
-                        < 0.01)
-                .andThen(Commands.runOnce(() -> commandSwerveDrivetrain.setControl(stopReq), commandSwerveDrivetrain));
+                    return AutoBuilder.followPath(path).andThen(positionPIDCommand);
+                },
+                Set.of(commandSwerveDrivetrain));
     }
 
-    public Command reefAlign() {
-        return Commands.defer(this::autoAlign, Set.of(commandSwerveDrivetrain));
+    public Command reefAlign(Branch branch) {
+        return Commands.defer(() -> autoAlign(branch), Set.of(commandSwerveDrivetrain));
     }
 }

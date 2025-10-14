@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "lineG"
+            "pathName": "midStart"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score4"
+            "name": "ReefAlign"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4"
           }
         }
       ]

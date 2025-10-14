@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeAlignPPOTF;
+import frc.robot.commands.AutoNamedCommands;
 import frc.robot.commands.ReefAlignPPOTF;
 import frc.robot.constants.Constants;
 import frc.robot.generated.CommandSwerveDrivetrain;
@@ -55,13 +56,13 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  */
 public class RobotContainer {
     // Subsystems
-    private final CommandSwerveDrivetrain drivetrain;
+    public final CommandSwerveDrivetrain drivetrain;
     private final ScoreMechSubsystem score;
     private final ElevatorSubsystem elevator;
 
     private final RampSubsystem ramp;
 
-    private boolean algaeMode = false;
+    public boolean algaeMode = false;
 
     // Vision
     public final PhotonAprilTagSystem frontCam;
@@ -74,7 +75,7 @@ public class RobotContainer {
 
     AprilTagSimulator aprilTagCamSim = new AprilTagSimulator();
 
-    final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
+    public final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
             .getStructTopic("/Pose", Pose2d.struct)
             .publish();
 
@@ -187,6 +188,9 @@ public class RobotContainer {
         }
 
         // Set up auto routines
+        var namedCommands = new AutoNamedCommands(score, elevator, reefAlignPPOTF);
+        namedCommands.registerCommands();
+
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
         mechanisms = new Mechanisms();
@@ -227,7 +231,7 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-        controller.rightTrigger().onTrue(score.spinManual(0.2).withTimeout(3));
+        controller.rightTrigger().onTrue(score.spinManual(0.5).withTimeout(3));
         controller
                 .leftTrigger()
                 .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
@@ -259,14 +263,18 @@ public class RobotContainer {
 
         controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
 
-        controller.leftBumper().onTrue(reefAlignPPOTF.reefAlign());
+        controller.leftBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
+        controller.rightBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));
     }
 
     private void configureTriggerBindings() {
         // Trigger for coral detection in ramp - will automatically set coral position for handoff
-        new Trigger(ramp::outerRampDetection).or(ramp::innerRampDetection).whileTrue(ramp.setRoller(0.75));
+        new Trigger(ramp::outerRampDetection)
+                .or(ramp::innerRampDetection)
+                .whileTrue(ramp.setRoller(0.75).alongWith(score.spinManual(0.05)));
         new Trigger(score::innerSensorDetected)
-                .debounce(0.5)
+                .and(() -> !score.outerSensorDetected())
+                .debounce(0.2)
                 .onTrue(score.spinUntilCoralSafe()
                         .andThen(score.spinManual(-0.07).until(score::innerSensorDetected))
                         .onlyIf(() -> elevator.getCurrentPosition() <= 0.05));

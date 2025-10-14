@@ -53,7 +53,10 @@ public class ReefAlignPPOTF {
     private Pose2d reefFaceTargetPose;
 
     public ReefAlignPPOTF(
-            CommandSwerveDrivetrain commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2, AprilTagSubsystem reefCam3) {
+            CommandSwerveDrivetrain commandSwerveDrivetrain,
+            AprilTagSubsystem reefCam1,
+            AprilTagSubsystem reefCam2,
+            AprilTagSubsystem reefCam3) {
         this.commandSwerveDrivetrain = commandSwerveDrivetrain;
         this.leftFrontCamera = reefCam1;
         this.rightFrontCamera = reefCam2;
@@ -77,7 +80,11 @@ public class ReefAlignPPOTF {
     }
 
     public Optional<AprilTagDetection> getReefCamDetection() {
-        return leftFrontCamera.getBestDetection();
+        if (leftFrontCamera.getBestDetection().isPresent()) {
+            return leftFrontCamera.getBestDetection();
+        } else {
+            return rightFrontCamera.getBestDetection();
+        }
     }
 
     public Optional<Pose2d> getBranchPoseFromTagID(int id) {

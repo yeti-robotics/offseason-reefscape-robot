@@ -10,6 +10,7 @@ package frc.robot;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -67,7 +68,7 @@ public class RobotContainer {
     // Vision
     public final PhotonAprilTagSystem frontLeftCam;
     public final PhotonAprilTagSystem frontRightCam;
-    public final PhotonAprilTagSystem rearCam;
+    //    public final PhotonAprilTagSystem rearCam;
     private final AprilTagSubsystem[] aprilTagSubsystems;
     private final ReefAlignPPOTF reefAlignPPOTF;
     private final AlgaeAlignPPOTF algaeAlignPPOTF;
@@ -158,10 +159,10 @@ public class RobotContainer {
                 frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
                 frontRightCam =
                         new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
-                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, rearCam);
-                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, rearCam);
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
 
@@ -176,10 +177,10 @@ public class RobotContainer {
                 frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
                 frontRightCam =
                         new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
-                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, rearCam);
-                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, rearCam);
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
 
@@ -194,10 +195,10 @@ public class RobotContainer {
                 frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
                 frontRightCam =
                         new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
-                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, rearCam);
-                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, rearCam);
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
         }
@@ -217,12 +218,12 @@ public class RobotContainer {
         aprilTagCamSim.addCamera(simCam1);
         frontLeftCam.setCamera(simCam1.getCam());
 
-        AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
-                .withCameraName("Rear Camera")
-                .withTransform(Constants.rearCamTrans)
-                .build();
-        aprilTagCamSim.addCamera(simCam2);
-        rearCam.setCamera(simCam2.getCam());
+        //        AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
+        //                .withCameraName("Rear Camera")
+        //                .withTransform(Constants.rearCamTrans)
+        //                .build();
+        //        aprilTagCamSim.addCamera(simCam2);
+        //        rearCam.setCamera(simCam2.getCam());
 
         AprilTagCamSim simCam3 = AprilTagCamSimBuilder.newCamera()
                 .withCameraName("Front Right Camera")
@@ -231,7 +232,9 @@ public class RobotContainer {
         aprilTagCamSim.addCamera(simCam3);
         frontRightCam.setCamera(simCam3.getCam());
 
-        aprilTagSubsystems = new AprilTagSubsystem[] {frontLeftCam, frontRightCam, rearCam};
+        aprilTagSubsystems = new AprilTagSubsystem[] {frontLeftCam, frontRightCam};
+
+        drivetrain.setStateStdDevs(VecBuilder.fill(0.03, 0.03, 1));
 
         // Configure the button bindings
         configureButtonBindings();

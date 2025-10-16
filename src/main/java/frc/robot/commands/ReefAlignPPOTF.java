@@ -36,14 +36,12 @@ public class ReefAlignPPOTF {
     private static final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
 
-    private static final Transform2d leftBranchTransform = new Transform2d(
-            Units.inchesToMeters(6),
-            Units.inchesToMeters(-2.5),
-            Rotation2d.k180deg); // negative x gets you closer, positive is further
-    private static final Transform2d rightBranchTransform = new Transform2d(
-            Units.inchesToMeters(6),
-            Units.inchesToMeters(2.5),
-            Rotation2d.k180deg); // negative y moves you left, positive moves right
+    // negative x gets you closer, positive is further
+    // negative y moves you left, positive moves right
+    private static final Transform2d leftBranchTransform =
+            new Transform2d(Units.inchesToMeters(16), Units.inchesToMeters(-6), Rotation2d.k180deg);
+    private static final Transform2d rightBranchTransform =
+            new Transform2d(Units.inchesToMeters(16), Units.inchesToMeters(6), Rotation2d.k180deg);
 
     public enum Branch {
         LEFT,
@@ -143,7 +141,7 @@ public class ReefAlignPPOTF {
         Pose2d currentPose = commandSwerveDrivetrain.getState().Pose;
         Pose2d targetPosition = reefFaceTargetPose.transformBy(branchTransform);
 
-        Logger.recordOutput("Target pose", targetPosition);
+        Logger.recordOutput("Vision/Target pose", targetPosition);
         // Create a new pose with the target position but current rotation
         Pose2d reefBranchPose = new Pose2d(
                 targetPosition.getX(), targetPosition.getY(), targetPosition.getRotation() // Keep the current rotation
@@ -159,7 +157,7 @@ public class ReefAlignPPOTF {
                     PathPlannerPath path = new PathPlannerPath(
                             waypoints,
                             new PathConstraints(
-                                    MetersPerSecond.of(1),
+                                    MetersPerSecond.of(2),
                                     MetersPerSecondPerSecond.of(2),
                                     RadiansPerSecond.of(2 * Math.PI),
                                     RadiansPerSecondPerSecond.of(4 * Math.PI)),

@@ -88,6 +88,8 @@ public class RobotContainer {
             if (!aprilTagPoseOpt.isEmpty() && !drivetrain.isMotionBlur()) {
                 for (AprilTagPose pose : aprilTagPoseOpt) {
                     if (pose.numTags() > 0) {
+                        Logger.recordOutput(
+                                "Vision/" + aprilTagSubsystem.getCamera().getName(), pose.estimatedRobotPose());
                         drivetrain.addVisionMeasurement(
                                 pose.estimatedRobotPose(), pose.timestamp(), pose.standardDeviations());
                     }
@@ -95,11 +97,18 @@ public class RobotContainer {
             }
         }
 
+        publishCamTransforms();
         posePublisher.set(drivetrain.getState().Pose);
     }
 
     public void updateVisionSim() {
         aprilTagCamSim.update(drivetrain.getState().Pose);
+        publishCamTransforms();
+
+        aprilTagCamSim.update(drivetrain.getState().Pose);
+    }
+
+    private void publishCamTransforms() {
         Pose3d leftFrontCameraPose = new Pose3d(drivetrain.getState().Pose)
                 .transformBy(new Transform3d(
                         Constants.leftFrontCamTrans.getX(),
@@ -121,11 +130,9 @@ public class RobotContainer {
                         Constants.rearCamTrans.getZ(),
                         Constants.rearCamTrans.getRotation()));
 
-        Logger.recordOutput("Left Front Cam Transform", leftFrontCameraPose);
-        Logger.recordOutput("Rear Cam Transform", rearCameraPose);
-        Logger.recordOutput("Front Right Cam Transform", frontRightCameraPose);
-
-        aprilTagCamSim.update(drivetrain.getState().Pose);
+        Logger.recordOutput("Vision/Left Front Cam Transform", leftFrontCameraPose);
+        Logger.recordOutput("Vision/Rear Cam Transform", rearCameraPose);
+        Logger.recordOutput("Vision/Front Right Cam Transform", frontRightCameraPose);
     }
 
     private final SwerveRequest.FieldCentric driveForward = new SwerveRequest.FieldCentric()
@@ -234,7 +241,7 @@ public class RobotContainer {
 
         aprilTagSubsystems = new AprilTagSubsystem[] {frontLeftCam, frontRightCam};
 
-        drivetrain.setStateStdDevs(VecBuilder.fill(0.03, 0.03, 1));
+        drivetrain.setStateStdDevs(VecBuilder.fill(0.33333, 0.33333, Math.toRadians(0.5)));
 
         // Configure the button bindings
         configureButtonBindings();

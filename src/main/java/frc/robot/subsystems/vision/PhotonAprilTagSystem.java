@@ -58,8 +58,6 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
 
     private Matrix<N3, N1> updateEstimationStdDevs(
             Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
-        photonPoseEstimator.addHeadingData(
-                Timer.getFPGATimestamp(), drivetrain.getPigeon2().getRotation2d());
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
             return kSingleTagStdDevs;
@@ -120,7 +118,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
             if (pipelineResult.hasTargets()) {
                 for (var target : pipelineResult.targets) {
                     boolean lessThan5M =
-                            AprilTagDetectionHelpers.getDetectionDistance(target.getBestCameraToTarget()) > 5;
+                            AprilTagDetectionHelpers.getDetectionDistance(target.getBestCameraToTarget()) > 4.5;
 
                     boolean tagAmb = target.getPoseAmbiguity() > maxAmbiguity;
 
@@ -189,8 +187,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                      *
                      * @see AprilTagPose#DEFAULT_STD_DEVS instead
                      */
-                    Matrix<N3, N1> stdDevs =
-                            updateEstimationStdDevs(estimatedRobotPoseOpt, pipelineResult.getTargets());
+                    Matrix<N3, N1> stdDevs = AprilTagPose.DEFAULT_STD_DEVS;
 
                     poseEstimates.add(new AprilTagPose(
                             estimatedRobotPose.estimatedPose.toPose2d(),
@@ -213,6 +210,11 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
 
     public void setCamera(PhotonCamera camera) {
         this.camera = camera;
+    }
+
+    @Override
+    public PhotonCamera getCamera() {
+        return camera;
     }
 
     private Optional<AprilTagDetection> mapToDetection(PhotonTrackedTarget target) {

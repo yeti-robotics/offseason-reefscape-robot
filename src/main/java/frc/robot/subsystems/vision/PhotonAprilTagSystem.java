@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
@@ -31,6 +32,9 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
     private static final double translationBaseStdev = 0.7;
     private static final double rotationBaseStdev = Math.toRadians(30);
 
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(18, 28, 48);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.75, 0.75, 1.4);
+
     private double maxAmbiguity = 0.2;
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -50,6 +54,46 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
         this.drivetrain = commandSwerveDrivetrain;
 
         photonPoseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+    }
+
+    private Matrix<N3, N1> updateEstimationStdDevs(
+            Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+        if (estimatedPose.isEmpty()) {
+            // No pose input. Default to single-tag std devs
+            return kSingleTagStdDevs;
+
+        } else {
+            // Pose present. Start running Heuristic
+            var estStdDevs = kSingleTagStdDevs;
+            int numTags = 0;
+            double avgDist = 0;
+
+            // Precalculation - see how many tags we found, and calculate an average-distance metric
+            for (var tgt : targets) {
+                var tagPose = photonPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+                if (tagPose.isEmpty()) continue;
+                numTags++;
+                avgDist += tagPose.get()
+                        .toPose2d()
+                        .getTranslation()
+                        .getDistance(
+                                estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+            }
+
+            if (numTags == 0) {
+                // No tags visible. Default to single-tag std devs
+                return kSingleTagStdDevs;
+            } else {
+                avgDist /= numTags;
+                // Decrease std devs if multiple targets are visible
+                if (numTags > 1) estStdDevs = kMultiTagStdDevs;
+                // Increase std devs based on (average) distance
+                if (numTags == 1 && avgDist > 4)
+                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                return estStdDevs;
+            }
+        }
     }
 
     @Override
@@ -74,7 +118,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
             if (pipelineResult.hasTargets()) {
                 for (var target : pipelineResult.targets) {
                     boolean lessThan5M =
-                            AprilTagDetectionHelpers.getDetectionDistance(target.getBestCameraToTarget()) > 5;
+                            AprilTagDetectionHelpers.getDetectionDistance(target.getBestCameraToTarget()) > 4.5;
 
                     boolean tagAmb = target.getPoseAmbiguity() > maxAmbiguity;
 
@@ -166,6 +210,11 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
 
     public void setCamera(PhotonCamera camera) {
         this.camera = camera;
+    }
+
+    @Override
+    public PhotonCamera getCamera() {
+        return camera;
     }
 
     private Optional<AprilTagDetection> mapToDetection(PhotonTrackedTarget target) {

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision.apriltag;
 
 import java.util.*;
+import org.photonvision.PhotonCamera;
 
 public interface AprilTagSubsystem {
     Optional<AprilTagResults> getResults();
@@ -44,4 +45,6 @@ public interface AprilTagSubsystem {
 
         return detections;
     }
+
+    abstract PhotonCamera getCamera();
 }

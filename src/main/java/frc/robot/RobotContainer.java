@@ -263,7 +263,15 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-        controller.rightTrigger().onTrue(score.spinManual(0.5).withTimeout(3));
+        controller
+                .rightTrigger()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.L4_UP.getHeight())
+                                .alongWith(score.spinManual(0.5).withTimeout(3)),
+                        score.spinManual(0.5).withTimeout(3),
+                        () -> elevator.getCurrentPosition()
+                                >= ElevatorPosition.L4.getHeight().magnitude() - 0.05));
+
         controller
                 .leftTrigger()
                 .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
@@ -292,8 +300,6 @@ public class RobotContainer {
                         elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
                         elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
                         () -> algaeMode));
-
-        controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
 
         controller.leftBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
         controller.rightBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));

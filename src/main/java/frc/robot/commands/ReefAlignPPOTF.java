@@ -28,20 +28,20 @@ import org.littletonrobotics.junction.Logger;
 public class ReefAlignPPOTF {
     private final CommandSwerveDrivetrain commandSwerveDrivetrain;
 
-    private final AprilTagSubsystem reefCam1;
+    private final AprilTagSubsystem leftFrontCamera;
+    private final AprilTagSubsystem rightFrontCamera;
+    private final AprilTagSubsystem rearCamera;
 
     private static final SwerveRequest.FieldCentricFacingAngle swerveReq = new SwerveRequest.FieldCentricFacingAngle();
     private static final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
 
-    private static final Transform2d leftBranchTransform = new Transform2d(
-            Units.inchesToMeters(6),
-            Units.inchesToMeters(-2.5),
-            Rotation2d.k180deg); // negative x gets you closer, positive is further
-    private static final Transform2d rightBranchTransform = new Transform2d(
-            Units.inchesToMeters(6),
-            Units.inchesToMeters(2.5),
-            Rotation2d.k180deg); // negative y moves you left, positive moves right
+    // negative x gets you closer, positive is further
+    // negative y moves you left, positive moves right
+    private static final Transform2d leftBranchTransform =
+            new Transform2d(Units.inchesToMeters(16), Units.inchesToMeters(-6), Rotation2d.k180deg);
+    private static final Transform2d rightBranchTransform =
+            new Transform2d(Units.inchesToMeters(16), Units.inchesToMeters(6), Rotation2d.k180deg);
 
     public enum Branch {
         LEFT,
@@ -51,9 +51,14 @@ public class ReefAlignPPOTF {
     private Pose2d reefFaceTargetPose;
 
     public ReefAlignPPOTF(
-            CommandSwerveDrivetrain commandSwerveDrivetrain, AprilTagSubsystem reefCam1, AprilTagSubsystem reefCam2) {
+            CommandSwerveDrivetrain commandSwerveDrivetrain,
+            AprilTagSubsystem reefCam1,
+            AprilTagSubsystem reefCam2,
+            AprilTagSubsystem reefCam3) {
         this.commandSwerveDrivetrain = commandSwerveDrivetrain;
-        this.reefCam1 = reefCam1;
+        this.leftFrontCamera = reefCam1;
+        this.rightFrontCamera = reefCam2;
+        this.rearCamera = reefCam3;
 
         swerveReq.HeadingController.setPID(10, 0, 1);
         swerveReq.HeadingController.setTolerance(0.07);
@@ -73,7 +78,11 @@ public class ReefAlignPPOTF {
     }
 
     public Optional<AprilTagDetection> getReefCamDetection() {
-        return reefCam1.getBestDetection();
+        if (leftFrontCamera.getBestDetection().isPresent()) {
+            return leftFrontCamera.getBestDetection();
+        } else {
+            return rightFrontCamera.getBestDetection();
+        }
     }
 
     public Optional<Pose2d> getBranchPoseFromTagID(int id) {
@@ -132,7 +141,7 @@ public class ReefAlignPPOTF {
         Pose2d currentPose = commandSwerveDrivetrain.getState().Pose;
         Pose2d targetPosition = reefFaceTargetPose.transformBy(branchTransform);
 
-        Logger.recordOutput("Target pose", targetPosition);
+        Logger.recordOutput("Vision/Target pose", targetPosition);
         // Create a new pose with the target position but current rotation
         Pose2d reefBranchPose = new Pose2d(
                 targetPosition.getX(), targetPosition.getY(), targetPosition.getRotation() // Keep the current rotation
@@ -148,7 +157,7 @@ public class ReefAlignPPOTF {
                     PathPlannerPath path = new PathPlannerPath(
                             waypoints,
                             new PathConstraints(
-                                    MetersPerSecond.of(1),
+                                    MetersPerSecond.of(2),
                                     MetersPerSecondPerSecond.of(2),
                                     RadiansPerSecond.of(2 * Math.PI),
                                     RadiansPerSecondPerSecond.of(4 * Math.PI)),

@@ -10,6 +10,7 @@ package frc.robot;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -65,8 +66,9 @@ public class RobotContainer {
     public boolean algaeMode = false;
 
     // Vision
-    public final PhotonAprilTagSystem frontCam;
-    public final PhotonAprilTagSystem rearCam;
+    public final PhotonAprilTagSystem frontLeftCam;
+    public final PhotonAprilTagSystem frontRightCam;
+    //    public final PhotonAprilTagSystem rearCam;
     private final AprilTagSubsystem[] aprilTagSubsystems;
     private final ReefAlignPPOTF reefAlignPPOTF;
     private final AlgaeAlignPPOTF algaeAlignPPOTF;
@@ -86,6 +88,8 @@ public class RobotContainer {
             if (!aprilTagPoseOpt.isEmpty() && !drivetrain.isMotionBlur()) {
                 for (AprilTagPose pose : aprilTagPoseOpt) {
                     if (pose.numTags() > 0) {
+                        Logger.recordOutput(
+                                "Vision/" + aprilTagSubsystem.getCamera().getName(), pose.estimatedRobotPose());
                         drivetrain.addVisionMeasurement(
                                 pose.estimatedRobotPose(), pose.timestamp(), pose.standardDeviations());
                     }
@@ -93,17 +97,31 @@ public class RobotContainer {
             }
         }
 
+        publishCamTransforms();
         posePublisher.set(drivetrain.getState().Pose);
     }
 
     public void updateVisionSim() {
         aprilTagCamSim.update(drivetrain.getState().Pose);
-        Pose3d frontCameraPose = new Pose3d(drivetrain.getState().Pose)
+        publishCamTransforms();
+
+        aprilTagCamSim.update(drivetrain.getState().Pose);
+    }
+
+    private void publishCamTransforms() {
+        Pose3d leftFrontCameraPose = new Pose3d(drivetrain.getState().Pose)
                 .transformBy(new Transform3d(
-                        Constants.frontCamTrans.getX(),
-                        Constants.frontCamTrans.getY(),
-                        Constants.frontCamTrans.getZ(),
-                        Constants.frontCamTrans.getRotation()));
+                        Constants.leftFrontCamTrans.getX(),
+                        Constants.leftFrontCamTrans.getY(),
+                        Constants.leftFrontCamTrans.getZ(),
+                        Constants.leftFrontCamTrans.getRotation()));
+
+        Pose3d frontRightCameraPose = new Pose3d(drivetrain.getState().Pose)
+                .transformBy(new Transform3d(
+                        Constants.rightFrontCamTrans.getX(),
+                        Constants.rightFrontCamTrans.getY(),
+                        Constants.rightFrontCamTrans.getZ(),
+                        Constants.rightFrontCamTrans.getRotation()));
 
         Pose3d rearCameraPose = new Pose3d(drivetrain.getState().Pose)
                 .transformBy(new Transform3d(
@@ -112,10 +130,9 @@ public class RobotContainer {
                         Constants.rearCamTrans.getZ(),
                         Constants.rearCamTrans.getRotation()));
 
-        Logger.recordOutput("Front Cam Transform", frontCameraPose);
-        Logger.recordOutput("Rear Cam Transform", rearCameraPose);
-
-        aprilTagCamSim.update(drivetrain.getState().Pose);
+        Logger.recordOutput("Vision/Left Front Cam Transform", leftFrontCameraPose);
+        Logger.recordOutput("Vision/Rear Cam Transform", rearCameraPose);
+        Logger.recordOutput("Vision/Front Right Cam Transform", frontRightCameraPose);
     }
 
     private final SwerveRequest.FieldCentric driveForward = new SwerveRequest.FieldCentric()
@@ -146,11 +163,13 @@ public class RobotContainer {
                 elevator = new ElevatorSubsystem(new ElevatorIOTalonFX());
                 ramp = new RampSubsystem(new RampIOTalonFX());
 
-                frontCam = new PhotonAprilTagSystem("Front Camera", Constants.frontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontRightCam =
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
-                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontCam, rearCam);
-                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontCam, rearCam);
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
 
@@ -162,11 +181,13 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIOSim());
 
-                frontCam = new PhotonAprilTagSystem("Front Camera", Constants.frontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontRightCam =
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
-                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontCam, rearCam);
-                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontCam, rearCam);
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
 
@@ -178,11 +199,13 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIO() {});
 
-                frontCam = new PhotonAprilTagSystem("Front Camera", Constants.frontCamTrans, drivetrain);
-                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontRightCam =
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
-                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontCam, rearCam);
-                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontCam, rearCam);
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
         }
@@ -196,20 +219,29 @@ public class RobotContainer {
         mechanisms = new Mechanisms();
 
         AprilTagCamSim simCam1 = AprilTagCamSimBuilder.newCamera()
-                .withCameraName("Front Camera")
-                .withTransform(Constants.frontCamTrans)
+                .withCameraName("Front Left Camera")
+                .withTransform(Constants.leftFrontCamTrans)
                 .build();
         aprilTagCamSim.addCamera(simCam1);
-        frontCam.setCamera(simCam1.getCam());
+        frontLeftCam.setCamera(simCam1.getCam());
 
-        AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
-                .withCameraName("Rear Camera")
-                .withTransform(Constants.rearCamTrans)
+        //        AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
+        //                .withCameraName("Rear Camera")
+        //                .withTransform(Constants.rearCamTrans)
+        //                .build();
+        //        aprilTagCamSim.addCamera(simCam2);
+        //        rearCam.setCamera(simCam2.getCam());
+
+        AprilTagCamSim simCam3 = AprilTagCamSimBuilder.newCamera()
+                .withCameraName("Front Right Camera")
+                .withTransform(Constants.rightFrontCamTrans)
                 .build();
-        aprilTagCamSim.addCamera(simCam2);
-        rearCam.setCamera(simCam2.getCam());
+        aprilTagCamSim.addCamera(simCam3);
+        frontRightCam.setCamera(simCam3.getCam());
 
-        aprilTagSubsystems = new AprilTagSubsystem[] {frontCam, rearCam};
+        aprilTagSubsystems = new AprilTagSubsystem[] {frontLeftCam, frontRightCam};
+
+        drivetrain.setStateStdDevs(VecBuilder.fill(0.33333, 0.33333, Math.toRadians(0.5)));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -231,7 +263,15 @@ public class RobotContainer {
                         .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
                         .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
-        controller.rightTrigger().onTrue(score.spinManual(0.5).withTimeout(3));
+        controller
+                .rightTrigger()
+                .onTrue(Commands.either(
+                        elevator.moveToPosition(ElevatorPosition.L4_UP.getHeight())
+                                .alongWith(score.spinManual(0.5).withTimeout(3)),
+                        score.spinManual(0.5).withTimeout(3),
+                        () -> elevator.getCurrentPosition()
+                                >= ElevatorPosition.L4.getHeight().magnitude() - 0.05));
+
         controller
                 .leftTrigger()
                 .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
@@ -260,8 +300,6 @@ public class RobotContainer {
                         elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
                         elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
                         () -> algaeMode));
-
-        controller.povDown().onTrue(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
 
         controller.leftBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
         controller.rightBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));

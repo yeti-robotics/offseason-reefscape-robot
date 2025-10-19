@@ -21,7 +21,10 @@ public class AutoNamedCommands {
     public void registerCommands() {
         NamedCommands.registerCommand(
                 "ReefAlignLeft",
-                reefAlignCommand.reefAlign(ReefAlignPPOTF.Branch.LEFT).withTimeout(3).asProxy());
+                reefAlignCommand
+                        .reefAlign(ReefAlignPPOTF.Branch.LEFT)
+                        .withTimeout(3)
+                        .asProxy());
         NamedCommands.registerCommand(
                 "ReefAlignRight",
                 reefAlignCommand
@@ -29,7 +32,10 @@ public class AutoNamedCommands {
                         .withTimeout(3)
                         .asProxy());
         NamedCommands.registerCommand(
-                "L4", elevator.moveToPosition(ElevatorPosition.L4.getHeight()).andThen(score.scoreCoral()));
+                "L4",
+                elevator.moveToPosition(ElevatorPosition.L4.getHeight())
+                        .andThen(elevator.moveToPosition(ElevatorPosition.L4_UP.getHeight())
+                                .alongWith(score.spinManual(0.5).withTimeout(3))));
         NamedCommands.registerCommand(
                 "L3", elevator.moveToPosition(ElevatorPosition.L3.getHeight()).andThen(score.scoreCoral()));
         NamedCommands.registerCommand(

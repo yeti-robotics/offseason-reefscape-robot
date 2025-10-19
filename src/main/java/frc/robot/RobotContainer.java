@@ -63,6 +63,8 @@ public class RobotContainer {
 
     private final RampSubsystem ramp;
 
+    private final AutoCommands left1CoralAuto;
+
     public boolean algaeMode = false;
 
     // Vision
@@ -212,6 +214,7 @@ public class RobotContainer {
 
         // Set up auto routines
         var namedCommands = new AutoNamedCommands(score, elevator, reefAlignPPOTF);
+        left1CoralAuto = new AutoCommands(elevator, reefAlignPPOTF, drivetrain, score);
         namedCommands.registerCommands();
 
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -329,7 +332,13 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
+
+    // left1CoralAuto
     public Command getAutonomousCommand() {
-        return autoChooser.get();
+        return left1CoralAuto.orca1LeftCoral();
     }
+//    // regular autobuilder
+//    public Command getAutonomousCommand() {
+//        return autoChooser.get();
+//    }
 }

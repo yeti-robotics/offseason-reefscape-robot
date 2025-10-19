@@ -18,13 +18,6 @@ public class Mechanisms {
     public Mechanism2d elevatorMech;
     private final MechanismLigament2d liftLigament;
 
-    private final StructArrayPublisher<Pose3d> realComponentPosePublisher = NetworkTableInstance.getDefault()
-            .getStructArrayTopic("ComponentPoses/Real", Pose3d.struct)
-            .publish();
-    private final StructArrayPublisher<Pose3d> targetComponentPosePublisher = NetworkTableInstance.getDefault()
-            .getStructArrayTopic("ComponentPoses/Target", Pose3d.struct)
-            .publish();
-
     public Mechanisms() {
         elevatorMech = new Mechanism2d(Units.inchesToMeters(60), Units.inchesToMeters(100));
 

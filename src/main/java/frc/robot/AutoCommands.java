@@ -30,7 +30,7 @@ public class AutoCommands {
     }
 
     public Command orca1LeftCoral() {
-        Optional<PathPlannerPath> lineToIJ = PathPlannerUtils.loadPathByName("LineF");
+        Optional<PathPlannerPath> lineToIJ = PathPlannerUtils.loadPathByName("lineToIJ");
 
         return lineToIJ.isEmpty()
                 ? Commands.none()

@@ -5,7 +5,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Robot;
-import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
 

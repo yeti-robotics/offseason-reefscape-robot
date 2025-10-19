@@ -189,7 +189,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                      */
                                         Matrix<N3, N1> stdDevs = AprilTagPose.DEFAULT_STD_DEVS;
 //                    Matrix<N3, N1> stdDevs =
-                            updateEstimationStdDevs(estimatedRobotPoseOpt, pipelineResult.getTargets());
+//                            updateEstimationStdDevs(estimatedRobotPoseOpt, pipelineResult.getTargets());
 
                     poseEstimates.add(new AprilTagPose(
                             estimatedRobotPose.estimatedPose.toPose2d(),

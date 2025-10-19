@@ -14,6 +14,8 @@ import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.apriltag.*;
 import frc.robot.subsystems.vision.util.AprilTagDetectionHelpers;
 import java.util.*;
+
+import org.opencv.core.Mat;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -187,7 +189,9 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                      *
                      * @see AprilTagPose#DEFAULT_STD_DEVS instead
                      */
-                    Matrix<N3, N1> stdDevs = AprilTagPose.DEFAULT_STD_DEVS;
+//                    Matrix<N3, N1> stdDevs = AprilTagPose.DEFAULT_STD_DEVS;
+                    Matrix<N3, N1> stdDevs = updateEstimationStdDevs(
+                            estimatedRobotPoseOpt, pipelineResult.getTargets());
 
                     poseEstimates.add(new AprilTagPose(
                             estimatedRobotPose.estimatedPose.toPose2d(),

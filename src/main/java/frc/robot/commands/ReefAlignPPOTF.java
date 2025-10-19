@@ -39,7 +39,7 @@ public class ReefAlignPPOTF {
     // negative x gets you closer, positive is further
     // negative y moves you left, positive moves right
     private static final Transform2d leftBranchTransform =
-            new Transform2d(Units.inchesToMeters(16), Units.inchesToMeters(6), Rotation2d.k180deg);
+            new Transform2d(Units.inchesToMeters(16), Units.inchesToMeters(-6), Rotation2d.k180deg);
     private static final Transform2d rightBranchTransform =
             new Transform2d(Units.inchesToMeters(16), Units.inchesToMeters(12), Rotation2d.k180deg);
 

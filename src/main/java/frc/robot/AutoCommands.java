@@ -37,14 +37,24 @@ public class AutoCommands {
 
         return lineToIJ.isEmpty()
                 ? drivetrain.runOnce(() -> new SwerveRequest.FieldCentric()
-                .withDeadband(TunerConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
-                .withRotationalDeadband(TunerConstants.MaFxAngularRate * 0.1)
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage))
-                : AutoBuilder.followPath(lineToIJ.get()).withTimeout(2)
+                        .withDeadband(TunerConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
+                        .withRotationalDeadband(TunerConstants.MaFxAngularRate * 0.1)
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage))
+                : AutoBuilder.followPath(lineToIJ.get())
+                        .withTimeout(2)
                         .andThen(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT))
                         .andThen(elevator.moveToPosition(ElevatorPosition.L4.getHeight()))
+                        .andThen(Commands.wait(2.0))
                         .andThen(elevator.moveToPosition(ElevatorPosition.L4_UP.getHeight())
                                 .alongWith(score.spinManual(0.5).withTimeout(3)))
+                        .andThen(Commands.wait(2.0))
                         .andThen(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
+    }
+
+    public Command driveForward() {
+        return drivetrain.runOnce(() -> new SwerveRequest.FieldCentric()
+                .withDeadband(TunerConstants.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
+                .withRotationalDeadband(TunerConstants.MaFxAngularRate * 0.1)
+                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
     }
 }

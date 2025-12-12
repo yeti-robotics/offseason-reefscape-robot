@@ -46,18 +46,18 @@ public final class Constants {
     public static final CANBus motorCANBus = CANBus.systemCore(1);
     public static final CANBus rampCANBus = CANBus.systemCore(2);
 
-    // Front Camera Red
-    public static final Transform3d leftFrontCamTrans = new Transform3d(
-            new Translation3d(Units.inchesToMeters(8), Units.inchesToMeters(4.8), Units.inchesToMeters(7.25)),
-            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(-30)));
+    // Front Camera
+    public static final Transform3d rightFrontCamTransform = new Transform3d(
+            new Translation3d(Units.inchesToMeters(9), Units.inchesToMeters(5.25), Units.inchesToMeters(7.25)),
+            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(-20)));
 
-    // Rear Camera Blue
+    // Rear Camera
     public static final Transform3d rearCamTrans = new Transform3d(
             new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(8), Units.inchesToMeters(38)),
             new Rotation3d(0, Math.toRadians(15), Math.toRadians(180)));
 
-    // Front Camera Green
-    public static final Transform3d rightFrontCamTrans = new Transform3d(
-            new Translation3d(Units.inchesToMeters(8), Units.inchesToMeters(-4.8), Units.inchesToMeters(7.25)),
-            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(20)));
+    // Front Camera
+    public static final Transform3d leftFrontCamTransform = new Transform3d(
+            new Translation3d(Units.inchesToMeters(9), Units.inchesToMeters(-5.75), Units.inchesToMeters(7.25)),
+            new Rotation3d(0, Math.toRadians(-15), Math.toRadians(13)));
 }

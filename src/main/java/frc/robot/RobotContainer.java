@@ -113,17 +113,17 @@ public class RobotContainer {
     private void publishCamTransforms() {
         Pose3d leftFrontCameraPose = new Pose3d(drivetrain.getState().Pose)
                 .transformBy(new Transform3d(
-                        Constants.leftFrontCamTrans.getX(),
-                        Constants.leftFrontCamTrans.getY(),
-                        Constants.leftFrontCamTrans.getZ(),
-                        Constants.leftFrontCamTrans.getRotation()));
+                        Constants.rightFrontCamTransform.getX(),
+                        Constants.rightFrontCamTransform.getY(),
+                        Constants.rightFrontCamTransform.getZ(),
+                        Constants.rightFrontCamTransform.getRotation()));
 
         Pose3d frontRightCameraPose = new Pose3d(drivetrain.getState().Pose)
                 .transformBy(new Transform3d(
-                        Constants.rightFrontCamTrans.getX(),
-                        Constants.rightFrontCamTrans.getY(),
-                        Constants.rightFrontCamTrans.getZ(),
-                        Constants.rightFrontCamTrans.getRotation()));
+                        Constants.leftFrontCamTransform.getX(),
+                        Constants.leftFrontCamTransform.getY(),
+                        Constants.leftFrontCamTransform.getZ(),
+                        Constants.leftFrontCamTransform.getRotation()));
 
         Pose3d rearCameraPose = new Pose3d(drivetrain.getState().Pose)
                 .transformBy(new Transform3d(
@@ -165,9 +165,10 @@ public class RobotContainer {
                 elevator = new ElevatorSubsystem(new ElevatorIOTalonFX());
                 ramp = new RampSubsystem(new RampIOTalonFX());
 
-                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontLeftCam =
+                        new PhotonAprilTagSystem("Front Left Camera", Constants.rightFrontCamTransform, drivetrain);
                 frontRightCam =
-                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.leftFrontCamTransform, drivetrain);
                 //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
                 reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
@@ -183,9 +184,10 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIOSim());
 
-                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontLeftCam =
+                        new PhotonAprilTagSystem("Front Left Camera", Constants.rightFrontCamTransform, drivetrain);
                 frontRightCam =
-                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.leftFrontCamTransform, drivetrain);
                 //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
                 reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
@@ -201,9 +203,10 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIO() {});
 
-                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontLeftCam =
+                        new PhotonAprilTagSystem("Front Left Camera", Constants.rightFrontCamTransform, drivetrain);
                 frontRightCam =
-                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.leftFrontCamTransform, drivetrain);
                 //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
                 reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
@@ -223,7 +226,7 @@ public class RobotContainer {
 
         AprilTagCamSim simCam1 = AprilTagCamSimBuilder.newCamera()
                 .withCameraName("Front Left Camera")
-                .withTransform(Constants.leftFrontCamTrans)
+                .withTransform(Constants.rightFrontCamTransform)
                 .build();
         aprilTagCamSim.addCamera(simCam1);
         frontLeftCam.setCamera(simCam1.getCam());
@@ -237,7 +240,7 @@ public class RobotContainer {
 
         AprilTagCamSim simCam3 = AprilTagCamSimBuilder.newCamera()
                 .withCameraName("Front Right Camera")
-                .withTransform(Constants.rightFrontCamTrans)
+                .withTransform(Constants.leftFrontCamTransform)
                 .build();
         aprilTagCamSim.addCamera(simCam3);
         frontRightCam.setCamera(simCam3.getCam());
@@ -333,10 +336,10 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
 
-//    // left1CoralAuto
-//    public Command getAutonomousCommand() {
-//        return left1CoralAuto.orca1LeftCoral();
-//    }
+    //    // left1CoralAuto
+    //    public Command getAutonomousCommand() {
+    //        return left1CoralAuto.orca1LeftCoral();
+    //    }
     // regular autobuilder
     public Command getAutonomousCommand() {
         return autoChooser.get();

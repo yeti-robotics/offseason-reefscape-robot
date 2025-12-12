@@ -23,33 +23,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "IJToHP"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "hpToKL"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "ReefAlignLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "name": "Stow"
           }
         }
       ]

@@ -131,14 +131,11 @@ public class Robot extends LoggedRobot {
 
         //         schedule the autonomous command (example)
         if (autonomousCommand != null) {
-            autonomousCommand.schedule();
+            CommandScheduler.getInstance().schedule(autonomousCommand);
         }
     }
 
     /** This function is called periodically during autonomous. */
-    @Override
-    public void autonomousPeriodic() {}
-
     /** This function is called once when teleop is enabled. */
     @Override
     public void teleopInit() {

@@ -5,7 +5,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Robot;
-import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 public class FieldConstants {
@@ -23,11 +23,11 @@ public class FieldConstants {
     static {
         try {
             if (Robot.isReal()) {
-                APRIL_TAG_FIELD_LAYOUT = new AprilTagFieldLayout("/home/systemcore/deploy/practice_field.json");
+                APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
             } else {
                 APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
             }
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             throw new RuntimeException(e);
         }
     }

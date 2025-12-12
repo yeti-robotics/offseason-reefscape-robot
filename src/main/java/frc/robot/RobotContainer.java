@@ -63,6 +63,8 @@ public class RobotContainer {
 
     private final RampSubsystem ramp;
 
+    private final AutoCommands left1CoralAuto;
+
     public boolean algaeMode = false;
 
     // Vision
@@ -212,6 +214,7 @@ public class RobotContainer {
 
         // Set up auto routines
         var namedCommands = new AutoNamedCommands(score, elevator, reefAlignPPOTF);
+        left1CoralAuto = new AutoCommands(elevator, reefAlignPPOTF, drivetrain, score);
         namedCommands.registerCommands();
 
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -277,7 +280,7 @@ public class RobotContainer {
                 .onTrue(elevator.moveToPosition(ElevatorPosition.HP_INAKE.getHeight())); // check voltage?
 
         controller.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-        controller.povRight().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
+        controller.rightStick().onTrue(new InstantCommand(() -> algaeMode = !algaeMode));
         controller.povLeft().whileTrue(ramp.setRoller(-0.1).alongWith(score.spinManual(-0.2)));
         controller.povUp().whileTrue(ramp.setRoller(0.75).andThen(score.spinManual(0.2)));
 
@@ -329,6 +332,12 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
+
+//    // left1CoralAuto
+//    public Command getAutonomousCommand() {
+//        return left1CoralAuto.orca1LeftCoral();
+//    }
+    // regular autobuilder
     public Command getAutonomousCommand() {
         return autoChooser.get();
     }

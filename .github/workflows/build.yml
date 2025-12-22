@@ -16,6 +16,14 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v5.0.0
+        with:
+          name: photonlib-offline
+          run-id: 16460285110
+          repository: photonvision/photonvision
+          github-token: ${{ secrets.ARTIFACT_DOWNLOADER }}
+          artifact-ids: 3879505423
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2

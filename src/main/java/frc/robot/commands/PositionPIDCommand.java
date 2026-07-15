@@ -1,21 +1,22 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.*;
+import static org.wpilib.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.units.measure.Time;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.math.util.MathUtil;
+import org.wpilib.math.filter.Debouncer;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.networktables.DoublePublisher;
+import org.wpilib.networktables.NetworkTableInstance;
+import org.wpilib.units.measure.Time;
+import org.wpilib.system.Timer;
+import org.wpilib.command2.Command;
 import frc.robot.generated.CommandSwerveDrivetrain;
 import org.littletonrobotics.junction.Logger;
 
@@ -38,7 +39,7 @@ public class PositionPIDCommand extends Command {
             .getDoubleTopic("Y Error")
             .publish();
 
-    private final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+    private final SwerveRequest.ApplyRobotVelocity robotSpeeds = new SwerveRequest.ApplyRobotVelocity();
 
     private PositionPIDCommand(CommandSwerveDrivetrain mSwerve, Pose2d goalPose) {
         this.mSwerve = mSwerve;
@@ -49,7 +50,7 @@ public class PositionPIDCommand extends Command {
 
     public static Command generateCommand(CommandSwerveDrivetrain swerve, Pose2d goalPose, Time timeout) {
         return new PositionPIDCommand(swerve, goalPose).withTimeout(timeout).finallyDo(() -> {
-            swerve.setControl(new SwerveRequest.ApplyRobotSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0)));
+            swerve.setControl(new SwerveRequest.ApplyRobotVelocity().withVelocity(new ChassisVelocities(0, 0, 0)));
             swerve.setControl(new SwerveRequest.SwerveDriveBrake());
         });
     }
@@ -64,7 +65,7 @@ public class PositionPIDCommand extends Command {
         PathPlannerTrajectoryState goalState = new PathPlannerTrajectoryState();
         goalState.pose = goalPose;
 
-        mSwerve.setControl(robotSpeeds.withSpeeds(
+        mSwerve.setControl(robotSpeeds.withVelocity(
                 mDriveController.calculateRobotRelativeSpeeds(mSwerve.getState().Pose, goalState)));
 
         xErrLogger.accept(mSwerve.getState().Pose.getX() - goalPose.getX());
@@ -94,7 +95,7 @@ public class PositionPIDCommand extends Command {
 
         var position = diff.getTranslation().getNorm() < Centimeter.of(1.5).in(Meters);
 
-        var speed = Math.sqrt(Math.pow(mSwerve.getState().Speeds.vx, 2) + Math.pow(mSwerve.getState().Speeds.vy, 2))
+        var speed = Math.sqrt(Math.pow(mSwerve.getState().Velocity.vx, 2) + Math.pow(mSwerve.getState().Velocity.vy, 2))
                 < InchesPerSecond.of(2).in(MetersPerSecond);
 
         // System.out.println("end trigger conditions R: "+ rotation + "\tP: " + position + "\tS: " + speed);

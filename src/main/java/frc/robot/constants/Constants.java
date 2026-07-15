@@ -6,11 +6,11 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.CANBus;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotBase;
+import org.wpilib.math.geometry.Rotation3d;
+import org.wpilib.math.geometry.Transform3d;
+import org.wpilib.math.geometry.Translation3d;
+import org.wpilib.math.util.Units;
+import org.wpilib.framework.RobotBase;
 import frc.robot.generated.TunerConstants;
 
 /**
@@ -43,8 +43,8 @@ public final class Constants {
     }
 
     public static final CANBus drivetrainCANBus = new CANBus(TunerConstants.kCANBus.getName(), "./logs/example.hoot");
-    public static final CANBus motorCANBus = CANBus.systemCore(1);
-    public static final CANBus rampCANBus = CANBus.systemCore(2);
+    public static final CANBus motorCANBus = new CANBus("can_s1");
+    public static final CANBus rampCANBus = new CANBus("can_s2");
 
     // Front Camera Red
     public static final Transform3d leftFrontCamTrans = new Transform3d(

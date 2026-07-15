@@ -1,7 +1,7 @@
 package frc.robot.subsystems.scoreMech;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class ScoreMechSubsystem extends SubsystemBase {

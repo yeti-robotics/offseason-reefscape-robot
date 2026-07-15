@@ -1,7 +1,7 @@
 package frc.robot.util;
 
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import org.wpilib.command2.button.CommandGenericHID;
+import org.wpilib.command2.button.Trigger;
 
 public class CommandGigaStation extends CommandGenericHID {
     public enum GigaButtons {

@@ -2,6 +2,7 @@ package frc.robot.subsystems.scoreMech;
 
 import static frc.robot.constants.Constants.motorCANBus;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.util.sim.PhysicsSim;
@@ -26,6 +27,6 @@ public class ScoreMechIOSim implements ScoreMechIO {
 
     @Override
     public void setPower(double scorePower) {
-        scoreMotor.set(scorePower);
+        scoreMotor.setControl(new DutyCycleOut(scorePower));
     }
 }

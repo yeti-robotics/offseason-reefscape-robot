@@ -1,6 +1,6 @@
 package frc.robot.subsystems.vision.apriltag;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Pose2d;
 
 public class AprilTagDetection {
     private final int fiducialID;

@@ -4,10 +4,10 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.ctre.phoenix6.sim.TalonFXSimState;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import org.wpilib.math.system.DCMotor;
+import org.wpilib.math.system.Models;
+import org.wpilib.math.util.Units;
+import org.wpilib.simulation.DCMotorSim;
 
 /** Holds information about a simulated TalonFX. */
 class TalonFXSimProfile extends PhysicsSim.SimProfile {
@@ -25,9 +25,18 @@ class TalonFXSimProfile extends PhysicsSim.SimProfile {
      */
     public TalonFXSimProfile(final TalonFX talonFX, final double rotorInertia) {
         var gearbox = DCMotor.getKrakenX60Foc(1);
-        this.motorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(gearbox, rotorInertia, 1.0), gearbox);
+
+        this.motorSim =
+                new DCMotorSim(
+                        Models.singleJointedArmFromPhysicalConstants(
+                                gearbox,
+                                rotorInertia,
+                                1.0),
+                        gearbox);
+
         this.talonFXSim = talonFX.getSimState();
     }
+
 
     public TalonFXSimProfile(final TalonFX talonFX, final double rotorInertia, CANcoder cancoder) {
         this(talonFX, rotorInertia);

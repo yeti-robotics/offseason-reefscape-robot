@@ -1,14 +1,14 @@
 package frc.robot.util.sim;
 
-import edu.wpi.first.epilogue.Logged;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
+import org.wpilib.epilogue.Logged;
+import org.wpilib.math.geometry.Pose3d;
+import org.wpilib.math.geometry.Rotation3d;
+import org.wpilib.math.util.Units;
+import org.wpilib.smartdashboard.Mechanism2d;
+import org.wpilib.smartdashboard.MechanismLigament2d;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.util.Color;
+import org.wpilib.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
 @Logged
@@ -21,10 +21,10 @@ public class Mechanisms {
 
         liftLigament = elevatorMech
                 .getRoot("startPoint", Units.inchesToMeters(30), Units.inchesToMeters(4))
-                .append(new MechanismLigament2d("lift", Units.feetToMeters(3), 90, 6, new Color8Bit(Color.kRed)));
+                .append(new MechanismLigament2d("lift", Units.feetToMeters(3), 90, 6, new Color8Bit(Color.RED)));
         elevatorMech
                 .getRoot("startPoint", Units.inchesToMeters(30), Units.inchesToMeters(4))
-                .append(new MechanismLigament2d("bottom", Units.feetToMeters(3), 0, 6, new Color8Bit(Color.kGreen)));
+                .append(new MechanismLigament2d("bottom", Units.feetToMeters(3), 0, 6, new Color8Bit(Color.GREEN)));
     }
 
     public void updateElevatorMech(double elevatorPos) {

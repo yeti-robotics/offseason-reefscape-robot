@@ -9,7 +9,8 @@ import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.units.measure.Angle;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import org.wpilib.units.measure.Angle;
 import frc.robot.Robot;
 import frc.robot.util.sim.PhysicsSim;
 
@@ -30,7 +31,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         }
         primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);
         secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
-        secondaryElevatorMotor.setControl(new Follower(ElevatorConfig.primaryElevatorMotorID, true));
+        secondaryElevatorMotor.setControl(new Follower(ElevatorConfig.primaryElevatorMotorID, MotorAlignmentValue.Aligned));
         canRangeElevator.getConfigurator().apply(canRangeElevatorConfigs);
 
         zeroPosition();

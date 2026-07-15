@@ -4,8 +4,8 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.Commands;
 import frc.robot.commands.ReefAlignPPOTF;
 import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.generated.TunerConstants;
@@ -44,10 +44,10 @@ public class AutoCommands {
                         .withTimeout(2)
                         .andThen(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT))
                         .andThen(elevator.moveToPosition(ElevatorPosition.L4.getHeight()))
-                        .andThen(Commands.wait(2.0))
+                        .andThen(Commands.waitSeconds(2.0))
                         .andThen(elevator.moveToPosition(ElevatorPosition.L4_UP.getHeight())
                                 .alongWith(score.spinManual(0.5).withTimeout(3)))
-                        .andThen(Commands.wait(2.0))
+                        .andThen(Commands.waitSeconds(2.0))
                         .andThen(elevator.moveToPosition(ElevatorPosition.BOTTOM.getHeight()));
     }
 

@@ -1,13 +1,13 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.wpilib.math.linalg.Matrix;
+import org.wpilib.math.linalg.VecBuilder;
+import org.wpilib.math.geometry.Pose3d;
+import org.wpilib.math.geometry.Transform3d;
+import org.wpilib.math.numbers.N1;
+import org.wpilib.math.numbers.N3;
+import org.wpilib.system.Timer;
+import org.wpilib.command2.SubsystemBase;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.TagConstants;
 import frc.robot.generated.CommandSwerveDrivetrain;
@@ -49,11 +49,9 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
         this.cameraTransform = cameraTransform;
         this.photonPoseEstimator = new PhotonPoseEstimator(
                 FieldConstants.APRIL_TAG_FIELD_LAYOUT,
-                PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                 cameraTransform);
         this.drivetrain = commandSwerveDrivetrain;
 
-        photonPoseEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
     }
 
     private Matrix<N3, N1> updateEstimationStdDevs(
@@ -99,7 +97,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
     @Override
     public void periodic() {
         photonPoseEstimator.addHeadingData(
-                Timer.getFPGATimestamp(), drivetrain.getPigeon2().getRotation2d());
+                Timer.getTimestamp(), drivetrain.getPigeon2().getRotation2d());
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
         if (results.isEmpty()) {
@@ -128,7 +126,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                 }
             }
 
-            Optional<EstimatedRobotPose> estimatedRobotPoseOpt = photonPoseEstimator.update(pipelineResult);
+            Optional<EstimatedRobotPose> estimatedRobotPoseOpt = photonPoseEstimator.estimateCoprocMultiTagPose(pipelineResult);
             double timestamp = pipelineResult.getTimestampSeconds();
 
             if (timestamp > latestTimestamp) {

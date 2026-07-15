@@ -1,21 +1,21 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.*;
+import static org.wpilib.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.*;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.math.geometry.Transform2d;
+import org.wpilib.math.geometry.Translation2d;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.math.util.Units;
+import org.wpilib.units.measure.LinearVelocity;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.Commands;
 import frc.robot.constants.FieldConstants.Reef;
 import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.apriltag.AprilTagDetection;
@@ -33,7 +33,7 @@ public class ReefAlignPPOTF {
     private final AprilTagSubsystem rearCamera;
 
     private static final SwerveRequest.FieldCentricFacingAngle swerveReq = new SwerveRequest.FieldCentricFacingAngle();
-    private static final SwerveRequest.ApplyRobotSpeeds robotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+    private static final SwerveRequest.ApplyRobotVelocity robotSpeeds = new SwerveRequest.ApplyRobotVelocity();
     private final SwerveRequest.Idle stopReq = new SwerveRequest.Idle();
 
     // negative x gets you closer, positive is further
@@ -112,7 +112,7 @@ public class ReefAlignPPOTF {
         return Optional.of(reefTargetPose);
     }
 
-    private LinearVelocity getChassisVelocity(ChassisSpeeds chassisSpeeds) {
+    private LinearVelocity getChassisVelocity(ChassisVelocities chassisSpeeds) {
         return MetersPerSecond.of(new Translation2d(chassisSpeeds.vx, chassisSpeeds.vy).getNorm());
     }
 
@@ -162,7 +162,7 @@ public class ReefAlignPPOTF {
                                     RadiansPerSecond.of(2 * Math.PI),
                                     RadiansPerSecondPerSecond.of(4 * Math.PI)),
                             new IdealStartingState(
-                                    getChassisVelocity(state.Speeds),
+                                    getChassisVelocity(state.Velocity),
                                     commandSwerveDrivetrain.getRotation3d().toRotation2d()),
                             new GoalEndState(0.0, reefBranchPose.getRotation()));
                     path.preventFlipping = true;

@@ -162,7 +162,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     driveController,
                     config,
                     () -> MatchState.getAlliance()
-                            .filter(value -> value == Alliance.RED)
+                            .filter(alliance -> alliance == Alliance.RED)
                             .isPresent(),
                     this);
         }

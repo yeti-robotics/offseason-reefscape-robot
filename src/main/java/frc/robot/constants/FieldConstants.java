@@ -1,9 +1,9 @@
 package frc.robot.constants;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.util.Units;
+import org.wpilib.vision.apriltag.AprilTagFieldLayout;
+import org.wpilib.vision.apriltag.AprilTagFields;
+import org.wpilib.math.geometry.*;
+import org.wpilib.math.util.Units;
 import frc.robot.Robot;
 import java.io.UncheckedIOException;
 import java.util.*;

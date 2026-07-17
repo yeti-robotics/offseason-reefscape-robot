@@ -10,19 +10,19 @@ package frc.robot;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import org.wpilib.math.linalg.VecBuilder;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Pose3d;
+import org.wpilib.math.geometry.Transform3d;
+import org.wpilib.networktables.NetworkTableInstance;
+import org.wpilib.networktables.StructPublisher;
+import org.wpilib.driverstation.GenericHID;
+import org.wpilib.driverstation.XboxController;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.Commands;
+import org.wpilib.command2.InstantCommand;
+import org.wpilib.command2.button.CommandXboxController;
+import org.wpilib.command2.button.Trigger;
 import frc.robot.commands.AlgaeAlignPPOTF;
 import frc.robot.commands.AutoNamedCommands;
 import frc.robot.commands.ReefAlignPPOTF;
@@ -256,8 +256,8 @@ public class RobotContainer {
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * org.wpilib.driverstation.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * org.wpilib.command2.button.JoystickButton}.
      */
     private void configureButtonBindings() {
         // Default command, normal field-relative drive
@@ -333,10 +333,10 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
 
-//    // left1CoralAuto
-//    public Command getAutonomousCommand() {
-//        return left1CoralAuto.orca1LeftCoral();
-//    }
+    //    // left1CoralAuto
+    //    public Command getAutonomousCommand() {
+    //        return left1CoralAuto.orca1LeftCoral();
+    //    }
     // regular autobuilder
     public Command getAutonomousCommand() {
         return autoChooser.get();

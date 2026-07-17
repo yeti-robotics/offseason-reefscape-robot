@@ -1,6 +1,6 @@
 package frc.robot.util.sim;
 
-import edu.wpi.first.units.measure.Angle;
+import org.wpilib.units.measure.Angle;
 
 public interface SimulatableMechanism {
     Angle getCurrentPosition();

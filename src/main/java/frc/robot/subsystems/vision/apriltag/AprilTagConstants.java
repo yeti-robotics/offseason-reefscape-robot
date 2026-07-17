@@ -1,7 +1,7 @@
 package frc.robot.subsystems.vision.apriltag;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+import org.wpilib.vision.apriltag.AprilTagFieldLayout;
+import org.wpilib.vision.apriltag.AprilTagFields;
 import java.io.IOException;
 
 public class AprilTagConstants {

@@ -1,6 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import edu.wpi.first.units.measure.Angle;
+import org.wpilib.units.measure.Angle;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {

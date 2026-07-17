@@ -9,7 +9,7 @@ import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.units.measure.Angle;
+import org.wpilib.units.measure.Angle;
 import frc.robot.Robot;
 import frc.robot.util.sim.PhysicsSim;
 

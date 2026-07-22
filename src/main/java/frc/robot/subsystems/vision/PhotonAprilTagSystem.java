@@ -77,7 +77,7 @@ public class PhotonAprilTagSystem extends SubsystemBase implements AprilTagSubsy
                         .toPose2d()
                         .getTranslation()
                         .getDistance(
-                                estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+                                estimatedPose.get().estimatedPose);
             }
 
             if (numTags == 0) {

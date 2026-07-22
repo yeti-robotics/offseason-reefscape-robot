@@ -1,6 +1,7 @@
 package frc.robot.util.sim.vision;
 
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import org.photonvision.PhotonCamera;

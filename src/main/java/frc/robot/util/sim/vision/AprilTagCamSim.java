@@ -62,7 +62,7 @@ public class AprilTagCamSim {
         return seenTags;
     }
 
-    public Transform3d getTransform() {
+    public edu.wpi.first.math.geometry.Transform3d getTransform() {
         return transform;
     }
 

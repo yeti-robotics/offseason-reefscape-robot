@@ -257,10 +257,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // Default command, normal field-relative drive
-        drivetrain.setDefaultCommand(drivetrain.applyRequest(
-                () -> drive.withVelocityX(-controller.getLeftY() * TunerConstants.kSpeedAt12Volts.magnitude())
-                        .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
-                        .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
+//        drivetrain.setDefaultCommand(drivetrain.applyRequest(
+//                () -> drive.withVelocityX(-controller.getLeftY() * TunerConstants.kSpeedAt12Volts.magnitude())
+//                        .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.magnitude())
+//                        .withRotationalRate(-controller.getRightX() * TunerConstants.MaFxAngularRate)));
 
         controller
                 .rightTrigger()

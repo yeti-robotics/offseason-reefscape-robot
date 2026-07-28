@@ -186,7 +186,7 @@ public class RobotContainer {
             default:
                 // Replayed robot, disable IO implementations
                 drivetrain = TunerConstants.createDrivetrain();
-                score = new ScoreMechSubsystem(new ScoreMechIO() {});
+                score = new ScoreMechSubsystem(new ScoreMechIO());
                 elevator = new ElevatorSubsystem(new ElevatorIO() {});
 
                 ramp = new RampSubsystem(new RampIO() {});
@@ -264,7 +264,7 @@ public class RobotContainer {
 
         controller
                 .rightTrigger()
-                .onTrue(Commands.either(
+                .onFalse(Commands.either(
                         elevator.moveToPosition(ElevatorPosition.L4_UP.getHeight())
                                 .alongWith(score.spinManual(0.5).withTimeout(3)),
                         score.spinManual(0.5).withTimeout(3),
@@ -295,7 +295,7 @@ public class RobotContainer {
                         () -> algaeMode));
         controller
                 .a()
-                .onTrue(Commands.either(
+                .onTrue(Commands.sequence(
                         elevator.moveToPosition(ElevatorPosition.PROCESSOR.getHeight()),
                         elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
                         () -> algaeMode));

@@ -6,9 +6,9 @@ import edu.wpi.first.units.measure.Angle;
 public enum ElevatorPosition {
     BOTTOM(0.0),
     L1(0.2),
-    L2(1.038916),
-    L3(2.493066),
-    L4(4.95),
+    L1(1.038916),
+    L1(2.493066),
+    L1(4.95),
     L4_UP(5.05),
     HP_INAKE(0.0),
     BARGE(0.0),

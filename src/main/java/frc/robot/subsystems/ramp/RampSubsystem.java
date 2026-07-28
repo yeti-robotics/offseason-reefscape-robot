@@ -17,7 +17,7 @@ public class RampSubsystem extends SubsystemBase {
         this.io = io;
     }
 
-    public boolean outerRampDetection() {
+    public int outerRampDetection() {
         return inputs.outerSensorDetected;
     }
 

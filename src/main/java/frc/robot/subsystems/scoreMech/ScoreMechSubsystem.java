@@ -38,7 +38,7 @@ public class ScoreMechSubsystem extends SubsystemBase {
         io.setPower(0);
     }
 
-    public Command spinUntilCoralSafe() {
+    private Command spinUntilCoralSafe() {
         return runEnd(() -> io.setPower(0.25), () -> io.setPower(0)).until(this::coralIsSafe);
     }
 

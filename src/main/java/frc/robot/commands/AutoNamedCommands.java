@@ -10,7 +10,7 @@ public class AutoNamedCommands {
     private final ScoreMechSubsystem score;
     private final ElevatorSubsystem elevator;
 
-    public AutoNamedCommands(ScoreMechSubsystem score, ElevatorSubsystem elevator) {
+    public void AutoNamedCommands(ScoreMechSubsystem score, ElevatorSubsystem elevator) {
         this.score = score;
         this.elevator = elevator;
         registerCommands();

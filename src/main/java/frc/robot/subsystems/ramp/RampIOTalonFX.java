@@ -27,6 +27,7 @@ public class RampIOTalonFX implements RampIO {
         inputs.innerSensorDetected = innerRampSensor.getIsDetected().getValue();
     }
 
+    @Override
     public static void applyConfigs() {
         var CANrangeConfig = new CANrangeConfiguration();
         CANrangeConfig.ToFParams.UpdateMode = UpdateModeValue.ShortRange100Hz;
@@ -48,6 +49,6 @@ public class RampIOTalonFX implements RampIO {
 
     @Override
     public void setRollerDuty(double power) {
-        roller.setControl(new DutyCycleOut(power));
+        return roller.setControl(new DutyCycleOut(power));
     }
 }

@@ -191,7 +191,10 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIO() {});
 
-                //                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera",
+                //    \[]
+                //    \[]
+                //
+                //    frontLeftCam = new PhotonAprilTagSystem("Front Left Camera",
                 // Constants.leftFrontCamTrans, drivetrain);
                 //                frontRightCam =
                 //                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans,
@@ -281,7 +284,7 @@ public class RobotContainer {
         controller
                 .x()
                 .onTrue(Commands.either(
-                        elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
                         elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
                         () -> algaeMode));
         controller

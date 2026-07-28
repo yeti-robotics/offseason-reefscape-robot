@@ -21,8 +21,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     private final MotionMagicTorqueCurrentFOC magicRequest = new MotionMagicTorqueCurrentFOC(0);
 
     public ElevatorIOTalonFX() {
-        primaryElevatorMotor = new TalonFX(ElevatorConfig.primaryElevatorMotorID, motorCANBus);
-        secondaryElevatorMotor = new TalonFX(ElevatorConfig.secondaryElevatorMotorID, motorCANBus);
+        primaryElevatorMotor = new TalonFX(primaryElevatorMotorID, motorCANBus);
+        secondaryElevatorMotor = new TalonFX(secondaryElevatorMotorID, motorCANBus);
         canRangeElevator = new CANrange(ElevatorConfig.canRangeID, rampCANBus);
         if (Robot.isSimulation()) {
             PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);

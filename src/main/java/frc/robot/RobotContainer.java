@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AlgaeAlignPPOTF;
 import frc.robot.commands.AutoNamedCommands;
+import frc.robot.commands.ReefAlignPPOTF;
 import frc.robot.constants.Constants;
 import frc.robot.generated.CommandSwerveDrivetrain;
 import frc.robot.generated.TunerConstants;
@@ -36,7 +38,14 @@ import frc.robot.subsystems.scoreMech.ScoreMechIO;
 import frc.robot.subsystems.scoreMech.ScoreMechIOSim;
 import frc.robot.subsystems.scoreMech.ScoreMechIOTalonFXCANrange;
 import frc.robot.subsystems.scoreMech.ScoreMechSubsystem;
+import frc.robot.subsystems.vision.PhotonAprilTagSystem;
+import frc.robot.subsystems.vision.apriltag.AprilTagPose;
+import frc.robot.subsystems.vision.apriltag.AprilTagSubsystem;
 import frc.robot.util.sim.Mechanisms;
+import frc.robot.util.sim.vision.AprilTagCamSim;
+import frc.robot.util.sim.vision.AprilTagCamSimBuilder;
+import frc.robot.util.sim.vision.AprilTagSimulator;
+import java.util.List;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -59,41 +68,47 @@ public class RobotContainer {
     public boolean algaeMode = false;
 
     // Vision
-    //    public final PhotonAprilTagSystem frontLeftCam;
-    //    public final PhotonAprilTagSystem frontRightCam;
-    //        public final PhotonAprilTagSystem rearCam;
-    //    private final AprilTagSubsystem[] aprilTagSubsystems;
-    //    private final ReefAlignPPOTF reefAlignPPOTF;
-    //    private final AlgaeAlignPPOTF algaeAlignPPOTF;
+    public final PhotonAprilTagSystem frontLeftCam;
+    public final PhotonAprilTagSystem frontRightCam;
+    //    public final PhotonAprilTagSystem rearCam;
+    private final AprilTagSubsystem[] aprilTagSubsystems;
+    private final ReefAlignPPOTF reefAlignPPOTF;
+    private final AlgaeAlignPPOTF algaeAlignPPOTF;
 
     final Mechanisms mechanisms;
+
+    AprilTagSimulator aprilTagCamSim = new AprilTagSimulator();
 
     public final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
             .getStructTopic("/Pose", Pose2d.struct)
             .publish();
 
     public void updateVision() {
-        //        for (AprilTagSubsystem aprilTagSubsystem : aprilTagSubsystems) {
-        //            List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
-        //
-        //            if (!aprilTagPoseOpt.isEmpty() && !drivetrain.isMotionBlur()) {
-        //                for (AprilTagPose pose : aprilTagPoseOpt) {
-        //                    if (pose.numTags() > 0) {
-        //                        Logger.recordOutput(
-        //                                "Vision/" + aprilTagSubsystem.getCamera().getName(),
-        // pose.estimatedRobotPose());
-        //                        drivetrain.addVisionMeasurement(
-        //                                pose.estimatedRobotPose(), pose.timestamp(), pose.standardDeviations());
-        //                    }
-        //                }
-        //            }
-        //        }
-        //
-        //        publishCamTransforms();
-        //        posePublisher.set(drivetrain.getState().Pose);
+        for (AprilTagSubsystem aprilTagSubsystem : aprilTagSubsystems) {
+            List<AprilTagPose> aprilTagPoseOpt = aprilTagSubsystem.getEstimatedPose();
+
+            if (!aprilTagPoseOpt.isEmpty() && !drivetrain.isMotionBlur()) {
+                for (AprilTagPose pose : aprilTagPoseOpt) {
+                    if (pose.numTags() > 0) {
+                        Logger.recordOutput(
+                                "Vision/" + aprilTagSubsystem.getCamera().getName(), pose.estimatedRobotPose());
+                        drivetrain.addVisionMeasurement(
+                                pose.estimatedRobotPose(), pose.timestamp(), pose.standardDeviations());
+                    }
+                }
+            }
+        }
+
+        publishCamTransforms();
+        posePublisher.set(drivetrain.getState().Pose);
     }
 
-    public void updateVisionSim() {}
+    public void updateVisionSim() {
+        aprilTagCamSim.update(drivetrain.getState().Pose);
+        publishCamTransforms();
+
+        aprilTagCamSim.update(drivetrain.getState().Pose);
+    }
 
     private void publishCamTransforms() {
         Pose3d leftFrontCameraPose = new Pose3d(drivetrain.getState().Pose)
@@ -150,15 +165,13 @@ public class RobotContainer {
                 elevator = new ElevatorSubsystem(new ElevatorIOTalonFX());
                 ramp = new RampSubsystem(new RampIOTalonFX());
 
-                //                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera",
-                // Constants.leftFrontCamTrans, drivetrain);
-                //                frontRightCam =
-                //                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans,
-                // drivetrain);
+                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontRightCam =
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
                 //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
 
-                //                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, null, null, null);
-                //                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, null, null);
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
 
@@ -170,16 +183,13 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIOSim());
 
-                //                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera",
-                // Constants.leftFrontCamTrans, drivetrain);
-                //                frontRightCam =
-                //                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans,
-                // drivetrain);
-                //                //                rearCam = new PhotonAprilTagSystem("Rear Camera",
-                // Constants.rearCamTrans, drivetrain);
-                //
-                //                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, null, null, null);
-                //                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, null, null);
+                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontRightCam =
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
 
@@ -191,38 +201,32 @@ public class RobotContainer {
 
                 ramp = new RampSubsystem(new RampIO() {});
 
-                //    \[]
-                //    \[]
-                //
-                //    frontLeftCam = new PhotonAprilTagSystem("Front Left Camera",
-                // Constants.leftFrontCamTrans, drivetrain);
-                //                frontRightCam =
-                //                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans,
-                // drivetrain);
-                //                //                rearCam = new PhotonAprilTagSystem("Rear Camera",
-                // Constants.rearCamTrans, drivetrain);
-                //
-                //                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, null, null, null);
-                //                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, null, null);
+                frontLeftCam = new PhotonAprilTagSystem("Front Left Camera", Constants.leftFrontCamTrans, drivetrain);
+                frontRightCam =
+                        new PhotonAprilTagSystem("Front Right Camera", Constants.rightFrontCamTrans, drivetrain);
+                //                rearCam = new PhotonAprilTagSystem("Rear Camera", Constants.rearCamTrans, drivetrain);
+
+                reefAlignPPOTF = new ReefAlignPPOTF(drivetrain, frontLeftCam, frontRightCam, frontRightCam);
+                algaeAlignPPOTF = new AlgaeAlignPPOTF(drivetrain, frontLeftCam, frontLeftCam);
 
                 break;
         }
 
         // Set up auto routines
-        var namedCommands = new AutoNamedCommands(score, elevator);
-        left1CoralAuto = new AutoCommands(elevator, drivetrain, score);
+        var namedCommands = new AutoNamedCommands(score, elevator, reefAlignPPOTF);
+        left1CoralAuto = new AutoCommands(elevator, reefAlignPPOTF, drivetrain, score);
         namedCommands.registerCommands();
 
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
         mechanisms = new Mechanisms();
 
-        //        AprilTagCamSim simCam1 = AprilTagCamSimBuilder.newCamera()
-        //                .withCameraName("Front Left Camera")
-        //                .withTransform(Constants.leftFrontCamTrans)
-        //                .build();
-        //        aprilTagCamSim.addCamera(simCam1);
-        //        frontLeftCam.setCamera(simCam1.getCam());
+        AprilTagCamSim simCam1 = AprilTagCamSimBuilder.newCamera()
+                .withCameraName("Front Left Camera")
+                .withTransform(Constants.leftFrontCamTrans)
+                .build();
+        aprilTagCamSim.addCamera(simCam1);
+        frontLeftCam.setCamera(simCam1.getCam());
 
         //        AprilTagCamSim simCam2 = AprilTagCamSimBuilder.newCamera()
         //                .withCameraName("Rear Camera")
@@ -231,14 +235,14 @@ public class RobotContainer {
         //        aprilTagCamSim.addCamera(simCam2);
         //        rearCam.setCamera(simCam2.getCam());
 
-        //        AprilTagCamSim simCam3 = AprilTagCamSimBuilder.newCamera()
-        //                .withCameraName("Front Right Camera")
-        //                .withTransform(Constants.rightFrontCamTrans)
-        //                .build();
-        //        aprilTagCamSim.addCamera(simCam3);
-        //        frontRightCam.setCamera(simCam3.getCam());
+        AprilTagCamSim simCam3 = AprilTagCamSimBuilder.newCamera()
+                .withCameraName("Front Right Camera")
+                .withTransform(Constants.rightFrontCamTrans)
+                .build();
+        aprilTagCamSim.addCamera(simCam3);
+        frontRightCam.setCamera(simCam3.getCam());
 
-        //        aprilTagSubsystems = new AprilTagSubsystem[] {frontLeftCam, frontRightCam};
+        aprilTagSubsystems = new AprilTagSubsystem[] {frontLeftCam, frontRightCam};
 
         drivetrain.setStateStdDevs(VecBuilder.fill(0.33333, 0.33333, Math.toRadians(0.5)));
 
@@ -284,7 +288,7 @@ public class RobotContainer {
         controller
                 .x()
                 .onTrue(Commands.either(
-                        elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
+                        elevator.moveToPosition(ElevatorPosition.HIGH_ALGAE.getHeight()),
                         elevator.moveToPosition(ElevatorPosition.L3.getHeight()),
                         () -> algaeMode));
         controller
@@ -300,8 +304,8 @@ public class RobotContainer {
                         elevator.moveToPosition(ElevatorPosition.L1.getHeight()),
                         () -> algaeMode));
 
-        //        controller.leftBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
-        //        controller.rightBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));
+        controller.leftBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.LEFT));
+        controller.rightBumper().whileTrue(reefAlignPPOTF.reefAlign(ReefAlignPPOTF.Branch.RIGHT));
     }
 
     private void configureTriggerBindings() {

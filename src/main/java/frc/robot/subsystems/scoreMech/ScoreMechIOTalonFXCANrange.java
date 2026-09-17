@@ -1,6 +1,6 @@
 package frc.robot.subsystems.scoreMech;
 
-import static frc.robot.constants.Constants.motorCANBus;
+import static frc.robot.constants.Constants.rioBus;
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -14,9 +14,9 @@ public class ScoreMechIOTalonFXCANrange implements ScoreMechIO {
     private static CANrange outerCANrange;
 
     public ScoreMechIOTalonFXCANrange() {
-        scoreMotor = new TalonFX(ScoreConfigs.scoreMotorID, motorCANBus);
-        innerCANrange = new CANrange(ScoreConfigs.innerCANrangeID, motorCANBus);
-        outerCANrange = new CANrange(ScoreConfigs.outerCANrangeID, motorCANBus);
+        scoreMotor = new TalonFX(ScoreConfigs.scoreMotorID, rioBus);
+        innerCANrange = new CANrange(ScoreConfigs.innerCANrangeID, rioBus);
+        outerCANrange = new CANrange(ScoreConfigs.outerCANrangeID, rioBus);
         applyConfigs();
     }
 

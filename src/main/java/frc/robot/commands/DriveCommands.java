@@ -81,8 +81,8 @@ public class DriveCommands {
                             omega * drive.getMaxAngularSpeedRadPerSec());
                     boolean isFlipped = DriverStation.getAlliance().isPresent()
                             && DriverStation.getAlliance().get() == Alliance.Red;
-                    drive.runVelocity(speeds.toFieldRelative(
-                            isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation()));
+                    drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
+                            speeds, isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation()));
                 },
                 drive);
     }
@@ -119,7 +119,8 @@ public class DriveCommands {
                                     omega);
                             boolean isFlipped = DriverStation.getAlliance().isPresent()
                                     && DriverStation.getAlliance().get() == Alliance.Red;
-                            drive.runVelocity(speeds.toFieldRelative(
+                            drive.runVelocity(speeds.fromFieldRelativeSpeeds(
+                                    speeds,
                                     isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation()));
                         },
                         drive)
@@ -213,7 +214,7 @@ public class DriveCommands {
                 // Measurement sequence
                 Commands.sequence(
                         // Wait for modules to fully orient before starting measurement
-                        Commands.wait(1.0),
+                        Commands.waitSeconds(1.0),
 
                         // Record starting measurement
                         Commands.runOnce(() -> {

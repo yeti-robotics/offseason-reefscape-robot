@@ -94,7 +94,8 @@ public class PositionPIDCommand extends Command {
 
         var position = diff.getTranslation().getNorm() < Centimeter.of(1.5).in(Meters);
 
-        var speed = Math.sqrt(Math.pow(mSwerve.getState().Speeds.vx, 2) + Math.pow(mSwerve.getState().Speeds.vy, 2))
+        var speed = Math.sqrt(Math.pow(mSwerve.getState().Speeds.vxMetersPerSecond, 2)
+                        + Math.pow(mSwerve.getState().Speeds.vyMetersPerSecond, 2))
                 < InchesPerSecond.of(2).in(MetersPerSecond);
 
         // System.out.println("end trigger conditions R: "+ rotation + "\tP: " + position + "\tS: " + speed);

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.elevator;
 
-import static frc.robot.constants.Constants.motorCANBus;
-import static frc.robot.constants.Constants.rampCANBus;
+import static frc.robot.constants.Constants.rioBus;
 import static frc.robot.subsystems.elevator.ElevatorConfig.*;
 
 import com.ctre.phoenix6.controls.Follower;
@@ -9,6 +8,7 @@ import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.Robot;
 import frc.robot.util.sim.PhysicsSim;
@@ -21,16 +21,17 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     private final MotionMagicTorqueCurrentFOC magicRequest = new MotionMagicTorqueCurrentFOC(0);
 
     public ElevatorIOTalonFX() {
-        primaryElevatorMotor = new TalonFX(primaryElevatorMotorID, motorCANBus);
-        secondaryElevatorMotor = new TalonFX(secondaryElevatorMotorID, motorCANBus);
-        canRangeElevator = new CANrange(ElevatorConfig.canRangeID, rampCANBus);
+        primaryElevatorMotor = new TalonFX(ElevatorConfig.primaryElevatorMotorID, rioBus);
+        secondaryElevatorMotor = new TalonFX(ElevatorConfig.secondaryElevatorMotorID, rioBus);
+        canRangeElevator = new CANrange(ElevatorConfig.canRangeID, rioBus);
         if (Robot.isSimulation()) {
             PhysicsSim.getInstance().addTalonFX(primaryElevatorMotor);
             PhysicsSim.getInstance().addTalonFX(secondaryElevatorMotor);
         }
         primaryElevatorMotor.getConfigurator().apply(primaryTalonFXConfigs);
         secondaryElevatorMotor.getConfigurator().apply(secondaryTalonFXConfigs);
-        secondaryElevatorMotor.setControl(new Follower(ElevatorConfig.primaryElevatorMotorID, true));
+        secondaryElevatorMotor.setControl(
+                new Follower(ElevatorConfig.primaryElevatorMotorID, MotorAlignmentValue.Opposed));
         canRangeElevator.getConfigurator().apply(canRangeElevatorConfigs);
 
         zeroPosition();

@@ -1,29 +1,29 @@
 {
-  "fileName": "ReduxLib-2027.0.0-alpha-2.json",
+  "fileName": "ReduxLib-2026.1.2.json",
   "name": "ReduxLib",
-  "version": "2027.0.0-alpha-2",
-  "frcYear": "2027_alpha1",
+  "version": "2026.1.2",
+  "frcYear": "2026",
   "uuid": "151ecca8-670b-4026-8160-cdd2679ef2bd",
   "mavenUrls": [
     "https://maven.reduxrobotics.com/"
   ],
-  "jsonUrl": "https://frcsdk.reduxrobotics.com/ReduxLib_2027.json",
+  "jsonUrl": "https://frcsdk.reduxrobotics.com/ReduxLib_2026.json",
   "javaDependencies": [
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-java",
-      "version": "2027.0.0-alpha-2"
+      "version": "2026.1.2"
     }
   ],
   "jniDependencies": [
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-fifo",
-      "version": "2027.0.0-alpha-2",
+      "version": "2026.1.2",
       "isJar": false,
       "skipInvalidPlatforms": true,
       "validPlatforms": [
-        "linuxsystemcore",
+        "linuxathena",
         "linuxx86-64",
         "linuxarm64",
         "osxuniversal",
@@ -35,14 +35,14 @@
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-cpp",
-      "version": "2027.0.0-alpha-2",
+      "version": "2026.1.2",
       "libName": "ReduxLib",
       "headerClassifier": "headers",
       "sourcesClassifier": "sources",
       "sharedLibrary": true,
       "skipInvalidPlatforms": true,
       "binaryPlatforms": [
-        "linuxsystemcore",
+        "linuxathena",
         "linuxx86-64",
         "linuxarm64",
         "osxuniversal",
@@ -52,13 +52,13 @@
     {
       "groupId": "com.reduxrobotics.frc",
       "artifactId": "ReduxLib-fifo",
-      "version": "2027.0.0-alpha-2",
+      "version": "2026.1.2",
       "libName": "reduxfifo",
       "headerClassifier": "headers",
       "sharedLibrary": true,
       "skipInvalidPlatforms": true,
       "binaryPlatforms": [
-        "linuxsystemcore",
+        "linuxathena",
         "linuxx86-64",
         "linuxarm64",
         "osxuniversal",

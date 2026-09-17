@@ -12,9 +12,9 @@ public class RampIOSim implements RampIO {
     private final CANrange outerRampSensor;
 
     public RampIOSim() {
-        roller = new TalonFX(RampConfigTalonFXReal.rollerID, Constants.motorCANBus);
-        innerRampSensor = new CANrange(RampConfigTalonFXReal.innerRampSensorID, Constants.motorCANBus);
-        outerRampSensor = new CANrange(RampConfigTalonFXReal.outerRampSensorID, Constants.motorCANBus);
+        roller = new TalonFX(RampConfigTalonFXSim.rollerID, Constants.rioBus);
+        innerRampSensor = new CANrange(RampConfigTalonFXSim.innerRampSensorID, Constants.rioBus);
+        outerRampSensor = new CANrange(RampConfigTalonFXSim.outerRampSensorID, Constants.rioBus);
         PhysicsSim.getInstance().addTalonFX(roller);
     }
 

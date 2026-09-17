@@ -1,6 +1,6 @@
 package frc.robot.subsystems.scoreMech;
 
-import static frc.robot.constants.Constants.motorCANBus;
+import static frc.robot.constants.Constants.rioBus;
 
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -12,9 +12,9 @@ public class ScoreMechIOSim implements ScoreMechIO {
     private CANrange outerCANrange;
 
     public ScoreMechIOSim() {
-        scoreMotor = new TalonFX(ScoreConfigs.scoreMotorID, motorCANBus);
-        innerCANrange = new CANrange(ScoreConfigs.innerCANrangeID, motorCANBus);
-        outerCANrange = new CANrange(ScoreConfigs.outerCANrangeID, motorCANBus);
+        scoreMotor = new TalonFX(ScoreConfigs.scoreMotorID, rioBus);
+        innerCANrange = new CANrange(ScoreConfigs.innerCANrangeID, rioBus);
+        outerCANrange = new CANrange(ScoreConfigs.outerCANrangeID, rioBus);
         PhysicsSim.getInstance().addTalonFX(scoreMotor);
     }
 
